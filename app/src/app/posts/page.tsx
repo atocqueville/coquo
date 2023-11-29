@@ -19,7 +19,6 @@ export default async function Page() {
 
     const posts = await getData();
 
-    console.log('data', posts)
   return (
     <>
         <h2>Welcome to Posts page</h2>
