@@ -1,0 +1,36 @@
+# WARNING: This is a DEVELOPMENT docker-compose file, it should not be used for production.
+version: '3.8'
+services:
+
+  coquo:
+    image: atocqueville/coquo:latest
+    container_name: coquo-next
+    # build:
+    #   context: ./
+    #   dockerfile: ./dev/Dockerfile
+    ports:
+      - 3000:3000
+    # environment:
+    # volumes:
+    #   - npm_data:/data
+    #   - le_data:/etc/letsencrypt
+    #   - ../backend:/app
+    #   - ../frontend:/app/frontend
+    #   - ../global:/app/global
+    # depends_on:
+    #   - db
+    # working_dir: /app
+
+  # db:
+  #   image: jc21/mariadb-aria
+  #   container_name: npm_db
+  #   ports:
+  #     - 33306:3306
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+
+# volumes:
+#   coquo_data:
+#     name: coquo_data
+#   db_data:
+#     name: db_data

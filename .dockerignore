@@ -1,7 +1,4 @@
-**/.next
 .git
 npm-debug.log
-node_modules/
-**/node_modules/
 
 README.md

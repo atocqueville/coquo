@@ -1,13 +1,12 @@
 # FROM node:18-alpine
 FROM node:18.18-buster-slim
+RUN apt-get update && apt-get install openssl -y
 RUN mkdir -p /app
 COPY app/ /app
 WORKDIR /app
 
-RUN yarn install --production --frozen-lockfile
-RUN npx prisma generate
-RUN rm -rf prisma
-RUN yarn build
+# RUN yarn global add next@latest
+# RUN yarn prisma:gen
 
 EXPOSE 3000
 CMD ["yarn", "start"]
@@ -15,7 +14,6 @@ CMD ["yarn", "start"]
 
 # FROM node:18.18-buster-slim AS base
 
-# RUN apt-get update && apt-get install libssl-dev ca-certificates -y
 
 # WORKDIR /app
 
