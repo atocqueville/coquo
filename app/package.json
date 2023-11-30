@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "init-db": "npx prisma db push",
+    "prisma:studio": "npx prisma studio",
+    "prisma:gen": "npx prisma generate"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
