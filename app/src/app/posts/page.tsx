@@ -1,5 +1,5 @@
 import ButtonLink from '@/components/button-link';
-import prisma from '../../lib/prisma';
+import prisma from '@/lib/prisma';
 import type { GetStaticProps } from 'next/types';
 import type { Post } from '@prisma/client';
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
@@ -22,7 +22,10 @@ export default async function Page() {
   return (
     <>
         <h2>Welcome to Posts page</h2>
-        <ButtonLink path=''>Go back to home page !</ButtonLink>
+        <ButtonLink path='/'>Go back to home page !</ButtonLink>
+
+        <ButtonLink path='/create'>Create a new post !</ButtonLink>
+
 
         {posts.map(post=>(
         <Card key={post.id}>
