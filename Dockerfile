@@ -5,11 +5,13 @@ RUN mkdir -p /app
 COPY app/ /app
 WORKDIR /app
 
-# RUN yarn global add next@latest
-# RUN yarn prisma:gen
+RUN yarn
+RUN yarn build
+RUN yarn prisma:gen:prod
+RUN yarn init-db:prod
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["yarn", "start:prod"]
 
 
 # FROM node:18.18-buster-slim AS base

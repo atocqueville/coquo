@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:prod": "npm run init-db:prod && next start",
     "lint": "next lint",
-    "init-db": "npx prisma db push",
+    "init-db": "dotenv -e .env.local -- npx prisma db push",
+    "init-db:prod": "dotenv -e .env.production -- npx prisma db push",
     "prisma:studio": "npx prisma studio",
-    "prisma:gen": "npx prisma generate"
+    "prisma:gen": "npx prisma generate",
+    "prisma:gen:prod": "dotenv -e .env.production -- npx prisma generate"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
@@ -26,6 +29,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
     "eslint-config-prettier": "^9.0.0",

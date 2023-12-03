@@ -5,18 +5,10 @@ services:
   coquo:
     image: atocqueville/coquo:latest
     container_name: coquo-next
-    # build:
-    #   context: ./
-    #   dockerfile: ./dev/Dockerfile
     ports:
       - 3000:3000
-    # environment:
-    # volumes:
-    #   - npm_data:/data
-    #   - le_data:/etc/letsencrypt
-    #   - ../backend:/app
-    #   - ../frontend:/app/frontend
-    #   - ../global:/app/global
+    volumes:
+      - ./db-dev:/app/db
     # depends_on:
     #   - db
     # working_dir: /app
@@ -28,9 +20,3 @@ services:
   #     - 33306:3306
   #   volumes:
   #     - db_data:/var/lib/mysql
-
-# volumes:
-#   coquo_data:
-#     name: coquo_data
-#   db_data:
-#     name: db_data

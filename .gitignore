@@ -4,3 +4,8 @@
 .env
 
 .DS_Store
+
+app/node_modules
+app/.next
+app/prisma/dev.db
+/db-dev
