@@ -1,6 +1,6 @@
-import ButtonLink from '@/components/button-link';
+import ButtonLink from '../../components/button-link';
 import {Input, Button} from "@nextui-org/react";
-import { createPost } from '@/lib/actions';
+import { createPost } from '../../lib/actions';
 
 const CreateForm = () => {
 

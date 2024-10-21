@@ -1,5 +1,5 @@
-import ButtonLink from '@/components/button-link';
-import prisma from '@/lib/prisma';
+import ButtonLink from '../../components/button-link';
+import prisma from '../../lib/prisma';
 import type { GetStaticProps } from 'next/types';
 import type { Post } from '@prisma/client';
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";

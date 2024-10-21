@@ -5,10 +5,12 @@ RUN mkdir -p /app
 COPY app/ /app
 WORKDIR /app
 
+# Build dependencies
 RUN yarn
-RUN yarn build
-RUN yarn prisma:gen:prod
+# Build prisma package
 RUN yarn init-db:prod
+# Then build server
+RUN yarn build
 
 EXPOSE 3000
 CMD ["yarn", "start:prod"]
