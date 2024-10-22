@@ -1,11 +1,8 @@
-version: '3.8'
 services:
-
   coquo:
-    image: atocqueville/coquo:latest
     container_name: coquo-next
+    image: coquo
     ports:
       - 3000:3000
     volumes:
-      - /local/config:/config
-    # working_dir: /app
+      - ./config:/config

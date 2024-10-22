@@ -12,7 +12,9 @@
         "prisma:gen": "npx dotenv -e .env.local -- prisma generate",
         "db:push": "npx dotenv -e .env.local -- prisma db push",
         "db:seed": "npx dotenv -e .env.local -- prisma db seed",
-        "build:prod": "npx prisma generate && npx prisma migrate deploy && next build"
+        "build:prod": "npx prisma generate && npx prisma migrate deploy && next build",
+        "docker:build": "docker build -t coquo .",
+        "docker:run": "docker-compose down && docker compose up -d"
     },
     "prisma": {
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
