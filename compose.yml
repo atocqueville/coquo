@@ -1,4 +1,3 @@
-# WARNING: This is a DEVELOPMENT docker-compose file, it should not be used for production.
 version: '3.8'
 services:
 
@@ -8,15 +7,5 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./db-dev:/app/prisma
-    # depends_on:
-    #   - db
+      - /local/config:/config
     # working_dir: /app
-
-  # db:
-  #   image: jc21/mariadb-aria
-  #   container_name: npm_db
-  #   ports:
-  #     - 33306:3306
-  #   volumes:
-  #     - db_data:/var/lib/mysql
