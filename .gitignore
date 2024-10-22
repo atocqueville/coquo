@@ -25,6 +25,9 @@
 # production
 /build
 
+# data
+config/**
+
 # misc
 .DS_Store
 *.pem
