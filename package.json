@@ -8,6 +8,7 @@
         "start": "next start",
         "lint": "next lint",
         "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
+        "prisma:gen": "npx dotenv -e .env.local -- prisma generate",
         "db:seed": "npx dotenv -e .env.local -- prisma db seed",
         "docker:build": "docker build -t coquo .",
         "docker:run": "docker-compose down && docker compose up -d",

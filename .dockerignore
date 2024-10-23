@@ -6,3 +6,7 @@
 npm-debug.log
 
 README.md
+
+config/db/*
+config/logs/*
+config/*.json

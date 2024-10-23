@@ -1,20 +1,10 @@
-import prisma from '@/lib/prisma'
-import type { Post } from '@prisma/client'
 import ButtonLink from '@/components/button-link'
+import { getPosts } from '@/lib/api/post'
 
-async function getData(): Promise<Post[]> {
-    return await prisma.post.findMany({
-        // where: { published: true },
-        include: {
-            author: {
-                select: { email: true },
-            },
-        },
-    })
-}
+export const dynamic = 'force-dynamic'
 
 export default async function Page() {
-    const posts = await getData()
+    const posts = await getPosts()
 
     return (
         <>
