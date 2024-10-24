@@ -11,3 +11,4 @@ Self hosted recipe manager written in Next.js.
 - [ ] Add a "Print" feature => https://www.npmjs.com/package/react-to-print
 - [ ] Add a Favorite star to recipes
 - [ ] Add a step list with checkboxes to grey out completed steps
+- [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser
