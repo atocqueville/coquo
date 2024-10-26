@@ -5,10 +5,13 @@ import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { compare } from 'bcryptjs';
 
-export const authConfig: NextAuthConfig = {
+export const { auth, signIn, signOut, handlers } = NextAuth({
     trustHost: true,
     session: {
         strategy: 'jwt',
+    },
+    pages: {
+        signIn: '/api/auth/login',
     },
     callbacks: {
         authorized: async ({ auth }) => !!auth,
@@ -60,6 +63,4 @@ export const authConfig: NextAuthConfig = {
             },
         }),
     ],
-};
-
-export const { auth, signIn, signOut, handlers } = NextAuth(authConfig);
+});

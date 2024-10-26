@@ -1,7 +1,7 @@
-import ButtonLink from '@/components/button-link'
-import { createPost } from '@/lib/actions'
+import ButtonLink from '@/components/button-link';
+import { createPost } from '@/lib/actions';
 
-const CreateForm = () => {
+export default function CreateForm() {
     return (
         <div>
             <form action={createPost}>
@@ -16,7 +16,5 @@ const CreateForm = () => {
                 <ButtonLink path="/posts">Go back to posts list !</ButtonLink>
             </form>
         </div>
-    )
+    );
 }
-
-export default CreateForm

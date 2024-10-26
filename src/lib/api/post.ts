@@ -1,5 +1,5 @@
-import prisma from '@/lib/prisma'
-import type { Post } from '@prisma/client'
+import prisma from '@/lib/prisma';
+import type { Post } from '@prisma/client';
 
 export async function getPosts(): Promise<Post[]> {
     return prisma.post.findMany({
@@ -9,5 +9,5 @@ export async function getPosts(): Promise<Post[]> {
                 select: { email: true },
             },
         },
-    })
+    });
 }
