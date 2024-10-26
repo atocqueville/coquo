@@ -11,7 +11,6 @@ import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signIn } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -56,7 +55,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                 redirectTo: '/',
             });
         } catch (error) {
-            // TODO Show error message to user
+            console.log(error);
         }
         setIsLoading(false);
     }

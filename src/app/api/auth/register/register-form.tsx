@@ -60,6 +60,8 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
     async function onSubmit(data: FormData) {
         setIsLoading(true);
+        console.log(data);
+        setIsLoading(false);
     }
 
     return (
