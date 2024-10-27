@@ -9,8 +9,10 @@
         "lint": "next lint",
         "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
         "prisma:gen": "npx dotenv -e .env.local -- prisma generate",
+        "prisma:reset": "npx dotenv -e .env.local -- prisma migrate reset",
         "prisma:migrate": "npx dotenv -e .env.local -- prisma migrate dev --name",
         "db:seed": "npx dotenv -e .env.local -- prisma db seed",
+        "db:pull": "npx dotenv -e .env.local -- prisma db pull",
         "docker:build": "docker build -t coquo .",
         "docker:run": "docker-compose down && docker compose up -d",
         "build:prod": "dotenv -e .env.local -- prisma generate && next build",
@@ -20,7 +22,6 @@
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
     },
     "dependencies": {
-        "@auth/prisma-adapter": "^2.7.2",
         "@heroicons/react": "^2.1.4",
         "@hookform/resolvers": "^3.9.0",
         "@prisma/client": "5.21.1",

@@ -10,15 +10,26 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signIn } from 'next-auth/react';
+import { createUser } from '@/lib/api/user';
 
-interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const userAuthSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-});
-type FormData = z.infer<typeof userAuthSchema>;
+const userAuthSchema = z
+    .object({
+        email: z.string().email(),
+        password: z.string().min(6),
+        passwordConfirmation: z.string().min(6),
+        name: z.string(),
+    })
+    .refine(
+        ({ password, passwordConfirmation }) =>
+            password === passwordConfirmation,
+        {
+            path: ['passwordConfirmation'],
+            message: 'Les mots de passe ne correspondent pas',
+        }
+    );
+export type RegisterFormData = z.infer<typeof userAuthSchema>;
 
 const SpinnerIcon = (props: React.HTMLAttributes<SVGElement>) => (
     <svg
@@ -37,26 +48,19 @@ const SpinnerIcon = (props: React.HTMLAttributes<SVGElement>) => (
     </svg>
 );
 
-export function LoginForm({ className, ...props }: LoginFormProps) {
+export function RegisterForm({ className, ...props }: RegisterFormProps) {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormData>({
+    } = useForm<RegisterFormData>({
         resolver: zodResolver(userAuthSchema),
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    async function onSubmit(data: FormData) {
+    async function onSubmit(data: RegisterFormData) {
         setIsLoading(true);
-        try {
-            await signIn('credentials', {
-                ...data,
-                redirectTo: '/',
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        await createUser(data);
         setIsLoading(false);
     }
 
@@ -95,6 +99,30 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                                 {errors.password.message}
                             </p>
                         )}
+                        <Input
+                            id="passwordConfirmation"
+                            placeholder="Confirmer le mot de passe"
+                            type="password"
+                            disabled={isLoading}
+                            {...register('passwordConfirmation')}
+                        />
+                        {errors?.passwordConfirmation && (
+                            <p className="px-1 text-xs text-red-600">
+                                {errors.passwordConfirmation.message}
+                            </p>
+                        )}
+                        <Input
+                            id="name"
+                            placeholder="Ton petit surnom"
+                            type="text"
+                            disabled={isLoading}
+                            {...register('name')}
+                        />
+                        {errors?.name && (
+                            <p className="px-1 text-xs text-red-600">
+                                {errors.name.message}
+                            </p>
+                        )}
                     </div>
                     <button
                         className={cn(buttonVariants())}
@@ -103,41 +131,10 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                         {isLoading && (
                             <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Sign In with Email
+                        S&apos;enregistrer
                     </button>
                 </div>
             </form>
-
-            {/* 
-             TO ADD BACK WHEN IMPLEMENTING GOOGLE AUTH
-             
-             
-             <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                    </span>
-                </div>
-            </div>
-            <button
-                type="button"
-                className={cn(buttonVariants({ variant: 'outline' }))}
-                onClick={() => {
-                    setIsGitHubLoading(true);
-                    signIn('github');
-                }}
-                disabled={isLoading || isGitHubLoading}
-            >
-                {isGitHubLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Icons.gitHub className="mr-2 h-4 w-4" />
-                )}{' '}
-                Github
-            </button> */}
         </div>
     );
 }

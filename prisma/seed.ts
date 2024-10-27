@@ -10,7 +10,7 @@ async function main() {
             email: 'alice@prisma.io',
             password:
                 '$2a$10$JXMsrCj7l89oxq7xeWEHv.9Q0dy2NBrav9WyvccKdL.bYV6a6pFbm',
-            friendlyName: 'Alice',
+            name: 'Alice',
             posts: {
                 create: {
                     title: 'Check out Prisma with Next.js',
@@ -20,12 +20,14 @@ async function main() {
             },
         },
     });
-    const bob = await prisma.user.upsert({
-        where: { email: 'bob@prisma.io' },
+    const alex = await prisma.user.upsert({
+        where: { email: 'alex@prisma.io' },
         update: {},
         create: {
-            email: 'bob@prisma.io',
-            friendlyName: 'Bob',
+            email: 'alex@prisma.io',
+            name: 'Alex',
+            password:
+                '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
             posts: {
                 create: [
                     {
@@ -42,7 +44,7 @@ async function main() {
             },
         },
     });
-    console.log({ alice, bob });
+    console.log({ alice, alex });
 }
 
 main()

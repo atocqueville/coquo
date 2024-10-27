@@ -1,9 +1,7 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import prisma from '@/lib/prisma';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
-import { compare } from 'bcryptjs';
+import { getUser } from '@/lib/api/user';
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
     trustHost: true,
@@ -29,7 +27,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
             };
         },
     },
-    adapter: PrismaAdapter(prisma),
     providers: [
         Credentials({
             name: 'Credentials',
@@ -45,18 +42,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
                     })
                     .safeParse(credentials);
                 if (parsedCredentials.success) {
-                    const { email, password } = parsedCredentials.data;
-
-                    const user = await prisma.user.findUnique({
-                        where: { email },
-                    });
-
-                    if (!user) return null;
-                    const passwordsMatch = await compare(
-                        password,
-                        user.password || ''
-                    );
-                    if (passwordsMatch) return user;
+                    const user = await getUser(parsedCredentials.data);
+                    if (user) return user;
                 }
                 console.log('Invalid credentials');
                 return null;

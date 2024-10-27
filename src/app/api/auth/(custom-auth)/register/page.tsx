@@ -1,10 +1,8 @@
+import { RegisterForm } from '@/app/api/auth/(custom-auth)/register/register-form';
+import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { RegisterForm } from '@/app/api/auth/register/register-form';
-import { UserRoundPen } from 'lucide-react';
-import healthyFoodImage from '../../../../../public/healthy-food.jpg';
 
 export const metadata = {
     title: 'Create an account',
@@ -13,7 +11,7 @@ export const metadata = {
 
 export default function RegisterPage() {
     return (
-        <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+        <>
             <Link
                 href="/api/auth/login"
                 className={cn(
@@ -23,17 +21,6 @@ export default function RegisterPage() {
             >
                 Login
             </Link>
-            <div
-                className="hidden h-full bg-emerald-500 lg:block"
-                style={{ width: '100%', height: '100%', position: 'relative' }}
-            >
-                <Image
-                    alt="Healthy food"
-                    src={healthyFoodImage}
-                    layout="fill"
-                    objectFit="cover"
-                />
-            </div>
             <div className="lg:p-8">
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <div className="flex flex-col space-y-2 text-center">
@@ -48,6 +35,6 @@ export default function RegisterPage() {
                     <RegisterForm />
                 </div>
             </div>
-        </div>
+        </>
     );
 }
