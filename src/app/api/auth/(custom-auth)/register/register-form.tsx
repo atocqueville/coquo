@@ -5,6 +5,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
@@ -60,7 +61,20 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
     async function onSubmit(data: RegisterFormData) {
         setIsLoading(true);
-        await createUser(data);
+
+        try {
+            await createUser(data);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
+            throw error;
+        }
+
+        await signIn('credentials', {
+            ...data,
+            redirectTo: '/',
+        });
+
         setIsLoading(false);
     }
 

@@ -1,7 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
-
 import type { Prisma, User } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { RegisterFormData } from '@/app/api/auth/(custom-auth)/register/register-form';
@@ -20,8 +18,7 @@ export async function createUser(
         password: hashedPassword,
         name: registerFormData.name,
     };
-    await prisma.user.create({ data: formData });
-    redirect('/');
+    return await prisma.user.create({ data: formData });
 }
 
 export async function getUser({
