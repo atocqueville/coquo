@@ -13,3 +13,11 @@ Self hosted recipe manager written in Next.js.
 - [ ] Add a step list with checkboxes to grey out completed steps
 - [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser
 - [ ] Implement push notifications for PWA
+
+## Docker push
+
+```bash
+yarn docker:build
+docker tag coquo atocqueville/coquo:latest
+docker push atocqueville/coquo
+```
