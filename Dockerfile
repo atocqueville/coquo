@@ -25,8 +25,15 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # It needs the local env var DATABASE_URL, to go deep only one level (NO IDEA WHY)
 RUN yarn run build:prod
 
+# Build express app in file-storage
+RUN cd file-storage
+RUN yarn --frozen-lockfile
+
 # Production image, copy all the files and run next
 FROM base AS runner
+
+RUN npm install pm2 -g
+
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -48,7 +55,15 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+# Express File-Storage
+COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage
+
+# PM2 Config
+COPY --from=builder --chown=nextjs:nodejs /app/ecosystem.config.js ./ecosystem.config.js
 
 USER nextjs
 
@@ -59,4 +74,5 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["yarn", "start:prod"]
+
+CMD ["pm2-runtime", "ecosystem.config.js"]

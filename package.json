@@ -15,8 +15,7 @@
         "db:pull": "npx dotenv -e .env.local -- prisma db pull",
         "docker:build": "docker build -t coquo .",
         "docker:run": "docker-compose down && docker compose up -d",
-        "build:prod": "dotenv -e .env.local -- prisma generate && next build",
-        "start:prod": "npx prisma migrate deploy && node server.js"
+        "build:prod": "dotenv -e .env.local -- prisma generate && next build"
     },
     "prisma": {
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

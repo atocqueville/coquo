@@ -1,9 +1,9 @@
-import { createPost } from '@/lib/actions';
+import { createRecipe } from '@/lib/api/recipe';
 
 export default function CreateForm() {
     return (
         <div>
-            <form action={createPost}>
+            <form action={createRecipe}>
                 <h1>New Post</h1>
                 <input name="title" placeholder="Title" />
                 <input name="content" placeholder="Content" />
