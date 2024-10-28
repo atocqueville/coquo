@@ -18,8 +18,8 @@ export default function CustomAuthLayout({
                 <Image
                     alt="Healthy food"
                     src={healthyFoodImage}
-                    layout="fill"
-                    objectFit="cover"
+                    className="object-cover"
+                    fill
                 />
                 <div
                     style={{ top: '150px' }}

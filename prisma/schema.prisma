@@ -9,24 +9,32 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  posts         Post[]
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  image     String?
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  recipes   Recipe[]
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  author    User?    @relation(fields: [authorId], references: [id])
+model Recipe {
+  id          Int          @id @default(autoincrement())
+  title       String
+  picture     String?
+  ingredients String
+  steps       RecipeStep[]
+  userId      String
+  author      User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+}
+
+model RecipeStep {
+  id           Int    @id @default(autoincrement())
+  Recipe       Recipe @relation(fields: [recipeId], references: [id])
+  recipeId     Int
+  title        String
+  instructions String
 }

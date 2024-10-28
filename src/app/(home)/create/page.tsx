@@ -1,4 +1,3 @@
-import ButtonLink from '@/components/button-link';
 import { createPost } from '@/lib/actions';
 
 export default function CreateForm() {
@@ -12,8 +11,6 @@ export default function CreateForm() {
                 <button color="secondary" type="submit">
                     Create Post{' '}
                 </button>
-
-                <ButtonLink path="/posts">Go back to posts list !</ButtonLink>
             </form>
         </div>
     );
