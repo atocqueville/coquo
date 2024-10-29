@@ -1,10 +1,11 @@
 import type { Recipe } from '@prisma/client';
+import { MEDIA_STORAGE_MEDIAL_URL } from '@/lib/api/express.constants';
 
 export default function Recipe({ recipe }: { recipe: Recipe }) {
     return (
         <div>
             <img
-                src={`http://localhost:3040/media/${recipe.picture}`}
+                src={`${MEDIA_STORAGE_MEDIAL_URL}/${recipe.picture}`}
                 alt={'recipe top view'}
             />
             <p>{recipe.title}</p>

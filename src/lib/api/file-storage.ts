@@ -1,5 +1,7 @@
 'use server';
 
+import { FILE_STORAGE_MEDIAL_URL } from './express.constants';
+
 export async function uploadImage(
     fileList: FileList
 ): Promise<{ path: string }> {
@@ -9,7 +11,7 @@ export async function uploadImage(
     const formData = new FormData();
     formData.append('file', fileList[0] as File);
 
-    return fetch('http://localhost:3040/file', {
+    return fetch(FILE_STORAGE_MEDIAL_URL, {
         method: 'POST',
         body: formData,
     }).then((response) => response.json());
