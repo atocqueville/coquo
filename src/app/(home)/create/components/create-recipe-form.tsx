@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,36 +9,38 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signIn } from 'next-auth/react';
+import { createRecipe } from '@/lib/api/recipe';
+import { uploadImage } from '@/lib/api/file-storage';
 import { SpinnerIcon } from '@/components/icons';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const userAuthSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
+const createRecipeSchema = z.object({
+    title: z.string().min(1),
+    // ingredients: z.string().min(1),
+    // steps: z.array(z.string().min(1)),
+    picture: z.any(),
 });
-type FormData = z.infer<typeof userAuthSchema>;
+export type CreateRecipeFormData = z.infer<typeof createRecipeSchema>;
 
-export function LoginForm({ className, ...props }: LoginFormProps) {
+export function CreateRecipeForm({ className, ...props }: LoginFormProps) {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormData>({
-        resolver: zodResolver(userAuthSchema),
+    } = useForm<CreateRecipeFormData>({
+        resolver: zodResolver(createRecipeSchema),
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    async function onSubmit(data: FormData) {
+    async function onSubmit(data: CreateRecipeFormData) {
         setIsLoading(true);
         try {
-            await signIn('credentials', {
-                ...data,
-                redirectTo: '/',
-            });
+            const uploadFileResponse = await uploadImage(data.picture);
+            // delete data.picture;
+            await createRecipe(data, uploadFileResponse.path);
         } catch (error) {
-            console.log(error);
+            console.log('ceci est mon error', error);
         }
         setIsLoading(false);
     }
@@ -49,36 +50,39 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">
-                        <Label className="sr-only" htmlFor="email">
-                            Email
+                        <Label className="sr-only" htmlFor="title">
+                            Title
                         </Label>
                         <Input
-                            id="email"
-                            placeholder="name@example.com"
-                            type="email"
-                            autoCapitalize="none"
-                            autoComplete="email"
-                            autoCorrect="off"
-                            disabled={isLoading}
-                            {...register('email')}
+                            id="title"
+                            placeholder="Titre de la recette"
+                            type="text"
+                            {...register('title')}
                         />
-                        {errors?.email && (
+                        {errors?.title && (
                             <p className="px-1 text-xs text-red-600">
-                                {errors.email.message}
+                                {errors.title.message}
                             </p>
                         )}
-                        <Input
-                            id="password"
-                            placeholder="Mot de passe"
-                            type="password"
-                            disabled={isLoading}
-                            {...register('password')}
+                        {/* <Input
+                            id="ingredients"
+                            placeholder="Ingredients"
+                            type="text"
+                            {...register('ingredients')}
                         />
-                        {errors?.password && (
+                        {errors?.ingredients && (
                             <p className="px-1 text-xs text-red-600">
-                                {errors.password.message}
+                                {errors.ingredients.message}
                             </p>
-                        )}
+                        )} */}
+                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                            <Label htmlFor="picture">Picture</Label>
+                            <Input
+                                id="picture"
+                                type="file"
+                                {...register('picture')}
+                            />
+                        </div>
                     </div>
                     <button
                         className={cn(buttonVariants())}
@@ -87,7 +91,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                         {isLoading && (
                             <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Sign In with Email
+                        Ajouter la recette
                     </button>
                 </div>
             </form>

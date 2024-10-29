@@ -1,7 +1,12 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
     output: 'standalone',
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '12mb',
+        },
+    },
     headers: async () => [
         {
             source: '/(.*)',
@@ -38,6 +43,6 @@ const nextConfig: NextConfig = {
             ],
         },
     ],
-}
+};
 
-export default nextConfig
+export default nextConfig;

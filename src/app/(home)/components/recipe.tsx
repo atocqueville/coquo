@@ -3,6 +3,10 @@ import type { Recipe } from '@prisma/client';
 export default function Recipe({ recipe }: { recipe: Recipe }) {
     return (
         <div>
+            <img
+                src={`http://localhost:3040/media/${recipe.picture}`}
+                alt={'recipe top view'}
+            />
             <p>{recipe.title}</p>
         </div>
     );
