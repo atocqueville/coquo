@@ -6,3 +6,5 @@ services:
       - 3030:3000
     volumes:
       - ./config:/config
+    environment:
+      - AUTH_URL=http://localhost:3030/api/auth

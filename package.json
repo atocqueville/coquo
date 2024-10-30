@@ -37,7 +37,7 @@
         "crypto-js": "^4.2.0",
         "dotenv-cli": "^7.3.0",
         "lucide-react": "^0.453.0",
-        "next": "15.0.0",
+        "next": "15.0.2",
         "next-auth": "^5.0.0-beta.25",
         "prisma": "5.21.1",
         "react": "19.0.0-rc-65a56d0e-20241020",

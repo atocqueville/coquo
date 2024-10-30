@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { Recipe } from '@prisma/client';
 
 export default async function Recipe({ recipe }: { recipe: Recipe }) {
@@ -6,12 +5,7 @@ export default async function Recipe({ recipe }: { recipe: Recipe }) {
 
     return (
         <div>
-            <Image
-                src={imageUrl}
-                width={250}
-                height={250}
-                alt={'recipe top view'}
-            />
+            <img src={imageUrl} alt={'recipe top view'} />
             <p>{recipe.title}</p>
         </div>
     );

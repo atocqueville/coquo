@@ -12,5 +12,8 @@ module.exports = [
     {
         name: 'file-storage',
         script: 'file-storage/server.js',
+        env: {
+            MEDIA_PATH: '../../config/media',
+        },
     },
 ];

@@ -50,14 +50,16 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
             await createUser(data);
         } catch (error) {
             console.log(error);
-            setIsLoading(false);
-            throw error;
         }
 
-        await signIn('credentials', {
-            ...data,
-            redirectTo: '/',
-        });
+        try {
+            await signIn('credentials', {
+                ...data,
+                redirectTo: '/',
+            });
+        } catch (error) {
+            console.log(error);
+        }
 
         setIsLoading(false);
     }

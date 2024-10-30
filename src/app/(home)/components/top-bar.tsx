@@ -20,12 +20,12 @@ export default function TopBar() {
                         className="top-0 bottom-0 fixed z-10 outline-none w-[310px] flex"
                         style={
                             {
-                                left: '2rem',
+                                left: '3rem',
                                 '--initial-transform': 'calc(100% + 3rem)',
                             } as React.CSSProperties
                         }
                     >
-                        <div className="bg-zinc-50 h-full w-full grow p-5 flex flex-col rounded-[16px]">
+                        <div className="bg-zinc-50 h-full w-full grow p-5 flex flex-col rounded-r-[16px]">
                             <div className="max-w-md mx-auto">
                                 <Drawer.Title className="font-medium mb-2 text-zinc-900">
                                     Filtres

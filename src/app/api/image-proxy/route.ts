@@ -14,9 +14,16 @@ export async function GET(request: Request) {
         return new Response('Image not found', { status: 404 });
     }
 
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType || !contentType.startsWith('image')) {
+        return new Response("The requested resource isn't a valid image", {
+            status: 400,
+        });
+    }
+
     // Renvoyer l'image sous forme de flux (stream)
     const imageBuffer = await response.arrayBuffer();
     return new Response(imageBuffer, {
-        headers: { 'Content-Type': 'image/jpeg' }, // Adapter au type d'image
+        headers: { 'Content-Type': contentType },
     });
 }

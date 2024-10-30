@@ -40,7 +40,7 @@ export function CreateRecipeForm({ className, ...props }: LoginFormProps) {
             // delete data.picture;
             await createRecipe(data, uploadFileResponse.path);
         } catch (error) {
-            console.log('ceci est mon error', error);
+            console.log(error);
         }
         setIsLoading(false);
     }
