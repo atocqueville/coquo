@@ -31,5 +31,8 @@ app.post('/file', upload.single('file'), (req, res) => {
 
 app.listen(3040, 'localhost', (err) => {
     if (err) console.error(err);
-    else console.info('Listening at http://localhost:3040 to upload files');
+    else
+        console.info(
+            'Listening at http://localhost:3040, serving static folder media and ready to upload'
+        );
 });

@@ -1,11 +1,15 @@
+import Image from 'next/image';
 import type { Recipe } from '@prisma/client';
-import { MEDIA_STORAGE_MEDIAL_URL } from '@/lib/api/express.constants';
 
-export default function Recipe({ recipe }: { recipe: Recipe }) {
+export default async function Recipe({ recipe }: { recipe: Recipe }) {
+    const imageUrl = `/api/image-proxy?imageId=${recipe.picture}`;
+
     return (
         <div>
-            <img
-                src={`${MEDIA_STORAGE_MEDIAL_URL}/${recipe.picture}`}
+            <Image
+                src={imageUrl}
+                width={250}
+                height={250}
                 alt={'recipe top view'}
             />
             <p>{recipe.title}</p>
