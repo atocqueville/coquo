@@ -2,7 +2,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/sidebar';
 import { SessionProvider } from 'next-auth/react';
 
-export default function HomeLayout({
+export default function CookBookLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

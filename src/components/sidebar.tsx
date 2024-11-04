@@ -43,7 +43,7 @@ export function AppSidebar() {
     ];
 
     return (
-        <div className="z-20 bg-emerald-500">
+        <div className="z-40 bg-emerald-500">
             <Sidebar collapsible="icon">
                 <SidebarHeader>
                     <SidebarMenu>

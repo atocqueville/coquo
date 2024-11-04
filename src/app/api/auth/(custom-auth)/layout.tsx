@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import healthyFoodImage from '../../../../../public/healthy-food.jpg';
 import { poppins } from '@/app/fonts';
 
 export default function CustomAuthLayout({
@@ -17,7 +16,7 @@ export default function CustomAuthLayout({
             >
                 <Image
                     alt="Healthy food"
-                    src={healthyFoodImage}
+                    src="/healthy-food.jpg"
                     className="object-cover"
                     fill
                 />

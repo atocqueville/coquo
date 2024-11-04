@@ -6,6 +6,7 @@ import type { Prisma, Recipe } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import type { CreateRecipeFormData } from '@/app/(home)/create/components/create-recipe-form';
 import { auth } from '@/auth';
+import type { RecipeUi } from '@/lib/model/recipe-ui';
 
 /**
  * Override to use filters
@@ -21,6 +22,36 @@ export async function getRecipes(): Promise<Recipe[]> {
         //     },
         // }
         ();
+}
+
+export async function getRecipeById(id: string): Promise<RecipeUi> {
+    const recipeDb = await prisma.recipe.findUnique({
+        where: {
+            id: Number(id),
+        },
+        include: {
+            steps: true,
+        },
+    });
+    if (!recipeDb) {
+        throw new Error('Recipe not found');
+    }
+
+    const recipeUi = {
+        id: recipeDb.id,
+        title: recipeDb.title,
+        picture: recipeDb.picture,
+        ingredients: recipeDb.ingredients.split(';'),
+        steps: recipeDb.steps.map((step) => {
+            return {
+                id: step.id,
+                title: step.title,
+                instructions: step.instructions.split(';'),
+            };
+        }),
+    };
+
+    return recipeUi;
 }
 
 export async function createRecipe(

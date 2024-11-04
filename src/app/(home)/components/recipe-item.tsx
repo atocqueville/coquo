@@ -4,8 +4,6 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import type { Recipe } from '@prisma/client';
 
 export default async function RecipeItem({ recipe }: { recipe: Recipe }) {
-    const imageUrl = `/api/image-proxy?imageId=${recipe.picture}`;
-
     return (
         <Link href={`/r/${recipe.id}`}>
             <AspectRatio
@@ -13,7 +11,7 @@ export default async function RecipeItem({ recipe }: { recipe: Recipe }) {
                 className="bg-muted overflow-hidden rounded-md"
             >
                 <Image
-                    src={imageUrl}
+                    src={`/api/image-proxy?imageId=${recipe.picture}`}
                     alt="recipe top view"
                     fill
                     className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-[1.15]"

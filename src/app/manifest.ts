@@ -1,10 +1,10 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Next.js PWA',
-        short_name: 'NextPWA',
-        description: 'A Progressive Web App built with Next.js',
+        name: 'Coquo',
+        short_name: 'Coquo',
+        description: 'Cook. Create. Collect.',
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
@@ -21,5 +21,5 @@ export default function manifest(): MetadataRoute.Manifest {
                 type: 'image/png',
             },
         ],
-    }
+    };
 }
