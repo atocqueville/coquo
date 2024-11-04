@@ -11,7 +11,7 @@ export default function HomeLayout({
         <SessionProvider>
             <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="bg-emerald-100 w-full">{children}</main>
+                <main className="w-full">{children}</main>
             </SidebarProvider>
         </SessionProvider>
     );

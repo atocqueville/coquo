@@ -1,13 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import {
-    CookingPot,
-    Settings,
-    SquarePen,
-    ChevronUp,
-    User2,
-} from 'lucide-react';
+import { CookingPot, Star, SquarePen, ChevronUp, User2 } from 'lucide-react';
 import {
     Sidebar,
     SidebarHeader,
@@ -37,20 +31,19 @@ export function AppSidebar() {
             icon: CookingPot,
         },
         {
+            title: 'Favorite',
+            url: '/favorite',
+            icon: Star,
+        },
+        {
             title: 'Create',
             url: '/create',
             icon: SquarePen,
         },
-
-        {
-            title: 'Settings',
-            url: '/settings',
-            icon: Settings,
-        },
     ];
 
     return (
-        <div className="z-20">
+        <div className="z-20 bg-emerald-500">
             <Sidebar collapsible="icon">
                 <SidebarHeader>
                     <SidebarMenu>

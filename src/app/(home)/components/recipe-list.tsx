@@ -1,13 +1,13 @@
 import { getRecipes } from '@/lib/api/recipe';
-import Recipe from './recipe';
+import RecipeItem from './recipe-item';
 
 export default async function RecipeList() {
     const recipes = await getRecipes();
 
     return (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-8 grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {recipes.map((recipe) => (
-                <Recipe key={recipe.id} recipe={recipe} />
+                <RecipeItem key={recipe.id} recipe={recipe} />
             ))}
         </div>
     );
