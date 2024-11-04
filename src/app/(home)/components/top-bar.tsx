@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 
 export default function TopBar() {
     return (
-        <div className="sticky py-4 top-0 z-10 bg-white border-b border-solid">
+        <div className="sticky py-4 top-0 z-10 backdrop-blur-sm bg-white/30 border-b border-solid">
             <div className="flex items-center gap-2 mx-8">
                 <Drawer.Root direction="left">
                     <Drawer.Trigger
