@@ -11,9 +11,10 @@ Self hosted recipe manager written in Next.js.
 - [ ] Add "Season" to recipes
 - [ ] Add a Favorite star to recipes
 - [ ] Add a step list with checkboxes to grey out completed steps
-- [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser
+- [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser to get recipes from marmiton
 - [ ] Implement push notifications for PWA
 - [ ] Separation entre entrées, plats, desserts dans la liste des recettes
+- [ ] Une page CHANGELOG
 
 ## Docker push
 
