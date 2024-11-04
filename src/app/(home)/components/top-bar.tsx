@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 
 export default function TopBar() {
     return (
-        <div className="flex items-center gap-2 h-12 z-10 top-4 sticky top-0">
+        <div className="flex items-center gap-2 h-12 top-4 sticky top-0">
             <Drawer.Root direction="left">
                 <Drawer.Trigger
                     asChild
