@@ -17,7 +17,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
             </div>
 
             <div className="mx-16">
-                <h3 className="my-16 text-center text-5xl font-bold tracking-tight">
+                <h3 className="my-16 text-center text-5xl font-bold leading-[1.2] tracking-tight">
                     {recipe.title}
                 </h3>
 
