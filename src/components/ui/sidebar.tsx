@@ -1,10 +1,8 @@
 'use client';
-
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
-
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -18,7 +16,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '16rem';
@@ -69,7 +66,6 @@ const SidebarProvider = React.forwardRef<
     ) => {
         const isMobile = useIsMobile();
         const [openMobile, setOpenMobile] = React.useState(false);
-
         // This is the internal state of the sidebar.
         // We use openProp and setOpenProp for control from outside the component.
         const [_open, _setOpen] = React.useState(defaultOpen);
@@ -83,20 +79,17 @@ const SidebarProvider = React.forwardRef<
                 }
 
                 _setOpen(value);
-
                 // This sets the cookie to keep the sidebar state.
                 document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
             },
             [setOpenProp, open]
         );
-
         // Helper to toggle the sidebar.
         const toggleSidebar = React.useCallback(() => {
             return isMobile
                 ? setOpenMobile((open) => !open)
                 : setOpen((open) => !open);
         }, [isMobile, setOpen, setOpenMobile]);
-
         // Adds a keyboard shortcut to toggle the sidebar.
         React.useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
@@ -108,15 +101,12 @@ const SidebarProvider = React.forwardRef<
                     toggleSidebar();
                 }
             };
-
             window.addEventListener('keydown', handleKeyDown);
             return () => window.removeEventListener('keydown', handleKeyDown);
         }, [toggleSidebar]);
-
         // We add a state so that we can do data-state="expanded" or "collapsed".
         // This makes it easier to style the sidebar with Tailwind classes.
         const state = open ? 'expanded' : 'collapsed';
-
         const contextValue = React.useMemo<SidebarContext>(
             () => ({
                 state,
@@ -185,7 +175,6 @@ const Sidebar = React.forwardRef<
         ref
     ) => {
         const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
-
         if (collapsible === 'none') {
             return (
                 <div
@@ -256,7 +245,7 @@ const Sidebar = React.forwardRef<
                         // Adjust the padding for floating and inset variants.
                         variant === 'floating' || variant === 'inset'
                             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-                            : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon]',
+                            : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l',
                         className
                     )}
                     {...props}
@@ -273,13 +262,11 @@ const Sidebar = React.forwardRef<
     }
 );
 Sidebar.displayName = 'Sidebar';
-
 const SidebarTrigger = React.forwardRef<
     React.ElementRef<typeof Button>,
     React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
     const { toggleSidebar } = useSidebar();
-
     return (
         <Button
             ref={ref}
@@ -305,7 +292,6 @@ const SidebarRail = React.forwardRef<
     React.ComponentProps<'button'>
 >(({ className, ...props }, ref) => {
     const { toggleSidebar } = useSidebar();
-
     return (
         <button
             ref={ref}
@@ -451,7 +437,6 @@ const SidebarGroupLabel = React.forwardRef<
     React.ComponentProps<'div'> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'div';
-
     return (
         <Comp
             ref={ref}
@@ -472,7 +457,6 @@ const SidebarGroupAction = React.forwardRef<
     React.ComponentProps<'button'> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
-
     return (
         <Comp
             ref={ref}
@@ -574,7 +558,6 @@ const SidebarMenuButton = React.forwardRef<
     ) => {
         const Comp = asChild ? Slot : 'button';
         const { isMobile, state } = useSidebar();
-
         const button = (
             <Comp
                 ref={ref}
@@ -613,7 +596,6 @@ const SidebarMenuButton = React.forwardRef<
     }
 );
 SidebarMenuButton.displayName = 'SidebarMenuButton';
-
 const SidebarMenuAction = React.forwardRef<
     HTMLButtonElement,
     React.ComponentProps<'button'> & {
@@ -622,7 +604,6 @@ const SidebarMenuAction = React.forwardRef<
     }
 >(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
-
     return (
         <Comp
             ref={ref}
@@ -739,7 +720,6 @@ const SidebarMenuSubButton = React.forwardRef<
     }
 >(({ asChild = false, size = 'md', isActive, className, ...props }, ref) => {
     const Comp = asChild ? Slot : 'a';
-
     return (
         <Comp
             ref={ref}
