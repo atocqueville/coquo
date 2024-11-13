@@ -9,7 +9,7 @@ const CrossableCheckbox = React.forwardRef<
     React.ElementRef<typeof Checkbox>,
     React.ComponentPropsWithoutRef<typeof Checkbox>
 >(({ className, ...props }, ref) => (
-    <div className="flex items-center">
+    <div className="flex items-center my-2">
         <Checkbox
             ref={ref}
             className={cn(
