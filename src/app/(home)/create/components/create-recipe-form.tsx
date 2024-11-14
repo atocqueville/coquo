@@ -47,6 +47,9 @@ export function CreateRecipeForm({ className, ...props }: LoginFormProps) {
 
     return (
         <div className={cn('grid gap-6', className)} {...props}>
+            <h3 className="text-center text-3xl font-bold">
+                Ajouter une recette
+            </h3>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">

@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const multer = require('multer');
 
 const MEDIA_PATH = process.env.MEDIA_PATH || '../config/media';
-
+console.log('MEDIA ENV', MEDIA_PATH);
 const storage = multer.diskStorage({
     destination: (req, file, callback) => callback(null, MEDIA_PATH),
     filename: (req, file, callback) =>
@@ -30,7 +30,9 @@ app.use(
 app.use('/media', express.static(path.resolve(__dirname, MEDIA_PATH)));
 
 app.post('/file', upload.single('file'), (req, res) => {
+    console.log('log du post', req);
     if (req.file) {
+        console.log('in if');
         const shortPath = req.file.path.replace(MEDIA_PATH + '/', '');
         res.json({ path: shortPath });
     } else {

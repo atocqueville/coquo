@@ -8,7 +8,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
         <IngredientSidebar>
             <div className="h-screen">
                 <CustomTrigger />
-                <div className="relative h-3/6">
+                <div className="relative h-1/2">
                     <Image
                         src={`/api/image-proxy?imageId=${recipe.picture}`}
                         fill

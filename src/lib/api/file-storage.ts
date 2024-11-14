@@ -10,9 +10,16 @@ export async function uploadImage(
     }
     const formData = new FormData();
     formData.append('file', fileList[0] as File);
-
+    console.log('start upload');
     return fetch(FILE_STORAGE_URL + '/file', {
         method: 'POST',
         body: formData,
-    }).then((response) => response.json());
+    })
+        .then((response) => {
+            console.log('uload done', response);
+            return response.json();
+        })
+        .catch((e) => {
+            console.log('error', e);
+        });
 }
