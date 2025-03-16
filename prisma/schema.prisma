@@ -25,6 +25,10 @@ model Recipe {
   picture     String?
   ingredients String
   steps       RecipeStep[]
+  difficulty  Int
+  prepTime    Int
+  cookTime    Int
+  servings    Int
   userId      String
   author      User         @relation(fields: [userId], references: [id])
   createdAt   DateTime     @default(now()) @map("created_at")

@@ -67,6 +67,19 @@ export function CreateRecipeForm({ className, ...props }: LoginFormProps) {
                                 {errors.title.message}
                             </p>
                         )}
+
+                        <Input
+                            id="title"
+                            placeholder="Titre de la recette"
+                            type="text"
+                            {...register('title')}
+                        />
+                        {errors?.title && (
+                            <p className="px-1 text-xs text-red-600">
+                                {errors.title.message}
+                            </p>
+                        )}
+
                         {/* <Input
                             id="ingredients"
                             placeholder="Ingredients"

@@ -1,6 +1,10 @@
 export const aubergineRotie = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',
     picture: 'potimarron.jpg',
+    difficulty: 3,
+    servings: 4,
+    prepTime: 45,
+    cookTime: 20,
     ingredients:
         "2x aubergine (560g);Huile d'olive;150 g graines de couscous Bio;25 g amandes effilée;200 mL eau;1x gousse d'ail (4g);30 g purée de sésame Bio;100 g fromage blanc;0.5 citron jaune;qq brins coriandre",
     steps: {
@@ -24,6 +28,10 @@ export const aubergineRotie = {
 export const potimarron = {
     title: 'Gnocchis à la crème de potimarron et noisettes',
     picture: 'gnocchis.jpg',
+    difficulty: 1,
+    servings: 2,
+    prepTime: 15,
+    cookTime: 35,
     ingredients:
         "800g potimarron;2x gousse d'ail (6g);300g crème;1 bouillon de légumes (cube);2x oignon jaune;2x gousse d'ail (6g);50g noisettes décortiquées;1200g gnocchi de pommes de terre fraiches;Quelques brins de persil plat",
     steps: {

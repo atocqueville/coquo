@@ -50,7 +50,7 @@ export function IngredientSidebar({ children }: { children: React.ReactNode }) {
                 <ScrollArea className="h-full w-full" type="scroll">
                     <div className="m-8">
                         {Array.from({ length: 50 }, (v, k) => (
-                            <CrossableCheckbox id={k + 'id'}>
+                            <CrossableCheckbox id={k + 'id'} key={k}>
                                 Ingrédient random {k}
                             </CrossableCheckbox>
                         ))}

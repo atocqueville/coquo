@@ -1,25 +1,35 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import type { Recipe } from '@prisma/client';
 
 export default async function RecipeItem({ recipe }: { recipe: Recipe }) {
     return (
-        <Link href={`/r/${recipe.id}`}>
-            <AspectRatio
-                ratio={1}
-                className="bg-muted overflow-hidden rounded-md"
-            >
+        <Link
+            key={recipe.id}
+            href={`/r/${recipe.id}`}
+            className="group overflow-hidden rounded-lg border bg-card text-card-foreground shadow transition-all hover:shadow-md"
+        >
+            <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
                     src={`/api/image-proxy?imageId=${recipe.picture}`}
                     alt="recipe top view"
                     fill
-                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-[1.15]"
+                    className="object-cover transition-transform group-hover:scale-105"
                 />
-            </AspectRatio>
-            <h3 className="mt-4 scroll-m-20 text-center text-2xl font-normal tracking-tight hover:underline">
-                {recipe.title}
-            </h3>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-12">
+                    <div className="flex justify-between text-white">
+                        <span className="text-sm font-medium">
+                            {recipe.duration}
+                        </span>
+                        <span className="text-sm font-medium">
+                            {recipe.difficulty}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div className="p-4">
+                <h3 className="font-medium line-clamp-2">{recipe.title}</h3>
+            </div>
         </Link>
     );
 }

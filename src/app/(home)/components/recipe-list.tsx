@@ -5,10 +5,12 @@ export default async function RecipeList() {
     const recipes = await getRecipes();
 
     return (
-        <div className="mx-16 mt-16 grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((recipe) => (
-                <RecipeItem key={recipe.id} recipe={recipe} />
-            ))}
-        </div>
+        <main className="flex-1 container px-4 py-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {recipes.map((recipe) => (
+                    <RecipeItem key={recipe.id} recipe={recipe} />
+                ))}
+            </div>
+        </main>
     );
 }
