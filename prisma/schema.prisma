@@ -26,6 +26,7 @@ model Recipe {
   ingredients String
   steps       RecipeStep[]
   difficulty  Int
+  description String?
   prepTime    Int
   cookTime    Int
   servings    Int

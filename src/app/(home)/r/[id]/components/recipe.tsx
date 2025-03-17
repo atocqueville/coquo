@@ -8,18 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 
-export default async function RecipeNew({ recipe }: { recipe: RecipeUi }) {
-    // This would normally come from a database or API
-
-    recipe = {
-        ...recipe,
-        prepTime: '30 min',
-        cookTime: '45 min',
-        servings: 8,
-        description:
-            'Une délicieuse tarte aux pommes traditionnelle française, parfaite pour le dessert ou le goûter.',
-        tips: 'Pour une version plus gourmande, vous pouvez ajouter une couche de crème pâtissière sous les pommes.',
-    } as any;
+export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     return (
         <div className="flex min-h-screen flex-col">
             <div className="flex flex-1">
@@ -94,9 +83,9 @@ export default async function RecipeNew({ recipe }: { recipe: RecipeUi }) {
                             </div>
 
                             <h2 className="mt-8 text-2xl font-semibold">
-                                Conseils
+                                Commentaires
                             </h2>
-                            <p className="mt-4">{recipe.tips}</p>
+                            <p className="mt-4">À venir... (lol)</p>
                         </div>
 
                         {/* Sticky ingredients panel - desktop only */}

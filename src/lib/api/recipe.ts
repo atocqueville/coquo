@@ -38,9 +38,7 @@ export async function getRecipeById(id: string): Promise<RecipeUi> {
     }
 
     const recipeUi = {
-        id: recipeDb.id,
-        title: recipeDb.title,
-        picture: recipeDb.picture,
+        ...recipeDb,
         ingredients: recipeDb.ingredients.split(';'),
         steps: recipeDb.steps.map((step) => {
             return {
@@ -94,5 +92,10 @@ const mapCreateRecipeFormDataToRecipeDb = (
                 id: userId,
             },
         },
+        prepTime: 0,
+        cookTime: 0,
+        servings: 0,
+        difficulty: 0,
+        description: '',
     };
 };
