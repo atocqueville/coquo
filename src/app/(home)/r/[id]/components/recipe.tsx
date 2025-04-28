@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Clock, List, Users } from 'lucide-react';
+import { ChevronLeft, Clock, List, Users } from 'lucide-react';
 
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
+import { CrossableStep } from '@/components/ui/crossable-step';
+import Link from 'next/link';
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     return (
@@ -22,70 +24,77 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             className="object-cover"
                             priority
                         />
+                        {/* Back button overlay - desktop only */}
+                        <div className="absolute top-4 left-4 hidden lg:block">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                asChild
+                                className="gap-1 bg-background/80 backdrop-blur-sm hover:bg-background/90 text-base font-semibold"
+                            >
+                                <Link href="/">
+                                    <ChevronLeft className="h-4 w-4" />
+                                    Retour aux recettes
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="flex flex-col lg:flex-row">
                         {/* Recipe content */}
-                        <div className="flex-1 p-6">
-                            <h1 className="text-3xl font-bold">
-                                {recipe.title}
-                            </h1>
+                        <div className="flex-1">
+                            <div className="sticky top-0 bg-white">
+                                <div className="p-6">
+                                    <h1 className="text-3xl font-bold">
+                                        {recipe.title}
+                                    </h1>
 
-                            <div className="mt-2 flex items-center gap-4 text-muted-foreground">
-                                <div className="flex items-center">
-                                    <Clock className="mr-1 h-4 w-4" />
-                                    <span>Préparation: {recipe.prepTime}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Clock className="mr-1 h-4 w-4" />
-                                    <span>Cuisson: {recipe.cookTime}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Users className="mr-1 h-4 w-4" />
-                                    <span>{recipe.servings} personnes</span>
-                                </div>
-                            </div>
-
-                            <Separator className="my-6" />
-
-                            <p className="text-lg">{recipe.description}</p>
-
-                            <h2 className="mt-8 text-2xl font-semibold">
-                                Instructions
-                            </h2>
-                            <div className="mt-4 space-y-8">
-                                {recipe.steps.map((step) => (
-                                    <div key={step.id} className="space-y-4">
-                                        <h3 className="text-xl font-medium">
-                                            {step.title}
-                                        </h3>
-                                        <ol className="space-y-4 pl-5">
-                                            {step.instructions.map(
-                                                (instruction, idx) => (
-                                                    <li
-                                                        key={idx}
-                                                        className="pl-2"
-                                                    >
-                                                        <div className="flex gap-4">
-                                                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                                                {idx + 1}
-                                                            </div>
-                                                            <p className="pt-1">
-                                                                {instruction}
-                                                            </p>
-                                                        </div>
-                                                    </li>
-                                                )
-                                            )}
-                                        </ol>
+                                    <div className="mt-2 flex items-center gap-4 text-muted-foreground">
+                                        <div className="flex items-center">
+                                            <Clock className="mr-1 h-4 w-4" />
+                                            <span>
+                                                Préparation: {recipe.prepTime}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <Clock className="mr-1 h-4 w-4" />
+                                            <span>
+                                                Cuisson: {recipe.cookTime}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <Users className="mr-1 h-4 w-4" />
+                                            <span>
+                                                {recipe.servings} personnes
+                                            </span>
+                                        </div>
                                     </div>
-                                ))}
+                                </div>
+                                <Separator />
                             </div>
 
-                            <h2 className="mt-8 text-2xl font-semibold">
-                                Commentaires
-                            </h2>
-                            <p className="mt-4">À venir... (lol)</p>
+                            <div className="p-6">
+                                <p className="text-lg">{recipe.description}</p>
+
+                                <h2 className="text-2xl font-semibold">
+                                    Instructions
+                                </h2>
+                                <div className="mt-4 space-y-8">
+                                    {recipe.steps.map((step) => (
+                                        <CrossableStep
+                                            key={step.id}
+                                            id={step.id.toString()}
+                                            title={step.title}
+                                            instructions={step.instructions}
+                                        />
+                                    ))}
+                                </div>
+
+                                <h2 className="mt-8 text-2xl font-semibold">
+                                    Commentaires
+                                </h2>
+                                <p className="mt-4">À venir... (lol)</p>
+                            </div>
                         </div>
 
                         {/* Sticky ingredients panel - desktop only */}
