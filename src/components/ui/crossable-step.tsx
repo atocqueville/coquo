@@ -57,9 +57,6 @@ export function CrossableStep({
                 {instructions.map((instruction, idx) => (
                     <li key={idx} className="pl-2">
                         <div className="flex gap-4">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                {idx + 1}
-                            </div>
                             <CrossableCheckbox
                                 id={`instruction-${id}-${idx}`}
                                 checked={instructionStates[idx]}

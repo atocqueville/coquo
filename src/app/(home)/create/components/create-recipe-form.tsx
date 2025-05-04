@@ -1,147 +1,406 @@
 'use client';
 
-import * as React from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import type React from 'react';
 
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { useState } from 'react';
+import Link from 'next/link';
+import { Plus, Trash2, Upload } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createRecipe } from '@/lib/api/recipe';
-import { uploadImage } from '@/lib/api/file-storage';
-import { SpinnerIcon } from '@/components/icons';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+// import { uploadImage } from '@/lib/api/file-storage';
+// import { createRecipe } from '@/lib/api/recipe';
 
-interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+export default function CreateRecipeForm() {
+    const [title, setTitle] = useState('');
+    const [ingredients, setIngredients] = useState<string[]>(['']);
+    const [steps, setSteps] = useState<
+        Array<{ id: number; title: string; instructions: string[] }>
+    >([{ id: 1, title: '', instructions: [''] }]);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-const createRecipeSchema = z.object({
-    title: z.string().min(1),
-    // ingredients: z.string().min(1),
-    // steps: z.array(z.string().min(1)),
-    picture: z.any(),
-});
-export type CreateRecipeFormData = z.infer<typeof createRecipeSchema>;
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
-export function CreateRecipeForm({ className, ...props }: LoginFormProps) {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<CreateRecipeFormData>({
-        resolver: zodResolver(createRecipeSchema),
-    });
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const addIngredient = () => {
+        setIngredients([...ingredients, '']);
+    };
 
-    async function onSubmit(data: CreateRecipeFormData) {
-        setIsLoading(true);
+    const updateIngredient = (index: number, value: string) => {
+        const newIngredients = [...ingredients];
+        newIngredients[index] = value;
+        setIngredients(newIngredients);
+    };
+
+    const removeIngredient = (index: number) => {
+        if (ingredients.length > 1) {
+            const newIngredients = [...ingredients];
+            newIngredients.splice(index, 1);
+            setIngredients(newIngredients);
+        }
+    };
+
+    const addStep = () => {
+        const newId =
+            steps.length > 0
+                ? Math.max(...steps.map((step) => step.id)) + 1
+                : 1;
+        setSteps([...steps, { id: newId, title: '', instructions: [''] }]);
+    };
+
+    const updateStepTitle = (index: number, value: string) => {
+        const newSteps = [...steps];
+        newSteps[index].title = value;
+        setSteps(newSteps);
+    };
+
+    const addInstruction = (stepIndex: number) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].instructions.push('');
+        setSteps(newSteps);
+    };
+
+    const updateInstruction = (
+        stepIndex: number,
+        instructionIndex: number,
+        value: string
+    ) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].instructions[instructionIndex] = value;
+        setSteps(newSteps);
+    };
+
+    const removeInstruction = (stepIndex: number, instructionIndex: number) => {
+        if (steps[stepIndex].instructions.length > 1) {
+            const newSteps = [...steps];
+            newSteps[stepIndex].instructions.splice(instructionIndex, 1);
+            setSteps(newSteps);
+        }
+    };
+
+    const removeStep = (index: number) => {
+        if (steps.length > 1) {
+            const newSteps = [...steps];
+            newSteps.splice(index, 1);
+            setSteps(newSteps);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
         try {
-            const uploadFileResponse = await uploadImage(data.picture);
+            // const uploadFileResponse = await uploadImage(imagePreview);
             // delete data.picture;
-            await createRecipe(data, uploadFileResponse.path);
+
+            // Filter out empty ingredients and instructions
+            const filteredIngredients = ingredients.filter(
+                (ingredient) => ingredient.trim() !== ''
+            );
+            const filteredSteps = steps
+                .map((step) => ({
+                    ...step,
+                    instructions: step.instructions.filter(
+                        (instruction) => instruction.trim() !== ''
+                    ),
+                }))
+                .filter(
+                    (step) =>
+                        step.title.trim() !== '' && step.instructions.length > 0
+                );
+
+            const recipe = {
+                title,
+                picture: imagePreview,
+                ingredients: filteredIngredients,
+                steps: filteredSteps,
+            };
+
+            console.log('Recipe to save:', recipe);
+
+            // await createRecipe(recipe, uploadFileResponse.path);
         } catch (error) {
             console.log(error);
+            return 'bite';
         }
-        setIsLoading(false);
-    }
+    };
 
     return (
-        <div className={cn('grid gap-6', className)} {...props}>
-            <h3 className="text-center text-3xl font-bold">
-                Ajouter une recette
-            </h3>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid gap-2">
-                    <div className="grid gap-1">
-                        <Label className="sr-only" htmlFor="title">
-                            Title
-                        </Label>
-                        <Input
-                            id="title"
-                            placeholder="Titre de la recette"
-                            type="text"
-                            {...register('title')}
-                        />
-                        {errors?.title && (
-                            <p className="px-1 text-xs text-red-600">
-                                {errors.title.message}
-                            </p>
-                        )}
-
-                        <Input
-                            id="title"
-                            placeholder="Titre de la recette"
-                            type="text"
-                            {...register('title')}
-                        />
-                        {errors?.title && (
-                            <p className="px-1 text-xs text-red-600">
-                                {errors.title.message}
-                            </p>
-                        )}
-
-                        {/* <Input
-                            id="ingredients"
-                            placeholder="Ingredients"
-                            type="text"
-                            {...register('ingredients')}
-                        />
-                        {errors?.ingredients && (
-                            <p className="px-1 text-xs text-red-600">
-                                {errors.ingredients.message}
-                            </p>
-                        )} */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="picture">Picture</Label>
-                            <Input
-                                id="picture"
-                                type="file"
-                                {...register('picture')}
-                            />
-                        </div>
-                    </div>
-                    <button
-                        className={cn(buttonVariants())}
-                        disabled={isLoading}
-                    >
-                        {isLoading && (
-                            <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Ajouter la recette
-                    </button>
-                </div>
-            </form>
-
-            {/* 
-             TO ADD BACK WHEN IMPLEMENTING GOOGLE AUTH
-             
-             
-             <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                    </span>
+        <>
+            <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold">
+                        Créer une nouvelle recette
+                    </h1>
                 </div>
             </div>
-            <button
-                type="button"
-                className={cn(buttonVariants({ variant: 'outline' }))}
-                onClick={() => {
-                    setIsGitHubLoading(true);
-                    signIn('github');
-                }}
-                disabled={isLoading || isGitHubLoading}
+
+            <form
+                id="recipe-form"
+                onSubmit={handleSubmit}
+                className="space-y-8"
             >
-                {isGitHubLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Icons.gitHub className="mr-2 h-4 w-4" />
-                )}{' '}
-                Github
-            </button> */}
-        </div>
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="space-y-4">
+                            <div>
+                                <Label htmlFor="title" className="text-base">
+                                    Titre de la recette
+                                </Label>
+                                <Input
+                                    id="title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Ex: Tarte aux pommes traditionnelle"
+                                    className="mt-1.5"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <Label htmlFor="image" className="text-base">
+                                    Image de la recette
+                                </Label>
+                                <div className="mt-1.5 flex items-center gap-4">
+                                    <div className="relative flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border border-dashed border-muted-foreground/25 transition-colors hover:border-muted-foreground/50">
+                                        <input
+                                            id="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className="absolute inset-0 cursor-pointer opacity-0"
+                                            onChange={handleImageChange}
+                                        />
+                                        {imagePreview ? (
+                                            <img
+                                                src={
+                                                    imagePreview ||
+                                                    '/placeholder.svg'
+                                                }
+                                                alt="Preview"
+                                                className="h-full w-full rounded-md object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center text-muted-foreground">
+                                                <Upload className="mb-2 h-8 w-8" />
+                                                <span>Ajouter une image</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        <p>Formats acceptés: JPG, PNG, GIF</p>
+                                        <p>Taille maximale: 5 MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h2 className="text-xl font-semibold">
+                                Ingrédients
+                            </h2>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={addIngredient}
+                            >
+                                <Plus className="mr-1 h-4 w-4" />
+                                Ajouter un ingrédient
+                            </Button>
+                        </div>
+                        <Separator className="mb-4" />
+                        <div className="space-y-3">
+                            {ingredients.map((ingredient, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-center gap-2"
+                                >
+                                    <Input
+                                        value={ingredient}
+                                        onChange={(e) =>
+                                            updateIngredient(
+                                                index,
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="Ex: 100g de farine"
+                                        className="flex-1"
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => removeIngredient(index)}
+                                        disabled={ingredients.length === 1}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                        <span className="sr-only">
+                                            Supprimer
+                                        </span>
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h2 className="text-xl font-semibold">
+                                Étapes de préparation
+                            </h2>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={addStep}
+                            >
+                                <Plus className="mr-1 h-4 w-4" />
+                                Ajouter une étape
+                            </Button>
+                        </div>
+                        <Separator className="mb-6" />
+                        <div className="space-y-8">
+                            {steps.map((step, stepIndex) => (
+                                <div
+                                    key={step.id}
+                                    className="rounded-lg border p-4"
+                                >
+                                    <div className="mb-4 flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                                                {stepIndex + 1}
+                                            </div>
+                                            <h3 className="font-medium">
+                                                Étape {stepIndex + 1}
+                                            </h3>
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() =>
+                                                removeStep(stepIndex)
+                                            }
+                                            disabled={steps.length === 1}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                            <span className="sr-only">
+                                                Supprimer l&apos;étape
+                                            </span>
+                                        </Button>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <Label
+                                            htmlFor={`step-title-${step.id}`}
+                                            className="mb-1.5 block"
+                                        >
+                                            Titre de l&apos;étape
+                                        </Label>
+                                        <Input
+                                            id={`step-title-${step.id}`}
+                                            value={step.title}
+                                            onChange={(e) =>
+                                                updateStepTitle(
+                                                    stepIndex,
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Ex: Préparation de la pâte"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <Label className="block">
+                                            Instructions
+                                        </Label>
+                                        {step.instructions.map(
+                                            (instruction, instructionIndex) => (
+                                                <div
+                                                    key={instructionIndex}
+                                                    className="flex items-start gap-2"
+                                                >
+                                                    <Textarea
+                                                        value={instruction}
+                                                        onChange={(e) =>
+                                                            updateInstruction(
+                                                                stepIndex,
+                                                                instructionIndex,
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        placeholder="Ex: Mélanger la farine, le sucre et la levure"
+                                                        className="flex-1 min-h-[80px]"
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() =>
+                                                            removeInstruction(
+                                                                stepIndex,
+                                                                instructionIndex
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            step.instructions
+                                                                .length === 1
+                                                        }
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                        <span className="sr-only">
+                                                            Supprimer
+                                                            l&apos;instruction
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            )
+                                        )}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                addInstruction(stepIndex)
+                                            }
+                                            className="mt-2"
+                                        >
+                                            <Plus className="mr-1 h-4 w-4" />
+                                            Ajouter une instruction
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="flex justify-end gap-4">
+                    <Button type="button" variant="outline" asChild>
+                        <Link href="/">Annuler</Link>
+                    </Button>
+                    <Button type="submit">Enregistrer la recette</Button>
+                </div>
+            </form>
+        </>
     );
 }

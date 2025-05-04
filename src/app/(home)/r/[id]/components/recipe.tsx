@@ -43,7 +43,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                     <div className="flex flex-col lg:flex-row">
                         {/* Recipe content */}
                         <div className="flex-1">
-                            <div className="sticky top-0 bg-white">
+                            <div className="sticky top-0 bg-white z-10">
                                 <div className="p-6">
                                     <h1 className="text-3xl font-bold">
                                         {recipe.title}
