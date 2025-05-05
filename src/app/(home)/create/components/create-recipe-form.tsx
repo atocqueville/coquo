@@ -4,7 +4,7 @@ import type React from 'react';
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Upload } from 'lucide-react';
+import { Plus, Trash2, Upload, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,8 +12,30 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-// import { uploadImage } from '@/lib/api/file-storage';
-// import { createRecipe } from '@/lib/api/recipe';
+import { Badge } from '@/components/ui/badge';
+import { uploadImage } from '@/lib/api/file-storage';
+import { createRecipe } from '@/lib/api/recipe';
+
+// Available tags for recipes
+const availableTags = [
+    'vegetarian',
+    'vegan',
+    'meat',
+    'fish',
+    'gluten-free',
+    'dairy-free',
+    'quick',
+    'summer',
+    'winter',
+    'autumn',
+    'spring',
+    'dessert',
+    'breakfast',
+    'lunch',
+    'dinner',
+    'snack',
+    'spicy',
+];
 
 export default function CreateRecipeForm() {
     const [title, setTitle] = useState('');
@@ -22,9 +44,13 @@ export default function CreateRecipeForm() {
         Array<{ id: number; title: string; instructions: string[] }>
     >([{ id: 1, title: '', instructions: [''] }]);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState('');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        setImageFile(file);
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -98,12 +124,31 @@ export default function CreateRecipeForm() {
         }
     };
 
+    const addTag = (tag: string) => {
+        if (tag && !selectedTags.includes(tag)) {
+            setSelectedTags([...selectedTags, tag]);
+        }
+        setTagInput('');
+    };
+
+    const removeTag = (tag: string) => {
+        setSelectedTags(selectedTags.filter((t) => t !== tag));
+    };
+
+    const filteredTags = availableTags.filter(
+        (tag) =>
+            !selectedTags.includes(tag) &&
+            tag.toLowerCase().includes(tagInput.toLowerCase())
+    );
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        let uploadFileResponse: { path: string } | null = null;
 
         try {
-            // const uploadFileResponse = await uploadImage(imagePreview);
-            // delete data.picture;
+            if (imageFile) {
+                uploadFileResponse = await uploadImage([imageFile]);
+            }
 
             // Filter out empty ingredients and instructions
             const filteredIngredients = ingredients.filter(
@@ -123,17 +168,18 @@ export default function CreateRecipeForm() {
 
             const recipe = {
                 title,
-                picture: imagePreview,
+                picture: uploadFileResponse?.path,
                 ingredients: filteredIngredients,
                 steps: filteredSteps,
+                tags: selectedTags,
             };
 
             console.log('Recipe to save:', recipe);
 
-            // await createRecipe(recipe, uploadFileResponse.path);
+            await createRecipe(recipe);
         } catch (error) {
             console.log(error);
-            return 'bite';
+            return 'Error while saving recipe';
         }
     };
 
@@ -201,6 +247,101 @@ export default function CreateRecipeForm() {
                                     <div className="text-sm text-muted-foreground">
                                         <p>Formats acceptés: JPG, PNG, GIF</p>
                                         <p>Taille maximale: 5 MB</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <Label className="text-base">Tags</Label>
+                                <div className="mt-1.5 space-y-3">
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedTags.map((tag) => (
+                                            <Badge
+                                                key={tag}
+                                                variant={tag as never}
+                                                className="flex items-center gap-1"
+                                            >
+                                                {tag}
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        removeTag(tag)
+                                                    }
+                                                    className="ml-1 rounded-full hover:bg-white/20"
+                                                >
+                                                    <X className="h-3 w-3" />
+                                                    <span className="sr-only">
+                                                        Supprimer le tag {tag}
+                                                    </span>
+                                                </button>
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                    <div className="relative">
+                                        <Input
+                                            value={tagInput}
+                                            onChange={(e) =>
+                                                setTagInput(e.target.value)
+                                            }
+                                            placeholder="Ajouter un tag..."
+                                            className="w-full"
+                                            onKeyDown={(e) => {
+                                                if (
+                                                    e.key === 'Enter' &&
+                                                    tagInput
+                                                ) {
+                                                    e.preventDefault();
+                                                    addTag(tagInput);
+                                                }
+                                            }}
+                                        />
+                                        {tagInput && (
+                                            <div className="absolute z-10 mt-1 w-full rounded-md border bg-background shadow-lg">
+                                                <div className="max-h-60 overflow-auto p-1">
+                                                    {filteredTags.length > 0 ? (
+                                                        filteredTags.map(
+                                                            (tag) => (
+                                                                <div
+                                                                    key={tag}
+                                                                    className="cursor-pointer rounded-sm px-2 py-1.5 hover:bg-muted"
+                                                                    onClick={() =>
+                                                                        addTag(
+                                                                            tag
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {tag}
+                                                                </div>
+                                                            )
+                                                        )
+                                                    ) : (
+                                                        <div className="px-2 py-1.5 text-muted-foreground">
+                                                            Aucun tag
+                                                            correspondant
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {availableTags
+                                            .slice(0, 8)
+                                            .map((tag) => (
+                                                <Button
+                                                    key={tag}
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => addTag(tag)}
+                                                    disabled={selectedTags.includes(
+                                                        tag
+                                                    )}
+                                                    className="text-xs"
+                                                >
+                                                    {tag}
+                                                </Button>
+                                            ))}
                                     </div>
                                 </div>
                             </div>
@@ -285,9 +426,6 @@ export default function CreateRecipeForm() {
                                 >
                                     <div className="mb-4 flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                                                {stepIndex + 1}
-                                            </div>
                                             <h3 className="font-medium">
                                                 Étape {stepIndex + 1}
                                             </h3>

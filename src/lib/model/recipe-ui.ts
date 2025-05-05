@@ -8,6 +8,7 @@ export interface RecipeUi {
     cookTime: number;
     prepTime: number;
     servings: number;
+    tags: string[];
     steps: Array<{
         id: number;
         title: string;

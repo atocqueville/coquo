@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
@@ -13,25 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createUser } from '@/lib/api/user';
 import { SpinnerIcon } from '@/components/icons';
+import { userAuthSchema } from '@/schemas';
 
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const userAuthSchema = z
-    .object({
-        email: z.string().email(),
-        password: z.string().min(6),
-        passwordConfirmation: z.string().min(6),
-        name: z.string(),
-    })
-    .refine(
-        ({ password, passwordConfirmation }) =>
-            password === passwordConfirmation,
-        {
-            path: ['passwordConfirmation'],
-            message: 'Les mots de passe ne correspondent pas',
-        }
-    );
-export type RegisterFormData = z.infer<typeof userAuthSchema>;
+type RegisterFormData = z.infer<typeof userAuthSchema>;
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
     const {
@@ -48,18 +34,19 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
         try {
             await createUser(data);
+            console.log('User created');
         } catch (error) {
             console.log(error);
         }
 
-        try {
-            await signIn('credentials', {
-                ...data,
-                redirectTo: '/',
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     await signIn('credentials', {
+        //         ...data,
+        //         redirectTo: '/',
+        //     });
+        // } catch (error) {
+        //     console.log(error);
+        // }
 
         setIsLoading(false);
     }

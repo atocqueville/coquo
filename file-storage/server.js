@@ -30,9 +30,7 @@ app.use(
 app.use('/media', express.static(path.resolve(__dirname, MEDIA_PATH)));
 
 app.post('/file', upload.single('file'), (req, res) => {
-    console.log('log du post', req);
     if (req.file) {
-        console.log('in if');
         const shortPath = req.file.path.replace(MEDIA_PATH + '/', '');
         res.json({ path: shortPath });
     } else {

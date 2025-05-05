@@ -12,14 +12,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signIn } from 'next-auth/react';
 import { SpinnerIcon } from '@/components/icons';
+import { UserLoginSchema } from '@/schemas';
+import { AuthError } from '@auth/core/errors';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const userAuthSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-});
-type FormData = z.infer<typeof userAuthSchema>;
+type FormData = z.infer<typeof UserLoginSchema>;
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
     const {
@@ -27,7 +25,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>({
-        resolver: zodResolver(userAuthSchema),
+        resolver: zodResolver(UserLoginSchema),
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -40,6 +38,16 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             });
         } catch (error) {
             console.log(error);
+            if (error instanceof AuthError) {
+                switch (error.name) {
+                    case 'CredentialsSignin':
+                        return { error: 'Invalid credentials!' };
+                    default:
+                        return { error: 'Something went wrong!' };
+                }
+            }
+
+            throw error;
         }
         setIsLoading(false);
     }

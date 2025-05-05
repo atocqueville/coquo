@@ -6,6 +6,12 @@ module.exports = [
         autorestart: false,
     },
     {
+        name: 'prisma-seed',
+        script: 'npx',
+        args: 'prisma db seed',
+        autorestart: false,
+    },
+    {
         name: 'nextjs',
         script: 'server.js',
     },

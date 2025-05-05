@@ -13,6 +13,7 @@
         "prisma:reset": "npx dotenv -e .env.local -- prisma migrate reset",
         "prisma:migrate": "npx dotenv -e .env.local -- prisma migrate dev --name",
         "db:seed": "npx dotenv -e .env.local -- prisma db seed",
+        "db:push": "npx dotenv -e .env.local -- prisma db push",
         "db:pull": "npx dotenv -e .env.local -- prisma db pull",
         "docker:build": "docker build -t coquo .",
         "docker:run": "docker-compose down && docker compose up -d",
@@ -22,6 +23,7 @@
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
     },
     "dependencies": {
+        "@auth/prisma-adapter": "^2.9.0",
         "@heroicons/react": "^2.1.4",
         "@hookform/resolvers": "^3.9.0",
         "@prisma/client": "5.21.1",
@@ -33,7 +35,7 @@
         "@radix-ui/react-label": "^2.1.0",
         "@radix-ui/react-scroll-area": "^1.2.0",
         "@radix-ui/react-separator": "^1.1.0",
-        "@radix-ui/react-slot": "^1.1.0",
+        "@radix-ui/react-slot": "^1.2.0",
         "@radix-ui/react-tooltip": "^1.1.3",
         "bcryptjs": "^2.4.3",
         "class-variance-authority": "^0.7.0",
@@ -42,7 +44,7 @@
         "dotenv-cli": "^7.3.0",
         "lucide-react": "^0.503.0",
         "next": "15.0.2",
-        "next-auth": "^5.0.0-beta.25",
+        "next-auth": "^5.0.0-beta.27",
         "prisma": "5.21.1",
         "react": "19.0.0-rc-65a56d0e-20241020",
         "react-dom": "19.0.0-rc-65a56d0e-20241020",

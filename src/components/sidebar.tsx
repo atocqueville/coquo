@@ -19,7 +19,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export function AppSidebar() {
     const session = useSession();
@@ -60,7 +60,9 @@ export function AppSidebar() {
                                     className="w-[--radix-popper-anchor-width]"
                                 >
                                     <DropdownMenuItem>
-                                        <span>Sign out</span>
+                                        <button onClick={() => signOut()}>
+                                            Sign out
+                                        </button>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

@@ -1,9 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Recipe } from '@prisma/client';
 import { toDifficulty } from '@/lib/pipes/toDifficulty';
-
-export default async function RecipeItem({ recipe }: { recipe: Recipe }) {
+import { Badge } from '@/components/ui/badge';
+import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
+export default async function RecipeItem({
+    recipe,
+}: {
+    recipe: RecipeWithTagsAndAuthor;
+}) {
     return (
         <Link
             key={recipe.id}
@@ -29,7 +33,20 @@ export default async function RecipeItem({ recipe }: { recipe: Recipe }) {
                 </div>
             </div>
             <div className="p-4">
-                <h3 className="font-medium line-clamp-2">{recipe.title}</h3>
+                <h3 className="font-medium line-clamp-2 mb-2">
+                    {recipe.title}
+                </h3>
+                <div className="flex flex-wrap gap-1.5">
+                    {recipe.tags.map((tag) => (
+                        <Badge
+                            key={tag.id}
+                            variant={tag.name as never}
+                            size="sm"
+                        >
+                            {tag.name}
+                        </Badge>
+                    ))}
+                </div>
             </div>
         </Link>
     );

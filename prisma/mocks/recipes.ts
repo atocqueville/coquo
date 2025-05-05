@@ -25,6 +25,9 @@ export const aubergineRotie = {
             },
         ],
     },
+    tags: {
+        connect: [{ name: 'vegetarian' }, { name: 'quick' }],
+    },
 };
 
 export const potimarron = {
@@ -47,5 +50,8 @@ export const potimarron = {
                 instructions: `Émincez l'oignon.;Dans une sauteuse, faites chauffer un filet d'huile d'olive à feu moyen à vif.;Faites revenir l'oignon avec le reste de l'ail 10 min. Salez, poivrez.;Au bout des 10 min, ajoutez les gnocchis et poursuivez la cuisson 5 min.;Effeuillez et ciselez le persil.;Hachez grossièrement les noisettes.`,
             },
         ],
+    },
+    tags: {
+        connect: [{ name: 'winter' }, { name: 'lunch' }, { name: 'vegan' }],
     },
 };
