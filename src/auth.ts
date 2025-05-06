@@ -1,12 +1,16 @@
-import NextAuth from 'next-auth';
-// import Credentials from 'next-auth/providers/credentials';
-// import { z } from 'zod';
-// import { getUser } from '@/lib/api/user';
-
+import NextAuth, { type DefaultSession } from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import authConfig from '@/auth.config';
 import { getUserById } from '@/data/user';
+
+declare module 'next-auth' {
+    interface Session {
+        user: {
+            role?: 'ADMIN' | 'USER';
+        } & DefaultSession['user'];
+    }
+}
 
 export const runtime = 'nodejs';
 
@@ -26,12 +30,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
 
             if (token.role && session.user) {
-                // session.user.role = token.role as string;
+                session.user.role = token.role as 'ADMIN' | 'USER';
             }
 
             if (session.user) {
                 session.user.name = token.name;
-                // session.user.email = token.email;
+                session.user.email = token.email as string;
                 //   session.user.isOAuth = token.isOAuth as boolean;
                 //   session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
             }
@@ -51,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.name = existingUser.name;
             token.email = existingUser.email;
             token.role = existingUser.role;
+            console.log({ token });
             // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
             return token;
