@@ -16,28 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { uploadImage } from '@/lib/api/file-storage';
 import { createRecipe } from '@/lib/api/recipe';
 
-// Available tags for recipes
-const availableTags = [
-    'vegetarian',
-    'vegan',
-    'meat',
-    'fish',
-    'gluten-free',
-    'dairy-free',
-    'quick',
-    'summer',
-    'winter',
-    'autumn',
-    'spring',
-    'dessert',
-    'breakfast',
-    'lunch',
-    'dinner',
-    'snack',
-    'spicy',
-];
-
-export default function CreateRecipeForm() {
+export default function CreateRecipeForm({ tags }: { tags: string[] }) {
     const [title, setTitle] = useState('');
     const [ingredients, setIngredients] = useState<string[]>(['']);
     const [steps, setSteps] = useState<
@@ -135,7 +114,7 @@ export default function CreateRecipeForm() {
         setSelectedTags(selectedTags.filter((t) => t !== tag));
     };
 
-    const filteredTags = availableTags.filter(
+    const filteredTags = tags.filter(
         (tag) =>
             !selectedTags.includes(tag) &&
             tag.toLowerCase().includes(tagInput.toLowerCase())
@@ -325,23 +304,21 @@ export default function CreateRecipeForm() {
                                         )}
                                     </div>
                                     <div className="flex flex-wrap gap-1.5">
-                                        {availableTags
-                                            .slice(0, 8)
-                                            .map((tag) => (
-                                                <Button
-                                                    key={tag}
-                                                    type="button"
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => addTag(tag)}
-                                                    disabled={selectedTags.includes(
-                                                        tag
-                                                    )}
-                                                    className="text-xs"
-                                                >
-                                                    {tag}
-                                                </Button>
-                                            ))}
+                                        {tags.slice(0, 8).map((tag) => (
+                                            <Button
+                                                key={tag}
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => addTag(tag)}
+                                                disabled={selectedTags.includes(
+                                                    tag
+                                                )}
+                                                className="text-xs"
+                                            >
+                                                {tag}
+                                            </Button>
+                                        ))}
                                     </div>
                                 </div>
                             </div>

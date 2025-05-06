@@ -94,6 +94,11 @@ const mapCreateRecipeFormDataToRecipeDb = (
                 id: userId,
             },
         },
+        tags: {
+            connect: createRecipeFormData.tags.map((tag) => ({
+                name: tag,
+            })),
+        },
         prepTime: 0,
         cookTime: 0,
         servings: 0,

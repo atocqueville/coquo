@@ -60,7 +60,11 @@ export function AppSidebar() {
                                     className="w-[--radix-popper-anchor-width]"
                                 >
                                     <DropdownMenuItem>
-                                        <button onClick={() => signOut()}>
+                                        <button
+                                            onClick={() =>
+                                                signOut({ redirectTo: '/' })
+                                            }
+                                        >
                                             Sign out
                                         </button>
                                     </DropdownMenuItem>

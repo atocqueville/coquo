@@ -11,6 +11,7 @@ RUN yarn --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -57,6 +58,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+RUN cp prisma/seed.prod.js prisma/seed.js
 
 # Express File-Storage
 COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage

@@ -1,4 +1,4 @@
-export const aubergineRotie = {
+const aubergineRotie = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',
     picture: 'potimarron.jpg',
     difficulty: 3,
@@ -30,7 +30,7 @@ export const aubergineRotie = {
     },
 };
 
-export const potimarron = {
+const potimarron = {
     title: 'Gnocchis à la crème de potimarron et noisettes',
     picture: 'gnocchis.jpg',
     difficulty: 1,
@@ -54,4 +54,9 @@ export const potimarron = {
     tags: {
         connect: [{ name: 'winter' }, { name: 'lunch' }, { name: 'vegan' }],
     },
+};
+
+module.exports = {
+    aubergineRotie,
+    potimarron,
 };

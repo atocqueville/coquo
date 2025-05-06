@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { aubergineRotie, potimarron } from './mocks/recipes';
+const { PrismaClient } = require('@prisma/client');
+const { aubergineRotie, potimarron } = require('./mocks/recipes.js');
 
 const prisma = new PrismaClient();
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -28,12 +28,10 @@ async function main() {
                 { name: 'spicy' },
             ],
         });
-        console.log('Seeded tags.');
+        console.log('[PRISMA] Seeded tags.');
     } else {
-        console.log('Tags already seeded.');
+        console.log('[PRISMA] Tags already seeded.');
     }
-
-    // You can repeat the same pattern for other models
 }
 
 main()
