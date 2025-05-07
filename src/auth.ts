@@ -24,6 +24,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     adapter: PrismaAdapter(prisma),
     callbacks: {
+        async signIn({ user }) {
+            const existingUser = await getUserById(user.id as string);
+            // TODO: Check if user email is verified
+            if (!existingUser) return false;
+
+            return true;
+        },
         async session({ token, session }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub;
@@ -55,10 +62,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.name = existingUser.name;
             token.email = existingUser.email;
             token.role = existingUser.role;
-            console.log({ token });
             // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
             return token;
+        },
+    },
+    events: {
+        async createUser({ user }) {
+            const usersCount = await prisma.user.count();
+            if (usersCount === 1) {
+                await prisma.user.update({
+                    where: { id: user.id },
+                    data: { role: 'ADMIN' },
+                });
+            }
         },
     },
     ...authConfig,

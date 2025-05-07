@@ -5,8 +5,6 @@ const aubergineRotie = {
     servings: 4,
     prepTime: 45,
     cookTime: 20,
-    description:
-        'Une délicieuse tarte aux pommes traditionnelle française, parfaite pour le dessert ou le goûter.',
     ingredients:
         "2x aubergine (560g);Huile d'olive;150 g graines de couscous Bio;25 g amandes effilée;200 mL eau;1x gousse d'ail (4g);30 g purée de sésame Bio;100 g fromage blanc;0.5 citron jaune;qq brins coriandre",
     steps: {

@@ -26,7 +26,7 @@ async function main() {
         ],
     });
 
-    const alice = await prisma.user.upsert({
+    await prisma.user.upsert({
         where: { email: 'alice@prisma.io' },
         update: {},
         create: {
@@ -45,7 +45,8 @@ async function main() {
             },
         },
     });
-    const alex = await prisma.user.upsert({
+
+    await prisma.user.upsert({
         where: { email: 'alex@prisma.io' },
         update: {},
         create: {
@@ -66,9 +67,21 @@ async function main() {
                     potimarron,
                 ],
             },
+            starredRecipes: {
+                connect: [
+                    {
+                        id: 1,
+                    },
+                    {
+                        id: 4,
+                    },
+                    {
+                        id: 5,
+                    },
+                ],
+            },
         },
     });
-    console.log({ alice, alex });
 }
 
 main()

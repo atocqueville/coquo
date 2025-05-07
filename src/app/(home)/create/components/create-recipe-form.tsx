@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Plus, Trash2, Upload, X } from 'lucide-react';
 
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { uploadImage } from '@/lib/api/file-storage';
 import { createRecipe } from '@/lib/api/recipe';
+import type { CreateRecipeSchema } from '@/schemas';
+
+type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
 export default function CreateRecipeForm({ tags }: { tags: string[] }) {
     const [title, setTitle] = useState('');
@@ -26,6 +30,11 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
     const [imageFile, setImageFile] = useState<File | undefined>(undefined);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
+    const [prepHours, setPrepHours] = useState(0);
+    const [prepMinutes, setPrepMinutes] = useState(0);
+    const [cookHours, setCookHours] = useState(0);
+    const [cookMinutes, setCookMinutes] = useState(0);
+    const [servings, setServings] = useState(4);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -145,12 +154,15 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
                         step.title.trim() !== '' && step.instructions.length > 0
                 );
 
-            const recipe = {
+            const recipe: CreateRecipeFormData = {
                 title,
                 picture: uploadFileResponse?.path,
                 ingredients: filteredIngredients,
                 steps: filteredSteps,
                 tags: selectedTags,
+                prepTime: prepHours * 60 + prepMinutes,
+                cookTime: cookHours * 60 + cookMinutes,
+                servings,
             };
 
             console.log('Recipe to save:', recipe);
@@ -179,24 +191,58 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
             >
                 <Card>
                     <CardContent className="p-6">
+                        <h2 className="mb-4 text-xl font-semibold">
+                            Informations principales
+                        </h2>
+                        <Separator className="mb-6" />
                         <div className="space-y-4">
-                            <div>
-                                <Label htmlFor="title" className="text-base">
-                                    Titre de la recette
-                                </Label>
-                                <Input
-                                    id="title"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="Ex: Tarte aux pommes traditionnelle"
-                                    className="mt-1.5"
-                                    required
-                                />
+                            <div className="flex flex-row gap-4">
+                                <div className="flex-1">
+                                    <Label
+                                        htmlFor="title"
+                                        className="text-base"
+                                    >
+                                        Titre de la recette
+                                    </Label>
+                                    <Input
+                                        id="title"
+                                        value={title}
+                                        onChange={(e) =>
+                                            setTitle(e.target.value)
+                                        }
+                                        placeholder="Ex: Tarte aux pommes traditionnelle"
+                                        className="mt-1.5"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label
+                                        htmlFor="servings"
+                                        className="text-base"
+                                    >
+                                        Nombre de couverts
+                                    </Label>
+                                    <div className="w-full mt-1.5">
+                                        <Input
+                                            id="servings"
+                                            type="number"
+                                            min="1"
+                                            max="20"
+                                            value={servings}
+                                            onChange={(e) =>
+                                                setServings(
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
                                 <Label htmlFor="image" className="text-base">
-                                    Image de la recette
+                                    Photo du plat
                                 </Label>
                                 <div className="mt-1.5 flex items-center gap-4">
                                     <div className="relative flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border border-dashed border-muted-foreground/25 transition-colors hover:border-muted-foreground/50">
@@ -232,7 +278,7 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
 
                             <div>
                                 <Label className="text-base">Tags</Label>
-                                <div className="mt-1.5 space-y-3">
+                                <div className="space-y-3">
                                     <div className="flex flex-wrap gap-2">
                                         {selectedTags.map((tag) => (
                                             <Badge
@@ -319,6 +365,108 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
                                                 {tag}
                                             </Button>
                                         ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+                                <div className="space-y-2">
+                                    <Label className="text-base">
+                                        Temps de préparation
+                                    </Label>
+                                    <div className="flex items-center gap-2">
+                                        <div className="">
+                                            <Label
+                                                htmlFor="prep-hours"
+                                                className="text-xs text-muted-foreground"
+                                            >
+                                                Heures
+                                            </Label>
+                                            <Input
+                                                id="prep-hours"
+                                                type="number"
+                                                min="0"
+                                                max="24"
+                                                value={prepHours}
+                                                onChange={(e) =>
+                                                    setPrepHours(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className="mt-1"
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label
+                                                htmlFor="prep-minutes"
+                                                className="text-xs text-muted-foreground"
+                                            >
+                                                Minutes
+                                            </Label>
+                                            <Input
+                                                id="prep-minutes"
+                                                type="number"
+                                                min="0"
+                                                max="59"
+                                                value={prepMinutes}
+                                                onChange={(e) =>
+                                                    setPrepMinutes(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className="mt-1"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-base">
+                                        Temps de cuisson
+                                    </Label>
+                                    <div className="flex items-center gap-2">
+                                        <div>
+                                            <Label
+                                                htmlFor="cook-hours"
+                                                className="text-xs text-muted-foreground"
+                                            >
+                                                Heures
+                                            </Label>
+                                            <Input
+                                                id="cook-hours"
+                                                type="number"
+                                                min="0"
+                                                max="24"
+                                                value={cookHours}
+                                                onChange={(e) =>
+                                                    setCookHours(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className="mt-1"
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label
+                                                htmlFor="cook-minutes"
+                                                className="text-xs text-muted-foreground"
+                                            >
+                                                Minutes
+                                            </Label>
+                                            <Input
+                                                id="cook-minutes"
+                                                type="number"
+                                                min="0"
+                                                max="59"
+                                                value={cookMinutes}
+                                                onChange={(e) =>
+                                                    setCookMinutes(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className="mt-1"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

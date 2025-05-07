@@ -18,12 +18,15 @@ export async function createUser(
         throw new Error('User already exists');
     }
 
+    const usersCount = await prisma.user.count();
+
     const salt = await genSalt(SALT_ROUNDS);
     const hashedPassword = await hash(registerFormData.password, salt);
     const formData: Prisma.UserCreateInput = {
         email: registerFormData.email,
         password: hashedPassword,
         name: registerFormData.name,
+        role: usersCount === 0 ? 'ADMIN' : 'USER',
     };
 
     return await prisma.user.create({ data: formData });

@@ -40,6 +40,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </Button>
                         </div>
                     </div>
+                    <Separator />
 
                     <div className="flex flex-col lg:flex-row">
                         {/* Recipe content */}

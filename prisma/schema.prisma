@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  password      String?
-  role          String    @default("USER")
-  image         String?
-  accounts      Account[]
-  recipes       Recipe[]
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  password       String?
+  role           String    @default("USER")
+  image          String?
+  accounts       Account[]
+  recipes        Recipe[]
+  starredRecipes Recipe[]  @relation("Favorites")
 }
 
 model Account {
@@ -49,13 +50,13 @@ model Recipe {
   ingredients String
   steps       RecipeStep[]
   difficulty  Int
-  description String?
   prepTime    Int
   cookTime    Int
   servings    Int
   tags        Tag[]        @relation("RecipeTags")
   userId      String
   author      User         @relation(fields: [userId], references: [id])
+  starredBy   User[]       @relation("Favorites")
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
 }

@@ -8,6 +8,7 @@ import type { CreateRecipeSchema } from '@/schemas';
 import { auth } from '@/auth';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { z } from 'zod';
+import { getUserStarredRecipeIds } from '@/data/user';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -70,6 +71,28 @@ export async function createRecipe(formData: CreateRecipeFormData) {
     redirect('/');
 }
 
+export async function toggleFavorite(recipeId: number) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error('Unauthorized');
+
+    const starredIds = await getUserStarredRecipeIds(session.user.id);
+    if (!starredIds) throw new Error('Failed to load favorites');
+
+    const alreadyStarred = starredIds.includes(Number(recipeId));
+    const action = alreadyStarred ? 'disconnect' : 'connect';
+
+    await prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+            starredRecipes: {
+                [action]: { id: recipeId },
+            },
+        },
+    });
+
+    return { success: true };
+}
+
 /**
  * Map array to string separated by ;
  */
@@ -81,14 +104,12 @@ const mapCreateRecipeFormDataToRecipeDb = (
         title: createRecipeFormData.title,
         picture: createRecipeFormData.picture,
         steps: {
-            create: [
-                {
-                    title: 'Step 1',
-                    instructions: 'Instructions',
-                },
-            ],
+            create: createRecipeFormData.steps.map((step) => ({
+                title: step.title,
+                instructions: step.instructions.join(';'),
+            })),
         },
-        ingredients: 'Ingredients',
+        ingredients: createRecipeFormData.ingredients.join(';'),
         author: {
             connect: {
                 id: userId,
@@ -99,10 +120,9 @@ const mapCreateRecipeFormDataToRecipeDb = (
                 name: tag,
             })),
         },
-        prepTime: 0,
-        cookTime: 0,
-        servings: 0,
+        prepTime: createRecipeFormData.prepTime,
+        cookTime: createRecipeFormData.cookTime,
+        servings: createRecipeFormData.servings,
         difficulty: 0,
-        description: '',
     };
 };
