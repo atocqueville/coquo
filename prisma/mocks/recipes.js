@@ -1,12 +1,10 @@
-export const aubergineRotie = {
+const aubergineRotie = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',
     picture: 'potimarron.jpg',
     difficulty: 3,
     servings: 4,
     prepTime: 45,
     cookTime: 20,
-    description:
-        'Une délicieuse tarte aux pommes traditionnelle française, parfaite pour le dessert ou le goûter.',
     ingredients:
         "2x aubergine (560g);Huile d'olive;150 g graines de couscous Bio;25 g amandes effilée;200 mL eau;1x gousse d'ail (4g);30 g purée de sésame Bio;100 g fromage blanc;0.5 citron jaune;qq brins coriandre",
     steps: {
@@ -25,9 +23,12 @@ export const aubergineRotie = {
             },
         ],
     },
+    tags: {
+        connect: [{ name: 'vegetarian' }, { name: 'quick' }],
+    },
 };
 
-export const potimarron = {
+const potimarron = {
     title: 'Gnocchis à la crème de potimarron et noisettes',
     picture: 'gnocchis.jpg',
     difficulty: 1,
@@ -48,4 +49,12 @@ export const potimarron = {
             },
         ],
     },
+    tags: {
+        connect: [{ name: 'winter' }, { name: 'lunch' }, { name: 'vegan' }],
+    },
+};
+
+module.exports = {
+    aubergineRotie,
+    potimarron,
 };

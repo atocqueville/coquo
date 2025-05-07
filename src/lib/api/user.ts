@@ -2,38 +2,32 @@
 
 import type { Prisma, User } from '@prisma/client';
 import prisma from '@/lib/prisma';
-import { RegisterFormData } from '@/app/api/auth/(custom-auth)/register/register-form';
-import { compare, genSalt, hash } from 'bcryptjs';
+import { genSalt, hash } from 'bcryptjs';
+import { userAuthSchema } from '@/schemas';
+import { z } from 'zod';
+import { getUserByEmail } from '@/data/user';
 
 const SALT_ROUNDS = 6;
 
 export async function createUser(
-    registerFormData: RegisterFormData
+    registerFormData: z.infer<typeof userAuthSchema>
 ): Promise<User> {
+    const existingUser = await getUserByEmail(registerFormData.email);
+
+    if (existingUser) {
+        throw new Error('User already exists');
+    }
+
+    const usersCount = await prisma.user.count();
+
     const salt = await genSalt(SALT_ROUNDS);
     const hashedPassword = await hash(registerFormData.password, salt);
-
     const formData: Prisma.UserCreateInput = {
         email: registerFormData.email,
         password: hashedPassword,
         name: registerFormData.name,
+        role: usersCount === 0 ? 'ADMIN' : 'USER',
     };
+
     return await prisma.user.create({ data: formData });
-}
-
-export async function getUser({
-    email,
-    password,
-}: {
-    email: string;
-    password: string;
-}): Promise<User | null> {
-    const user = await prisma.user.findUnique({
-        where: { email },
-    });
-
-    if (!user) return null;
-    const passwordsMatch = await compare(password, user.password || '');
-    if (passwordsMatch) return user;
-    return null;
 }

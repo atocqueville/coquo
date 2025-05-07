@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     return (
@@ -39,12 +40,13 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </Button>
                         </div>
                     </div>
+                    <Separator />
 
                     <div className="flex flex-col lg:flex-row">
                         {/* Recipe content */}
                         <div className="flex-1">
                             <div className="sticky top-0 bg-white z-10">
-                                <div className="p-6">
+                                <div className="pt-6 pb-4 px-6">
                                     <h1 className="text-3xl font-bold">
                                         {recipe.title}
                                     </h1>
@@ -67,6 +69,18 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                             <span>
                                                 {recipe.servings} personnes
                                             </span>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {recipe.tags.map((tag) => (
+                                                <Badge
+                                                    key={tag}
+                                                    variant={tag as never}
+                                                    size="sm"
+                                                >
+                                                    {tag}
+                                                </Badge>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>

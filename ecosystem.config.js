@@ -1,8 +1,7 @@
 module.exports = [
     {
-        name: 'prisma-migrate',
-        script: 'npx',
-        args: 'prisma migrate deploy',
+        name: 'prisma-init',
+        script: 'prisma/prisma-init.js',
         autorestart: false,
     },
     {

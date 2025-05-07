@@ -13,25 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createUser } from '@/lib/api/user';
 import { SpinnerIcon } from '@/components/icons';
+import { userAuthSchema } from '@/schemas';
 
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const userAuthSchema = z
-    .object({
-        email: z.string().email(),
-        password: z.string().min(6),
-        passwordConfirmation: z.string().min(6),
-        name: z.string(),
-    })
-    .refine(
-        ({ password, passwordConfirmation }) =>
-            password === passwordConfirmation,
-        {
-            path: ['passwordConfirmation'],
-            message: 'Les mots de passe ne correspondent pas',
-        }
-    );
-export type RegisterFormData = z.infer<typeof userAuthSchema>;
+type RegisterFormData = z.infer<typeof userAuthSchema>;
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
     const {
@@ -48,6 +34,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
         try {
             await createUser(data);
+            console.log('User created');
         } catch (error) {
             console.log(error);
         }

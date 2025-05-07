@@ -1,13 +1,36 @@
-import { PrismaClient } from '@prisma/client';
-import { aubergineRotie, potimarron } from './mocks/recipes';
+const { PrismaClient } = require('@prisma/client');
+const { aubergineRotie, potimarron } = require('./mocks/recipes.js');
 
 const prisma = new PrismaClient();
 
 async function main() {
-    const alice = await prisma.user.upsert({
+    await prisma.tag.createMany({
+        data: [
+            { name: 'vegetarian' },
+            { name: 'vegan' },
+            { name: 'meat' },
+            { name: 'fish' },
+            { name: 'gluten-free' },
+            { name: 'dairy-free' },
+            { name: 'quick' },
+            { name: 'summer' },
+            { name: 'winter' },
+            { name: 'autumn' },
+            { name: 'spring' },
+            { name: 'dessert' },
+            { name: 'breakfast' },
+            { name: 'lunch' },
+            { name: 'dinner' },
+            { name: 'snack' },
+            { name: 'spicy' },
+        ],
+    });
+
+    await prisma.user.upsert({
         where: { email: 'alice@prisma.io' },
         update: {},
         create: {
+            role: 'USER',
             email: 'alice@prisma.io',
             password:
                 '$2a$10$JXMsrCj7l89oxq7xeWEHv.9Q0dy2NBrav9WyvccKdL.bYV6a6pFbm',
@@ -22,10 +45,12 @@ async function main() {
             },
         },
     });
-    const alex = await prisma.user.upsert({
+
+    await prisma.user.upsert({
         where: { email: 'alex@prisma.io' },
         update: {},
         create: {
+            role: 'ADMIN',
             email: 'alex@prisma.io',
             name: 'Alex',
             password:
@@ -42,9 +67,21 @@ async function main() {
                     potimarron,
                 ],
             },
+            starredRecipes: {
+                connect: [
+                    {
+                        id: 1,
+                    },
+                    {
+                        id: 4,
+                    },
+                    {
+                        id: 5,
+                    },
+                ],
+            },
         },
     });
-    console.log({ alice, alex });
 }
 
 main()
