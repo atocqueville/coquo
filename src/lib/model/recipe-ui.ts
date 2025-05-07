@@ -3,7 +3,6 @@ export interface RecipeUi {
     title: string;
     picture: string | null;
     ingredients: string[];
-    description: string | null;
     difficulty: number;
     cookTime: number;
     prepTime: number;

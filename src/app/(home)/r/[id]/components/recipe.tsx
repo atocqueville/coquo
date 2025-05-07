@@ -88,8 +88,6 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
 
                             <div className="p-6">
-                                <p className="text-lg">{recipe.description}</p>
-
                                 <h2 className="text-2xl font-semibold">
                                     Instructions
                                 </h2>
