@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { uploadImage } from '@/lib/api/file-storage';
 import { createRecipe } from '@/lib/api/recipe';
 import type { CreateRecipeSchema } from '@/schemas';
+import Image from 'next/image';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -254,12 +255,13 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
                                             onChange={handleImageChange}
                                         />
                                         {imagePreview ? (
-                                            <img
+                                            <Image
                                                 src={
                                                     imagePreview ||
                                                     '/placeholder.svg'
                                                 }
                                                 alt="Preview"
+                                                fill
                                                 className="h-full w-full rounded-md object-cover"
                                             />
                                         ) : (
