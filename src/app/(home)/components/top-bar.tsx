@@ -7,7 +7,7 @@ import { Search } from 'lucide-react';
 
 export default function TopBar() {
     return (
-        <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
+        <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
             <div className="container flex items-center justify-between h-16 px-4">
                 <h1 className="text-2xl font-bold">Toutes les recettes</h1>
                 <div className="flex items-center gap-4">
