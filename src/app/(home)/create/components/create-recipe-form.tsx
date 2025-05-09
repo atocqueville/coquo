@@ -1,11 +1,10 @@
 'use client';
 
 import type React from 'react';
-
 import { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Upload, X } from 'lucide-react';
-
+import { useRouter } from 'next/navigation';
+import { Plus, Trash2, Upload } from 'lucide-react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,15 +12,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
+import { badgeLabel } from '@/components/ui/badge';
 import { uploadImage } from '@/lib/api/file-storage';
 import { createRecipe } from '@/lib/api/recipe';
 import type { CreateRecipeSchema } from '@/schemas';
 import Image from 'next/image';
+import { MultiSelect } from '@/components/ui/multi-select';
+import type { Tag } from '@prisma/client';
+import { toast } from 'sonner';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
-export default function CreateRecipeForm({ tags }: { tags: string[] }) {
+export default function CreateRecipeForm({ tags }: { tags: Tag[] }) {
+    const router = useRouter();
+
     const [title, setTitle] = useState('');
     const [ingredients, setIngredients] = useState<string[]>(['']);
     const [steps, setSteps] = useState<
@@ -30,12 +34,17 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | undefined>(undefined);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [tagInput, setTagInput] = useState('');
     const [prepHours, setPrepHours] = useState(0);
     const [prepMinutes, setPrepMinutes] = useState(0);
     const [cookHours, setCookHours] = useState(0);
     const [cookMinutes, setCookMinutes] = useState(0);
     const [servings, setServings] = useState(4);
+
+    const tagOptions = tags.map((tag) => ({
+        value: tag.id,
+        variant: tag.name,
+        label: badgeLabel[tag.name as keyof typeof badgeLabel],
+    }));
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -113,23 +122,6 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
         }
     };
 
-    const addTag = (tag: string) => {
-        if (tag && !selectedTags.includes(tag)) {
-            setSelectedTags([...selectedTags, tag]);
-        }
-        setTagInput('');
-    };
-
-    const removeTag = (tag: string) => {
-        setSelectedTags(selectedTags.filter((t) => t !== tag));
-    };
-
-    const filteredTags = tags.filter(
-        (tag) =>
-            !selectedTags.includes(tag) &&
-            tag.toLowerCase().includes(tagInput.toLowerCase())
-    );
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         let uploadFileResponse: { path: string } | null = null;
@@ -160,18 +152,24 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
                 picture: uploadFileResponse?.path,
                 ingredients: filteredIngredients,
                 steps: filteredSteps,
-                tags: selectedTags,
+                tags: selectedTags.map(
+                    (tag) =>
+                        tagOptions.find((t) => t.value === tag)?.value as string
+                ),
                 prepTime: prepHours * 60 + prepMinutes,
                 cookTime: cookHours * 60 + cookMinutes,
                 servings,
             };
 
-            console.log('Recipe to save:', recipe);
-
             await createRecipe(recipe);
-        } catch (error) {
-            console.log(error);
-            return 'Error while saving recipe';
+        } catch (err) {
+            console.log(err);
+            toast.error(
+                'Une erreur est survenue lors de la création de la recette'
+            );
+        } finally {
+            toast.success('Recette créée avec succès');
+            router.push('/');
         }
     };
 
@@ -279,94 +277,17 @@ export default function CreateRecipeForm({ tags }: { tags: string[] }) {
                             </div>
 
                             <div>
-                                <Label className="text-base">Tags</Label>
+                                <Label className="text-base" htmlFor="tags">
+                                    Tags
+                                </Label>
                                 <div className="space-y-3">
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedTags.map((tag) => (
-                                            <Badge
-                                                key={tag}
-                                                variant={tag as never}
-                                                className="flex items-center gap-1"
-                                            >
-                                                {tag}
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        removeTag(tag)
-                                                    }
-                                                    className="ml-1 rounded-full hover:bg-white/20"
-                                                >
-                                                    <X className="h-3 w-3" />
-                                                    <span className="sr-only">
-                                                        Supprimer le tag {tag}
-                                                    </span>
-                                                </button>
-                                            </Badge>
-                                        ))}
-                                    </div>
                                     <div className="relative">
-                                        <Input
-                                            value={tagInput}
-                                            onChange={(e) =>
-                                                setTagInput(e.target.value)
-                                            }
-                                            placeholder="Ajouter un tag..."
-                                            className="w-full"
-                                            onKeyDown={(e) => {
-                                                if (
-                                                    e.key === 'Enter' &&
-                                                    tagInput
-                                                ) {
-                                                    e.preventDefault();
-                                                    addTag(tagInput);
-                                                }
-                                            }}
+                                        <MultiSelect
+                                            options={tagOptions}
+                                            onValueChange={setSelectedTags}
+                                            defaultValue={selectedTags}
+                                            placeholder="Sélectionner des tags associés à la recette"
                                         />
-                                        {tagInput && (
-                                            <div className="absolute z-10 mt-1 w-full rounded-md border bg-background shadow-lg">
-                                                <div className="max-h-60 overflow-auto p-1">
-                                                    {filteredTags.length > 0 ? (
-                                                        filteredTags.map(
-                                                            (tag) => (
-                                                                <div
-                                                                    key={tag}
-                                                                    className="cursor-pointer rounded-sm px-2 py-1.5 hover:bg-muted"
-                                                                    onClick={() =>
-                                                                        addTag(
-                                                                            tag
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {tag}
-                                                                </div>
-                                                            )
-                                                        )
-                                                    ) : (
-                                                        <div className="px-2 py-1.5 text-muted-foreground">
-                                                            Aucun tag
-                                                            correspondant
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {tags.slice(0, 8).map((tag) => (
-                                            <Button
-                                                key={tag}
-                                                type="button"
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => addTag(tag)}
-                                                disabled={selectedTags.includes(
-                                                    tag
-                                                )}
-                                                className="text-xs"
-                                            >
-                                                {tag}
-                                            </Button>
-                                        ))}
                                     </div>
                                 </div>
                             </div>

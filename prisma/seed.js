@@ -18,10 +18,8 @@ async function main() {
             { name: 'autumn' },
             { name: 'spring' },
             { name: 'dessert' },
-            { name: 'breakfast' },
             { name: 'lunch' },
             { name: 'dinner' },
-            { name: 'snack' },
             { name: 'spicy' },
         ],
     });
@@ -33,7 +31,7 @@ async function main() {
             role: 'USER',
             email: 'alice@prisma.io',
             password:
-                '$2a$10$JXMsrCj7l89oxq7xeWEHv.9Q0dy2NBrav9WyvccKdL.bYV6a6pFbm',
+                '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
             name: 'Alice',
             recipes: {
                 create: [
@@ -52,6 +50,7 @@ async function main() {
         create: {
             role: 'ADMIN',
             email: 'alex@prisma.io',
+            emailVerified: new Date(),
             name: 'Alex',
             password:
                 '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',

@@ -26,8 +26,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     callbacks: {
         async signIn({ user }) {
             const existingUser = await getUserById(user.id as string);
-            // TODO: Check if user email is verified
-            if (!existingUser) return false;
+            if (!existingUser) throw new Error('User not found');
+            if (!existingUser.emailVerified)
+                throw new Error('Email not verified');
 
             return true;
         },
@@ -73,7 +74,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (usersCount === 1) {
                 await prisma.user.update({
                     where: { id: user.id },
-                    data: { role: 'ADMIN' },
+                    data: { role: 'ADMIN', emailVerified: new Date() },
                 });
             }
         },

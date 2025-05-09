@@ -19,6 +19,8 @@ model User {
   accounts       Account[]
   recipes        Recipe[]
   starredRecipes Recipe[]  @relation("Favorites")
+  isBlocked      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
 }
 
 model Account {

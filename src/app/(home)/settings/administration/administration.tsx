@@ -1,10 +1,7 @@
 'use client';
 
-import type React from 'react';
-
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -23,47 +20,88 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { RoleGate } from '@/components/auth/role-gate';
+import type { User } from '@prisma/client';
+import { verifyUser, blockUser, unblockUser } from '@/lib/api/user';
+import { toast } from 'sonner';
 
-// Mock unverified users
-const unverifiedUsers = [
-    {
-        id: 2,
-        name: 'Marie Martin',
-        email: 'marie.martin@example.com',
-        role: 'user',
-        requestedAt: '2023-05-10',
-    },
-    {
-        id: 3,
-        name: 'Pierre Dubois',
-        email: 'pierre.dubois@example.com',
-        role: 'user',
-        requestedAt: '2023-05-12',
-    },
-    {
-        id: 4,
-        name: 'Sophie Leroy',
-        email: 'sophie.leroy@example.com',
-        role: 'user',
-        requestedAt: '2023-05-15',
-    },
-];
-
-export default function AdministrationTab() {
-    const [pendingUsers, setPendingUsers] = useState(unverifiedUsers);
-
-    const handleApproveUser = (userId: number) => {
-        // Here you would approve the user in your backend
-        console.log('Approved user:', userId);
-        // Remove from pending list
-        setPendingUsers(pendingUsers.filter((user) => user.id !== userId));
+export default function AdministrationTab({
+    unverifiedUsers,
+    blockedUsers,
+}: {
+    unverifiedUsers: User[];
+    blockedUsers: User[];
+}) {
+    const [unverifiedUsersOptimistic, setUnverifiedUsersOptimistic] =
+        useState(unverifiedUsers);
+    const [blockedUsersOptimistic, setBlockedUsersOptimistic] =
+        useState(blockedUsers);
+    const handleApproveUser = (userId: string) => {
+        try {
+            verifyUser(userId);
+            toast.success('Compte validé avec succès');
+            setUnverifiedUsersOptimistic(
+                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            );
+        } catch (error) {
+            console.error(error);
+            toast.error('Une erreur est survenue. Veuillez réessayer.');
+        }
     };
 
-    const handleRejectUser = (userId: number) => {
-        // Here you would reject the user in your backend
-        console.log('Rejected user:', userId);
-        // Remove from pending list
-        setPendingUsers(pendingUsers.filter((user) => user.id !== userId));
+    const handleRejectUser = (userId: string) => {
+        try {
+            blockUser(userId);
+            toast.success('Compte rejeté avec succès');
+
+            // Find the user before removing from unverified list
+            const userToBlock = unverifiedUsersOptimistic.find(
+                (user) => user.id === userId
+            );
+
+            // Remove from unverified list
+            setUnverifiedUsersOptimistic(
+                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            );
+
+            // Add to blocked list if user was found
+            if (userToBlock) {
+                setBlockedUsersOptimistic([
+                    ...blockedUsersOptimistic,
+                    userToBlock,
+                ]);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Une erreur est survenue. Veuillez réessayer.');
+        }
+    };
+
+    const handleUnblockUser = (userId: string) => {
+        try {
+            unblockUser(userId);
+            toast.success('Compte débloqué avec succès');
+
+            // Find the user before removing from blocked list
+            const userToUnblock = blockedUsersOptimistic.find(
+                (user) => user.id === userId
+            );
+
+            // Remove from blocked list
+            setBlockedUsersOptimistic(
+                blockedUsersOptimistic.filter((user) => user.id !== userId)
+            );
+
+            // Add to unverified list if user was found
+            if (userToUnblock) {
+                setUnverifiedUsersOptimistic([
+                    ...unverifiedUsersOptimistic,
+                    userToUnblock,
+                ]);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Une erreur est survenue. Veuillez réessayer.');
+        }
     };
 
     return (
@@ -77,7 +115,7 @@ export default function AdministrationTab() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {pendingUsers.length > 0 ? (
+                    {unverifiedUsersOptimistic.length > 0 ? (
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -85,13 +123,11 @@ export default function AdministrationTab() {
                                     <TableHead>Email</TableHead>
                                     <TableHead>Date de demande</TableHead>
                                     <TableHead>Statut</TableHead>
-                                    <TableHead className="text-right">
-                                        Actions
-                                    </TableHead>
+                                    <TableHead>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {pendingUsers.map((user) => (
+                                {unverifiedUsersOptimistic.map((user) => (
                                     <TableRow key={user.id}>
                                         <TableCell className="font-medium">
                                             {user.name}
@@ -99,7 +135,7 @@ export default function AdministrationTab() {
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>
                                             {new Date(
-                                                user.requestedAt
+                                                user.createdAt
                                             ).toLocaleDateString('fr-FR')}
                                         </TableCell>
                                         <TableCell>
@@ -152,6 +188,55 @@ export default function AdministrationTab() {
                             </p>
                         </div>
                     )}
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Comptes bloqués</CardTitle>
+                    <CardDescription>
+                        Liste des comptes bloqués.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Nom</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Date de demande</TableHead>
+                                <TableHead>Statut</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {blockedUsersOptimistic.map((user) => (
+                                <TableRow key={user.id}>
+                                    <TableCell>{user.name}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>
+                                        {new Date(
+                                            user.createdAt
+                                        ).toLocaleDateString('fr-FR')}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="default">Bloqué</Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                handleUnblockUser(user.id)
+                                            }
+                                        >
+                                            Débloquer
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </CardContent>
             </Card>
         </RoleGate>

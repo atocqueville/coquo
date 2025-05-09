@@ -8,13 +8,11 @@ export async function uploadImage(fileList: File[]): Promise<{ path: string }> {
     }
     const formData = new FormData();
     formData.append('file', fileList[0]);
-    console.log('start upload');
     return fetch(FILE_STORAGE_URL + '/file', {
         method: 'POST',
         body: formData,
     })
         .then((response) => {
-            console.log('uload done', response);
             return response.json();
         })
         .catch((e) => {

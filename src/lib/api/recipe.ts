@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import type { CreateRecipeSchema } from '@/schemas';
@@ -68,7 +67,6 @@ export async function createRecipe(formData: CreateRecipeFormData) {
     );
     await prisma.recipe.create({ data: recipeFormToRecipeDb });
     revalidatePath('/');
-    redirect('/');
 }
 
 export async function toggleFavorite(recipeId: number) {
@@ -117,7 +115,7 @@ const mapCreateRecipeFormDataToRecipeDb = (
         },
         tags: {
             connect: createRecipeFormData.tags.map((tag) => ({
-                name: tag,
+                id: tag,
             })),
         },
         prepTime: createRecipeFormData.prepTime,

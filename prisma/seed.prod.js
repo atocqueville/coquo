@@ -21,10 +21,8 @@ async function main() {
                 { name: 'autumn' },
                 { name: 'spring' },
                 { name: 'dessert' },
-                { name: 'breakfast' },
                 { name: 'lunch' },
                 { name: 'dinner' },
-                { name: 'snack' },
                 { name: 'spicy' },
             ],
         });

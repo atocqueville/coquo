@@ -1,33 +1,49 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+
+export const badgeLabel = {
+    vegetarian: 'Végétarien',
+    vegan: 'Végan',
+    meat: 'Viande',
+    fish: 'Poisson',
+    'gluten-free': 'Sans gluten',
+    'dairy-free': 'Sans lactose',
+    quick: 'Rapide',
+    summer: 'Été',
+    winter: 'Hiver',
+    autumn: 'Automne',
+    spring: 'Printemps',
+    dessert: 'Dessert',
+    lunch: 'Déjeuner',
+    dinner: 'Dîner',
+    spicy: 'Épicé',
+};
 
 const badgeVariants = cva(
-    'inline-flex items-center rounded-lg border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+    'inline-flex text-black items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
     {
         variants: {
             variant: {
                 default:
                     'border-transparent bg-primary text-primary-foreground',
                 outline: 'text-foreground',
-                vegetarian: 'border-transparent bg-green-500 text-white',
-                vegan: 'border-transparent bg-emerald-600 text-white',
-                meat: 'border-transparent bg-red-500 text-white',
-                fish: 'border-transparent bg-blue-500 text-white',
-                'gluten-free': 'border-transparent bg-yellow-500 text-white',
-                'dairy-free': 'border-transparent bg-purple-500 text-white',
-                quick: 'border-transparent bg-orange-500 text-white',
-                summer: 'border-transparent bg-amber-500 text-white',
-                winter: 'border-transparent bg-sky-500 text-white',
-                autumn: 'border-transparent bg-orange-700 text-white',
-                spring: 'border-transparent bg-pink-500 text-white',
-                dessert: 'border-transparent bg-rose-400 text-white',
-                breakfast: 'border-transparent bg-indigo-500 text-white',
-                lunch: 'border-transparent bg-cyan-500 text-white',
-                dinner: 'border-transparent bg-violet-500 text-white',
-                snack: 'border-transparent bg-lime-500 text-white',
-                spicy: 'border-transparent bg-red-600 text-white',
+                vegetarian: 'border-[#8fdcb7] bg-[#eafded] text-[#015250]',
+                vegan: 'border-[#b3e194] bg-[#ecfbd6] text-[#0f5909]',
+                meat: 'border-[#fcada8] bg-[#fef0ed] text-[#6c0745]',
+                fish: 'border-[#93dde1] bg-[#ebfdf9] text-[#02355b]',
+                'gluten-free': 'border-[#bdbdbd] bg-[#f5f5f5] text-[#212121]',
+                'dairy-free': 'border-[#bbbbbb] bg-[#edf2fa] text-[#001235]',
+                quick: 'border-orange-400 bg-orange-200 text-orange-900',
+                summer: 'border-[#ffdb66] bg-[#fffbeb] text-[#7a4700]',
+                winter: 'border-[#96c1fb] bg-[#eaf3fe] text-[#001368]',
+                autumn: 'border-[#ffc382] bg-[#fff2e4] text-[#712602]',
+                spring: 'border-[#f9c9f5] bg-[#fef4fc] text-[#3d1360]',
+                dessert: 'border-[#f6b0ca] bg-[#feeff5] text-[#6c0d58]',
+                lunch: 'border-pink-400 bg-pink-200 text-pink-900',
+                dinner: 'border-violet-400 bg-violet-200 text-violet-900',
+                spicy: 'border-red-400 bg-red-200 text-red-800',
             },
             size: {
                 default: 'px-2.5 py-0.5 text-xs',
@@ -44,14 +60,34 @@ const badgeVariants = cva(
 
 export interface BadgeProps
     extends React.HTMLAttributes<HTMLDivElement>,
-        VariantProps<typeof badgeVariants> {}
+        VariantProps<typeof badgeVariants> {
+    clickable?: boolean;
+    onCrossClick?: () => void;
+}
 
-function Badge({ className, variant, size, ...props }: BadgeProps) {
+function Badge({
+    className,
+    variant,
+    size,
+    children,
+    clickable,
+    ...props
+}: BadgeProps) {
     return (
         <div
-            className={cn(badgeVariants({ variant, size }), className)}
+            className={cn(
+                badgeVariants({ variant, size }),
+                className,
+                'leading-none',
+                'h-[22px]'
+            )}
             {...props}
-        />
+        >
+            {badgeLabel[variant as keyof typeof badgeLabel] ?? children}
+            {clickable && (
+                <X className="ml-2 h-2 w-2 cursor-pointer text-[#8994b5] hover:text-[#001235]" />
+            )}
+        </div>
     );
 }
 

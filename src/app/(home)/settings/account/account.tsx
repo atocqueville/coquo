@@ -25,18 +25,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
+import { signOut } from 'next-auth/react';
+import type { User } from '@prisma/client';
+import { updateUser, updatePassword } from '@/lib/api/user';
+import { toast } from 'sonner';
+import AccountPassword from './account-password';
 
-// Mock user data
-const currentUser = {
-    id: 1,
-    name: 'Jean Dupont',
-    email: 'jean.dupont@example.com',
-    role: 'admin', // Change to "user" to hide admin section
-    avatar: '/placeholder.svg?height=100&width=100',
-    createdAt: '2023-01-15',
-};
-
-export default function AccountTab() {
+export default function AccountTab({ currentUser }: { currentUser: User }) {
     const [name, setName] = useState(currentUser.name);
     const [email, setEmail] = useState(currentUser.email);
     const [currentPassword, setCurrentPassword] = useState('');
@@ -44,28 +39,37 @@ export default function AccountTab() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
-    const handleProfileUpdate = (e: React.FormEvent) => {
+    const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would update the user profile
-        console.log('Profile updated:', { name, email });
-        // Show success message
+        try {
+            await updateUser(currentUser.id, { name, email });
+            toast.success('Profil mis à jour avec succès');
+        } catch (err) {
+            toast.error(
+                'Une erreur est survenue lors de la mise à jour du profil'
+            );
+        }
     };
 
-    const handlePasswordChange = (e: React.FormEvent) => {
+    const handlePasswordChange = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would update the password
-        console.log('Password changed');
-        // Reset form and show success message
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-    };
-
-    const handleSignOut = () => {
-        // Here you would sign out the user
-        console.log('User signed out');
-        // Redirect to login page
-        window.location.href = '/';
+        try {
+            if (newPassword !== confirmPassword) {
+                throw new Error('Les mots de passe ne correspondent pas');
+            }
+            await updatePassword(currentUser.id, {
+                currentPassword: currentPassword,
+                newPassword: newPassword,
+            });
+            toast.success('Mot de passe mis à jour avec succès');
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (err) {
+            toast.error(
+                err instanceof Error ? err.message : 'Une erreur est survenue'
+            );
+        }
     };
 
     return (
@@ -84,7 +88,7 @@ export default function AccountTab() {
                                 <Label htmlFor="name">Nom</Label>
                                 <Input
                                     id="name"
-                                    value={name}
+                                    value={name ?? ''}
                                     onChange={(e) => setName(e.target.value)}
                                     required
                                 />
@@ -94,13 +98,13 @@ export default function AccountTab() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    value={email}
+                                    value={email ?? ''}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
                             </div>
                         </div>
-                        <div className="flex justify-end">
+                        <div className="flex justify-start">
                             <Button type="submit">
                                 Enregistrer les modifications
                             </Button>
@@ -109,68 +113,7 @@ export default function AccountTab() {
                 </CardContent>
             </Card>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Sécurité</CardTitle>
-                    <CardDescription>
-                        Mettez à jour votre mot de passe pour sécuriser votre
-                        compte.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handlePasswordChange} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="current-password">
-                                Mot de passe actuel
-                            </Label>
-                            <Input
-                                id="current-password"
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) =>
-                                    setCurrentPassword(e.target.value)
-                                }
-                                required
-                            />
-                        </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label htmlFor="new-password">
-                                    Nouveau mot de passe
-                                </Label>
-                                <Input
-                                    id="new-password"
-                                    type="password"
-                                    value={newPassword}
-                                    onChange={(e) =>
-                                        setNewPassword(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="confirm-password">
-                                    Confirmer le mot de passe
-                                </Label>
-                                <Input
-                                    id="confirm-password"
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(e) =>
-                                        setConfirmPassword(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-end">
-                            <Button type="submit">
-                                Changer le mot de passe
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
+            <AccountPassword userId={currentUser.id} />
 
             <Card>
                 <CardHeader>
@@ -224,7 +167,7 @@ export default function AccountTab() {
                                     </Button>
                                     <Button
                                         variant="destructive"
-                                        onClick={handleSignOut}
+                                        onClick={() => signOut()}
                                     >
                                         Déconnexion
                                     </Button>

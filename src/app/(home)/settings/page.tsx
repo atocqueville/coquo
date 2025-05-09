@@ -1,10 +1,8 @@
-'use client';
-
 import type React from 'react';
 import { User, Shield } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AdministrationTab from '@/app/(home)/settings/administration/administration';
-import AccountTab from '@/app/(home)/settings/account/account';
+import AccountWrapper from '@/app/(home)/settings/account/account-wrapper';
+import AdministrationWrapper from './administration/administration-wrapper';
 
 export default function SettingsPage() {
     return (
@@ -28,11 +26,11 @@ export default function SettingsPage() {
                     </TabsList>
 
                     <TabsContent value="account" className="space-y-6">
-                        <AccountTab />
+                        <AccountWrapper />
                     </TabsContent>
 
                     <TabsContent value="admin" className="space-y-6">
-                        <AdministrationTab />
+                        <AdministrationWrapper />
                     </TabsContent>
                 </Tabs>
             </div>
