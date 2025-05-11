@@ -27,16 +27,13 @@ import {
 } from '@/components/ui/dialog';
 import { signOut } from 'next-auth/react';
 import type { User } from '@prisma/client';
-import { updateUser, updatePassword } from '@/lib/api/user';
+import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';
 import AccountPassword from './account-password';
 
 export default function AccountTab({ currentUser }: { currentUser: User }) {
     const [name, setName] = useState(currentUser.name);
     const [email, setEmail] = useState(currentUser.email);
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
@@ -45,29 +42,9 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
             await updateUser(currentUser.id, { name, email });
             toast.success('Profil mis à jour avec succès');
         } catch (err) {
+            console.error(err);
             toast.error(
                 'Une erreur est survenue lors de la mise à jour du profil'
-            );
-        }
-    };
-
-    const handlePasswordChange = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            if (newPassword !== confirmPassword) {
-                throw new Error('Les mots de passe ne correspondent pas');
-            }
-            await updatePassword(currentUser.id, {
-                currentPassword: currentPassword,
-                newPassword: newPassword,
-            });
-            toast.success('Mot de passe mis à jour avec succès');
-            setCurrentPassword('');
-            setNewPassword('');
-            setConfirmPassword('');
-        } catch (err) {
-            toast.error(
-                err instanceof Error ? err.message : 'Une erreur est survenue'
             );
         }
     };

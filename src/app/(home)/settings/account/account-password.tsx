@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import {
@@ -14,15 +13,12 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { updatePassword } from '@/lib/api/user';
-import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -58,7 +54,7 @@ export default function AccountPassword({ userId }: { userId: string }) {
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data);
+        console.log(data, userId);
     }
 
     // const handlePasswordChange = async (e: React.FormEvent) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { CookingPot, Heart, SquarePen, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import {
     SidebarContent,
     SidebarGroup,

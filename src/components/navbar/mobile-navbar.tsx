@@ -85,7 +85,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                     >
                         <SheetHeader className="text-left">
                             <VisuallyHidden asChild>
-                                <SheetTitle>Plus d'options</SheetTitle>
+                                <SheetTitle>Plus d&apos;options</SheetTitle>
                             </VisuallyHidden>
                         </SheetHeader>
                         <div className="grid grid-cols-4 gap-4 py-4">
