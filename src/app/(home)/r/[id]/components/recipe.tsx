@@ -14,109 +14,99 @@ import { Badge } from '@/components/ui/badge';
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     return (
         <div className="flex min-h-screen flex-col">
-            <div className="flex flex-1">
-                <main className="flex-1">
-                    {/* Recipe hero image */}
-                    <div className="relative h-[300px] sm:h-[400px]">
-                        <Image
-                            src={`/api/image-proxy?imageId=${recipe.picture}`}
-                            alt={`recipe top view`}
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                        {/* Back button overlay - desktop only */}
-                        <div className="absolute top-4 left-4 hidden lg:block">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                asChild
-                                className="gap-1 bg-background/80 backdrop-blur-sm hover:bg-background/90 text-base font-semibold"
-                            >
-                                <Link href="/">
-                                    <ChevronLeft className="h-4 w-4" />
-                                    Retour aux recettes
-                                </Link>
-                            </Button>
+            <main className="flex-1">
+                <div className="flex flex-col lg:flex-row">
+                    {/* Recipe content */}
+                    <div className="flex-1">
+                        {/* Recipe hero image */}
+                        <div className="relative h-[300px] sm:h-[400px]">
+                            <Image
+                                src={`/api/image-proxy?imageId=${recipe.picture}`}
+                                alt={`recipe top view`}
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                            {/* Back button overlay - desktop only */}
+                            <div className="absolute top-4 left-4 hidden lg:block">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    asChild
+                                    className="gap-1 bg-background/80 backdrop-blur-sm hover:bg-background/90 text-base font-semibold"
+                                >
+                                    <Link href="/">
+                                        <ChevronLeft className="h-4 w-4" />
+                                        Retour aux recettes
+                                    </Link>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                    <Separator />
 
-                    <div className="flex flex-col lg:flex-row">
-                        {/* Recipe content */}
-                        <div className="flex-1">
-                            <div className="sticky top-0 bg-white z-10">
-                                <div className="pt-6 pb-4 px-6">
-                                    <h1 className="text-3xl font-bold">
-                                        {recipe.title}
-                                    </h1>
+                        <div className="sticky top-0 bg-white z-10">
+                            <div className="pt-6 pb-4 px-6">
+                                <h1 className="text-3xl font-bold">
+                                    {recipe.title}
+                                </h1>
 
-                                    <div className="mt-2 flex items-center gap-4 text-muted-foreground">
-                                        <div className="flex items-center">
-                                            <Clock className="mr-1 h-4 w-4" />
-                                            <span>
-                                                Préparation: {recipe.prepTime}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <Clock className="mr-1 h-4 w-4" />
-                                            <span>
-                                                Cuisson: {recipe.cookTime}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <Users className="mr-1 h-4 w-4" />
-                                            <span>
-                                                {recipe.servings} personnes
-                                            </span>
-                                        </div>
+                                <div className="mt-2 flex items-center gap-4 text-muted-foreground">
+                                    <div className="flex items-center">
+                                        <Clock className="mr-1 h-4 w-4" />
+                                        <span>
+                                            Préparation: {recipe.prepTime}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Clock className="mr-1 h-4 w-4" />
+                                        <span>Cuisson: {recipe.cookTime}</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Users className="mr-1 h-4 w-4" />
+                                        <span>{recipe.servings} personnes</span>
+                                    </div>
 
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {recipe.tags.map((tag) => (
-                                                <Badge
-                                                    key={tag}
-                                                    variant={tag as never}
-                                                    size="sm"
-                                                >
-                                                    {tag}
-                                                </Badge>
-                                            ))}
-                                        </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {recipe.tags.map((tag) => (
+                                            <Badge
+                                                key={tag}
+                                                variant={tag as never}
+                                                size="sm"
+                                            >
+                                                {tag}
+                                            </Badge>
+                                        ))}
                                     </div>
                                 </div>
-                                <Separator />
                             </div>
-
-                            <div className="p-6">
-                                <h2 className="text-2xl font-semibold">
-                                    Instructions
-                                </h2>
-                                <div className="mt-4 space-y-8">
-                                    {recipe.steps.map((step) => (
-                                        <CrossableStep
-                                            key={step.id}
-                                            id={step.id.toString()}
-                                            title={step.title}
-                                            instructions={step.instructions}
-                                        />
-                                    ))}
-                                </div>
-
-                                <h2 className="mt-8 text-2xl font-semibold">
-                                    Commentaires
-                                </h2>
-                                <p className="mt-4">À venir... (lol)</p>
-                            </div>
+                            <Separator />
                         </div>
 
-                        {/* Sticky ingredients panel - desktop only */}
-                        <div className="hidden lg:block lg:w-80 p-6 lg:border-l">
-                            <div className="sticky top-6">
-                                <h2 className="text-xl font-semibold">
-                                    Ingrédients
-                                </h2>
-                                <Separator className="my-4" />
-                                <ScrollArea className="h-[calc(100vh-200px)]">
+                        <div className="p-6 pb-12">
+                            <h2 className="text-2xl font-semibold">
+                                Instructions
+                            </h2>
+                            <div className="mt-4 space-y-8">
+                                {recipe.steps.map((step) => (
+                                    <CrossableStep
+                                        key={step.id}
+                                        id={step.id.toString()}
+                                        title={step.title}
+                                        instructions={step.instructions}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sticky ingredients panel - desktop only */}
+                    <div className="hidden lg:block lg:w-80 lg:border-l">
+                        <div className="sticky top-0">
+                            <h1 className="pt-6 pb-4 px-6 text-2xl font-bold">
+                                Ingrédients
+                            </h1>
+                            <Separator className="" />
+                            <div className="p-6">
+                                <ScrollArea className="">
                                     <ul className="space-y-4">
                                         {recipe.ingredients.map(
                                             (ingredient, index) => (
@@ -133,8 +123,8 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
 
             {/* Floating ingredients button for mobile */}
             <div className="fixed bottom-6 right-6 lg:hidden">

@@ -11,26 +11,10 @@ import {
     SidebarFooter,
 } from '@/components/ui/sidebar';
 import { usePathname } from 'next/navigation';
+import { appRoutes } from '@/routes';
 
 export function SidebarLinks() {
     const pathname = usePathname();
-    const items = [
-        {
-            title: 'Recettes',
-            url: '/',
-            icon: CookingPot,
-        },
-        {
-            title: 'Favorite',
-            url: '/favorite',
-            icon: Heart,
-        },
-        {
-            title: 'Create',
-            url: '/create',
-            icon: SquarePen,
-        },
-    ];
 
     return (
         <>
@@ -38,20 +22,21 @@ export function SidebarLinks() {
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={pathname === item.url}
-                                        disabled={pathname === item.url}
-                                    >
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {appRoutes
+                                .filter((item) => item.href !== '/settings')
+                                .map((item) => (
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={pathname === item.href}
+                                            disabled={pathname === item.href}
+                                        >
+                                            <a href={item.href}>
+                                                <item.icon className="h-5 w-5" />
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

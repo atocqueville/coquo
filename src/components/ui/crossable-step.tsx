@@ -49,13 +49,14 @@ export function CrossableStep({
             <CrossableCheckbox
                 id={`step-${id}`}
                 checked={checked}
+                classNameLabel="font-bold"
                 onCheckedChange={handleStepCheck}
             >
                 {title}
             </CrossableCheckbox>
-            <ol className="mt-4 space-y-4 pl-5">
+            <ol className="mt-4 space-y-4">
                 {instructions.map((instruction, idx) => (
-                    <li key={idx} className="pl-2">
+                    <li key={idx}>
                         <div className="flex gap-4">
                             <CrossableCheckbox
                                 id={`instruction-${id}-${idx}`}

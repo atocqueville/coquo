@@ -1,6 +1,7 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/sidebar/sidebar';
 import { SessionProvider } from 'next-auth/react';
+import { MobileNavbar } from '@/components/navbar/mobile-navbar';
 
 export default function CookBookLayout({
     children,
@@ -9,22 +10,12 @@ export default function CookBookLayout({
 }>) {
     return (
         <SessionProvider>
-            <SidebarProvider
-                defaultOpen={false}
-                style={
-                    {
-                        '--sidebar-background': '217.2 91.2% 59.8%',
-                        '--sidebar-foreground': '0 0% 100%',
-                        '--sidebar-primary': '0 0% 100%',
-                        '--sidebar-primary-foreground': '217.2 91.2% 59.8%',
-                        '--sidebar-accent': '217.2 91.2% 65%',
-                        '--sidebar-accent-foreground': '0 0% 100%',
-                        '--sidebar-border': '217.2 91.2% 55%',
-                    } as React.CSSProperties
-                }
-            >
+            <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="w-full">{children}</main>
+                <main className="w-full mb-0 lg:mb-0 pb-16 lg:pb-0">
+                    {children}
+                </main>
+                <MobileNavbar />
             </SidebarProvider>
         </SessionProvider>
     );

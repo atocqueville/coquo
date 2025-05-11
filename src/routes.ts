@@ -1,9 +1,39 @@
+import { FileText, Heart, Home, PlusCircle, Settings } from 'lucide-react';
+
 /**
  * An array of routes that are accessible to the public.
  * These routes do not require authentication.
  * @type {string[]}
  */
 export const publicRoutes = ['/auth/new-verification'];
+
+export const appRoutes = [
+    {
+        href: '/',
+        icon: Home,
+        label: 'Accueil',
+    },
+    {
+        href: '/favorite',
+        icon: Heart,
+        label: 'Favoris',
+    },
+    {
+        href: '/create',
+        icon: PlusCircle,
+        label: 'Nouvelle recette',
+    },
+    {
+        href: '/changelog',
+        icon: FileText,
+        label: 'Changelog',
+    },
+    {
+        href: '/settings',
+        icon: Settings,
+        label: 'Paramètres',
+    },
+];
 
 /**
  * An array of routes that are used for authentication.
