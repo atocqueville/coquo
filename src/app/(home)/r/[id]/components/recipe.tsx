@@ -114,7 +114,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                         {/* Sticky title and ingredients button */}
                         <div className="sticky top-0 bg-white z-10 border-b">
                             <div className="flex items-center justify-between px-6 py-3">
-                                <h1 className="text-xl sm:text-2xl font-bold truncate">
+                                <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal">
                                     {recipe.title}
                                 </h1>
 
