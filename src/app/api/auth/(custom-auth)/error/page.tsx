@@ -12,6 +12,8 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { getAdminEmail } from '@/lib/api/user';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ErrorPage() {
     const adminEmail = await getAdminEmail();
 

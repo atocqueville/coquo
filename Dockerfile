@@ -1,4 +1,5 @@
 FROM node:18-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -30,7 +31,6 @@ RUN yarn --frozen-lockfile
 
 # Production image, copy all the files and run next
 FROM base AS runner
-RUN apk add --no-cache libc6-compat openssl
 
 RUN npm install pm2 -g
 
