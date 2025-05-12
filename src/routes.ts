@@ -1,4 +1,4 @@
-import { FileText, Heart, Home, PlusCircle, Settings } from 'lucide-react';
+import { Heart, Home, PlusCircle, Settings } from 'lucide-react';
 
 /**
  * An array of routes that are accessible to the public.
@@ -23,11 +23,11 @@ export const appRoutes = [
         icon: PlusCircle,
         label: 'Nouvelle recette',
     },
-    {
-        href: '/changelog',
-        icon: FileText,
-        label: 'Changelog',
-    },
+    // {
+    //     href: '/changelog',
+    //     icon: FileText,
+    //     label: 'Changelog',
+    // },
     {
         href: '/settings',
         icon: Settings,
