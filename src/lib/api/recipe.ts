@@ -18,8 +18,21 @@ export type RecipeWithTagsAndAuthor = Prisma.RecipeGetPayload<{
 /**
  * Override to use filters
  */
-export async function getRecipes(): Promise<RecipeWithTagsAndAuthor[]> {
+export async function getRecipes(filters: {
+    tags: string[];
+}): Promise<RecipeWithTagsAndAuthor[]> {
     return prisma.recipe.findMany({
+        where: {
+            AND: (filters?.tags?.length > 0 ? filters.tags : []).map(
+                (tagId) => ({
+                    tags: {
+                        some: {
+                            id: tagId,
+                        },
+                    },
+                })
+            ),
+        },
         include: {
             author: {
                 select: { email: true },
