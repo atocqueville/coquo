@@ -6,6 +6,7 @@ Self hosted recipe manager written in Next.js.
 
 ## Needed for v1
 
+- [ ] Get a Logo (and a color scheme ?)
 - [ ] Add a "Keep screen awake" feature => https://www.npmjs.com/package/react-screen-wake-lock
 - [x] Add "Season" to recipes
 - [x] Add a Favorite star to recipes

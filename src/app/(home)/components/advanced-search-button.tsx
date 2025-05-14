@@ -15,7 +15,6 @@ interface AdvancedSearchButtonProps {
     selectedTags: string[];
     tagOptions: Array<{ value: string; variant: string; label: string }>;
     onTagsChange: (values: string[]) => void;
-    onSaveFilters: (e?: React.FormEvent) => void;
     onResetFilters: () => void;
 }
 
@@ -23,7 +22,6 @@ export function AdvancedSearchButton({
     selectedTags,
     tagOptions,
     onTagsChange,
-    onSaveFilters,
     onResetFilters,
 }: AdvancedSearchButtonProps) {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);

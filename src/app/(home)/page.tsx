@@ -50,7 +50,8 @@ export default async function CookBookPage(props: {
             <RecipeList recipes={recipes}>
                 <p className="text-muted-foreground max-w-md mb-6">
                     Aucune recette ne correspond à vos critères de recherche.
-                    Essayez d'ajuster vos filtres ou de rechercher autre chose.
+                    Essayez d&apos;ajuster vos filtres ou de rechercher autre
+                    chose.
                 </p>
             </RecipeList>
 

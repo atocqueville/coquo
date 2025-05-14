@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { badgeLabel } from '@/components/ui/badge';
 import type { Tag } from '@prisma/client';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { setCookie, destroyCookie } from 'nookies';
 import { AdvancedSearchButton } from './advanced-search-button';
 
 export default function TopBar({ tags }: { tags: Tag[] }) {
@@ -20,6 +20,26 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         label: badgeLabel[tag.name as keyof typeof badgeLabel],
     }));
 
+    /** SAVE FILTERS TO COOKIE AND REFRESH URL */
+    const saveFilters = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+
+        setCookie(
+            null,
+            'recipeFilters',
+            JSON.stringify({
+                tags: selectedTags,
+                search: searchQuery,
+            }),
+            {
+                maxAge: 30 * 24 * 60 * 60, // 30 days
+                path: '/',
+            }
+        );
+
+        router.push('/');
+    };
+
     // Load saved filters from cookies and sync with URL on initial render
     useEffect(() => {
         try {
@@ -28,18 +48,6 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             const urlTagsParam = url.searchParams.get('tags');
             const urlSearchParam = url.searchParams.get('q');
             const urlTags = urlTagsParam ? urlTagsParam.split(',') : [];
-
-            // Get cookies filters
-            const cookies = parseCookies();
-            const cookieFilters = cookies.recipeFilters;
-            let cookieTags: string[] = [];
-            let cookieSearch: string = '';
-
-            if (cookieFilters) {
-                const parsed = JSON.parse(cookieFilters);
-                cookieTags = parsed.tags || [];
-                cookieSearch = parsed.search || '';
-            }
 
             // Determine which tags to use (URL has priority)
             if (urlTags.length > 0 || urlSearchParam) {
@@ -67,8 +75,8 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
 
     /** TRIGGER SAVE FILTERS AND REFRESH URL */
     useEffect(() => {
-        console.log('selectedTags', selectedTags);
         saveFilters();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedTags]);
 
     // Debounced search handler
@@ -118,26 +126,6 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         setSelectedTags(values);
     };
 
-    /** SAVE FILTERS TO COOKIE AND REFRESH URL */
-    const saveFilters = (e?: React.FormEvent) => {
-        if (e) e.preventDefault();
-
-        setCookie(
-            null,
-            'recipeFilters',
-            JSON.stringify({
-                tags: selectedTags,
-                search: searchQuery,
-            }),
-            {
-                maxAge: 30 * 24 * 60 * 60, // 30 days
-                path: '/',
-            }
-        );
-
-        router.push('/');
-    };
-
     const resetFilters = () => {
         destroyCookie(null, 'recipeFilters');
 
@@ -169,7 +157,6 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                         selectedTags={selectedTags}
                         tagOptions={tagOptions}
                         onTagsChange={handleTagsChange}
-                        onSaveFilters={saveFilters}
                         onResetFilters={resetFilters}
                     />
                 </div>
@@ -179,7 +166,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
 }
 
 // Debounce utility function
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
     func: T,
     wait: number
 ): (...args: Parameters<T>) => void {
