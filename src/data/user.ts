@@ -17,15 +17,3 @@ export const getUserById = async (id: string) => {
         return null;
     }
 };
-
-export const getUserStarredRecipeIds = async (id: string) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: { id },
-            include: { starredRecipes: true },
-        });
-        return user?.starredRecipes.map((recipe) => recipe.id);
-    } catch {
-        return null;
-    }
-};

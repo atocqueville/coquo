@@ -4,7 +4,7 @@ import { toDifficulty } from '@/lib/pipes/toDifficulty';
 import { Badge } from '@/components/ui/badge';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import { currentUser } from '@/lib/auth';
-import { getUserStarredRecipeIds } from '@/data/user';
+import { getUserStarredRecipeIds } from '@/lib/api/user';
 import FavoriteButton from './favorite-button';
 
 export default async function RecipeItem({

@@ -12,9 +12,7 @@ export default function CookBookLayout({
         <SessionProvider>
             <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="w-full mb-0 lg:mb-0 pb-16 lg:pb-0">
-                    {children}
-                </main>
+                <main className="w-full pb-16 md:pb-0">{children}</main>
                 <MobileNavbar />
             </SidebarProvider>
         </SessionProvider>

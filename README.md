@@ -1,25 +1,35 @@
 # coquo
 
-WORK IN PROGRESS
+⚠️ WORK IN PROGRESS ⚠️
 
 Self hosted recipe manager written in Next.js.
 
-## Ideas
+## Needed for v1
 
-- [x] Ajouter des tags a une recette (pays, rapide, végé, sophie...)
 - [ ] Add a "Keep screen awake" feature => https://www.npmjs.com/package/react-screen-wake-lock
-- [ ] Add a "Print" feature => https://www.npmjs.com/package/react-to-print
 - [x] Add "Season" to recipes
 - [x] Add a Favorite star to recipes
 - [x] Add a step list with checkboxes to grey out completed steps
-- [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser to get recipes from marmiton
-- [ ] Implement push notifications for PWA
-- [x] Separation entre entrées, plats, desserts dans la liste des recettes (fait via les tags ?)
-- [ ] Une page CHANGELOG
-- [ ] fuzzy text search
+- [x] Find a way to label recipes (tags ?)
+- [x] Une page CHANGELOG
 - [ ] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
 - [ ] Upload a profile picture when credentials signin
 - [ ] Google OAuth
+- [ ] Difficulty input in create form
+- [ ] Redesign create form
+- [ ] Edit recipe
+- [ ] Add remaining filters:
+  - [x] Title text search
+  - [x] Tags
+  - [ ] Author
+  - [ ] Difficulty
+
+## Feature Ideas
+- [ ] fuzzy text search
+- [ ] Create new tags
+- [ ] Implement push notifications for PWA
+- [ ] Add a "Print" feature => https://www.npmjs.com/package/react-to-print
+- [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser to get recipes from marmiton
 
 ## Docker push
 

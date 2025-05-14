@@ -128,3 +128,15 @@ export async function unblockUser(id: string) {
         data: { isBlocked: false },
     });
 }
+
+export const getUserStarredRecipeIds = async (id: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id },
+            include: { starredRecipes: true },
+        });
+        return user?.starredRecipes.map((recipe) => recipe.id);
+    } catch {
+        return null;
+    }
+};

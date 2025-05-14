@@ -7,7 +7,7 @@ import type { CreateRecipeSchema } from '@/schemas';
 import { auth } from '@/auth';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { z } from 'zod';
-import { getUserStarredRecipeIds } from '@/data/user';
+import { getUserStarredRecipeIds } from '@/lib/api/user';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -60,6 +60,27 @@ export async function getRecipes(filters: {
         },
         skip: skip,
         take: pageSize,
+    });
+}
+
+export async function getStarredRecipes(): Promise<RecipeWithTagsAndAuthor[]> {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error('Unauthorized');
+
+    const starredIds = await getUserStarredRecipeIds(session.user.id);
+    if (!starredIds) throw new Error('Failed to load favorites');
+
+    return prisma.recipe.findMany({
+        where: {
+            id: { in: starredIds },
+        },
+        include: {
+            author: { select: { email: true } },
+            tags: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
     });
 }
 

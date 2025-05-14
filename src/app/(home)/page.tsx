@@ -47,7 +47,12 @@ export default async function CookBookPage(props: {
     return (
         <div className="flex flex-col min-h-screen">
             <TopBar tags={tagsDb} />
-            <RecipeList recipes={recipes} />
+            <RecipeList recipes={recipes}>
+                <p className="text-muted-foreground max-w-md mb-6">
+                    Aucune recette ne correspond à vos critères de recherche.
+                    Essayez d'ajuster vos filtres ou de rechercher autre chose.
+                </p>
+            </RecipeList>
 
             {totalPages > 1 && (
                 <Pagination className="my-6">
