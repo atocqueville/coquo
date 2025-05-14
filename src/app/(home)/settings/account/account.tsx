@@ -29,7 +29,6 @@ import { signOut } from 'next-auth/react';
 import type { User } from '@prisma/client';
 import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';
-import AccountPassword from './account-password';
 
 export default function AccountTab({ currentUser }: { currentUser: User }) {
     const [name, setName] = useState(currentUser.name);
@@ -89,8 +88,6 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
                     </form>
                 </CardContent>
             </Card>
-
-            <AccountPassword userId={currentUser.id} />
 
             <Card>
                 <CardHeader>

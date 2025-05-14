@@ -2,25 +2,17 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Filter, Search } from 'lucide-react';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
-import { MultiSelect } from '@/components/ui/multi-select';
-import { Label } from '@/components/ui/label';
+import { Search } from 'lucide-react';
 import { badgeLabel } from '@/components/ui/badge';
 import type { Tag } from '@prisma/client';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { AdvancedSearchButton } from './advanced-search-button';
 
 export default function TopBar({ tags }: { tags: Tag[] }) {
     const router = useRouter();
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const tagOptions = tags.map((tag) => ({
         value: tag.id,
@@ -67,21 +59,17 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                         path: '/',
                     }
                 );
-            } else if (cookieTags.length > 0 || cookieSearch) {
-                // No URL params but we have cookie values, update URL and state
-                setSelectedTags(cookieTags);
-                if (cookieSearch) setSearchQuery(cookieSearch);
-
-                const params = new URLSearchParams();
-                if (cookieTags.length > 0)
-                    params.set('tags', cookieTags.join(','));
-                if (cookieSearch) params.set('q', cookieSearch);
-                router.push(`?${params.toString()}`);
             }
         } catch (error) {
             console.error('Error syncing filters:', error);
         }
     }, [router]); // Include the router since it's used inside the effect
+
+    /** TRIGGER SAVE FILTERS AND REFRESH URL */
+    useEffect(() => {
+        console.log('selectedTags', selectedTags);
+        saveFilters();
+    }, [selectedTags]);
 
     // Debounced search handler
     const debouncedSearch = useCallback(
@@ -123,7 +111,6 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchQuery(value);
-        console.log('searchQuery', value);
         debouncedSearch(value);
     };
 
@@ -131,10 +118,10 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         setSelectedTags(values);
     };
 
+    /** SAVE FILTERS TO COOKIE AND REFRESH URL */
     const saveFilters = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
 
-        // Save to cookie
         setCookie(
             null,
             'recipeFilters',
@@ -148,29 +135,16 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             }
         );
 
-        // Close the popover
-        setIsPopoverOpen(false);
-
-        // Update URL with all current filters
-        const params = new URLSearchParams();
-        if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
-        if (searchQuery) params.set('q', searchQuery);
-
-        // Simply redirect to homepage - middleware will handle adding filters
-        router.push(params.toString() ? `/?${params.toString()}` : '/');
+        router.push('/');
     };
 
     const resetFilters = () => {
-        destroyCookie(null, 'recipeFilters', { path: '/' });
+        destroyCookie(null, 'recipeFilters');
 
         // Reset state
         setSelectedTags([]);
         setSearchQuery('');
 
-        // Close the popover
-        setIsPopoverOpen(false);
-
-        // Simply redirect to homepage
         router.push('/');
     };
 
@@ -191,74 +165,13 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                             onChange={handleSearchChange}
                         />
                     </div>
-                    <Popover
-                        open={isPopoverOpen}
-                        onOpenChange={setIsPopoverOpen}
-                    >
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className={`h-9 w-9 sm:px-4 sm:py-2 sm:w-auto ${
-                                    selectedTags.length > 0
-                                        ? 'bg-emerald-400 hover:bg-emerald-400/80 border-secondary text-primary relative'
-                                        : ''
-                                }`}
-                            >
-                                <span className="hidden sm:block">
-                                    Recherche avancée
-                                </span>
-                                <Filter
-                                    className={
-                                        selectedTags.length > 0
-                                            ? 'text-primary'
-                                            : ''
-                                    }
-                                />
-                                {selectedTags.length > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] rounded-full flex items-center justify-center text-primary-foreground">
-                                        {selectedTags.length}
-                                    </span>
-                                )}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-80 p-4" align="end">
-                            <form onSubmit={saveFilters}>
-                                <div className="space-y-4">
-                                    <h3 className="font-medium text-base">
-                                        Filtres
-                                    </h3>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="tags-filter">
-                                            Tags
-                                        </Label>
-                                        <MultiSelect
-                                            id="tags-filter"
-                                            options={tagOptions}
-                                            onValueChange={handleTagsChange}
-                                            defaultValue={selectedTags}
-                                            placeholder="Sélectionner des tags"
-                                        />
-                                    </div>
-
-                                    <div className="flex justify-end mt-4">
-                                        <Button
-                                            type="button"
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={resetFilters}
-                                            className="mr-2"
-                                        >
-                                            Réinitialiser
-                                        </Button>
-                                        <Button type="submit" size="sm">
-                                            Appliquer
-                                        </Button>
-                                    </div>
-                                </div>
-                            </form>
-                        </PopoverContent>
-                    </Popover>
+                    <AdvancedSearchButton
+                        selectedTags={selectedTags}
+                        tagOptions={tagOptions}
+                        onTagsChange={handleTagsChange}
+                        onSaveFilters={saveFilters}
+                        onResetFilters={resetFilters}
+                    />
                 </div>
             </div>
         </header>

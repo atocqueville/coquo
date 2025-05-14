@@ -31,11 +31,13 @@ export async function getRecipes(filters: {
 
     // Add tag filtering
     if (tagIds.length > 0) {
-        whereConditions.tags = {
-            some: {
-                id: { in: tagIds },
+        whereConditions.AND = tagIds.map((tagId) => ({
+            tags: {
+                some: {
+                    id: tagId,
+                },
             },
-        };
+        }));
     }
 
     // Add search filtering

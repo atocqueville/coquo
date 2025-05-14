@@ -15,7 +15,6 @@ import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 
 const IngredientsList = ({ ingredients }: { ingredients: string[] }) => {
     return (
@@ -56,13 +55,13 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             {/* Back button - fixed position for better visibility */}
                             <div className="absolute top-4 left-4 z-10">
                                 <Button
-                                    variant="secondary"
+                                    variant="outline"
                                     size="sm"
                                     asChild
                                     className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
                                 >
                                     <Link href="/">
-                                        <ChevronLeft className="h-4 w-4 mr-1" />
+                                        <ChevronLeft className="mr-1" />
                                         <span className="hidden sm:inline">
                                             Retour aux recettes
                                         </span>
@@ -72,43 +71,47 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                     </Link>
                                 </Button>
                             </div>
-                        </div>
 
-                        {/* Non-sticky cooking time and tags */}
-                        <div className="bg-white">
-                            <div className="pt-6 px-6">
-                                <div className="flex items-center gap-4 text-muted-foreground">
-                                    <div className="flex items-center">
-                                        <ChefHat className="mr-1 h-4 w-4" />
-                                        <span className="hidden sm:block">
-                                            Préparation:
+                            {/* Cooking info and tags overlaying the image */}
+                            <div className="absolute bottom-0 left-0 right-0 z-10 p-4">
+                                {/* Cooking time */}
+                                <div className="flex flex-wrap gap-2 sm:gap-3 mt-2">
+                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
+                                        <ChefHat className="mr-2 h-4 w-4 text-primary" />
+                                        <span className="font-medium">
+                                            {recipe.prepTime}mn
                                         </span>
-                                        <span>{recipe.prepTime}mn</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <CookingPot className="mr-1 h-4 w-4" />
-                                        <span className="hidden sm:block">
-                                            Cuisson
+                                        <span className="text-muted-foreground ml-1 hidden sm:inline">
+                                            préparation
                                         </span>
-                                        <span>{recipe.cookTime}mn</span>
                                     </div>
-                                    <div className="flex items-center">
-                                        <Users className="mr-1 h-4 w-4" />
-                                        <span>{recipe.servings}</span>
+
+                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
+                                        <CookingPot className="mr-2 h-4 w-4 text-primary" />
+                                        <span className="font-medium">
+                                            {recipe.cookTime}mn
+                                        </span>
+                                        <span className="text-muted-foreground ml-1 hidden sm:inline">
+                                            cuisson
+                                        </span>
                                     </div>
-                                </div>
-                                <div className="flex flex-wrap gap-1.5 mt-3 pb-0">
-                                    {recipe.tags.map((tag) => (
-                                        <Badge
-                                            key={tag}
-                                            variant={tag as never}
-                                            size="sm"
-                                        >
-                                            {tag}
-                                        </Badge>
-                                    ))}
+
+                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
+                                        <Users className="mr-2 h-4 w-4 text-primary" />
+                                        <span className="font-medium">
+                                            {recipe.servings}
+                                        </span>
+                                        <span className="text-muted-foreground ml-1 hidden sm:inline">
+                                            personnes
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Remove the old tags section since they're now in the overlay */}
+                        <div className="bg-white pt-3">
+                            {/* Intentionally empty - spacing between image and title */}
                         </div>
 
                         {/* Sticky title and ingredients button */}
