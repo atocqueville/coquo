@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { tags } = require('./mocks/tags.js');
 
 const prisma = new PrismaClient();
 
@@ -8,23 +9,7 @@ async function main() {
 
     if (existingTags.length === 0) {
         await prisma.tag.createMany({
-            data: [
-                { name: 'vegetarian' },
-                { name: 'vegan' },
-                { name: 'meat' },
-                { name: 'fish' },
-                { name: 'gluten-free' },
-                { name: 'dairy-free' },
-                { name: 'quick' },
-                { name: 'summer' },
-                { name: 'winter' },
-                { name: 'autumn' },
-                { name: 'spring' },
-                { name: 'dessert' },
-                { name: 'lunch' },
-                { name: 'dinner' },
-                { name: 'spicy' },
-            ],
+            data: tags.map((tag) => ({ name: tag })),
         });
         console.log('[PRISMA] Seeded tags.');
     } else {

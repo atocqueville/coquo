@@ -17,6 +17,7 @@ export default auth((req) => {
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+    const isHomePage = nextUrl.pathname === '/';
 
     if (isApiAuthRoute) {
         return;
@@ -28,6 +29,27 @@ export default auth((req) => {
         }
 
         return;
+    }
+
+    // If authenticated and navigating to homepage, add filters from cookie to searchParams
+    if (isLoggedIn && isHomePage && !nextUrl.search) {
+        try {
+            // Access cookies directly from the request
+            const cookieHeader = req.cookies.get('recipeFilters')?.value;
+
+            if (cookieHeader) {
+                const recipeFilters = JSON.parse(cookieHeader);
+                const tags = recipeFilters.tags;
+
+                if (tags && tags.length > 0) {
+                    const url = new URL(nextUrl.href);
+                    url.searchParams.set('tags', tags.join(','));
+                    return Response.redirect(url);
+                }
+            }
+        } catch (error) {
+            console.error('Error applying filters from cookie:', error);
+        }
     }
 
     if (!isLoggedIn && !isPublicRoute) {

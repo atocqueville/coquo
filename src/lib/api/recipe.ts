@@ -15,30 +15,49 @@ export type RecipeWithTagsAndAuthor = Prisma.RecipeGetPayload<{
     include: { tags: true; author: { select: { email: true } } };
 }>;
 
-/**
- * Override to use filters
- */
 export async function getRecipes(filters: {
-    tags: string[];
+    tags?: string;
+    q?: string;
+    page?: string;
 }): Promise<RecipeWithTagsAndAuthor[]> {
+    const tagIds = filters?.tags ? filters.tags.split(',') : [];
+    const searchQuery = filters?.q || '';
+    const currentPage = parseInt(filters?.page || '1', 10);
+    const pageSize = 10;
+    const skip = (currentPage - 1) * pageSize;
+
+    // Build where conditions
+    const whereConditions: Prisma.RecipeWhereInput = {};
+
+    // Add tag filtering
+    if (tagIds.length > 0) {
+        whereConditions.tags = {
+            some: {
+                id: { in: tagIds },
+            },
+        };
+    }
+
+    // Add search filtering
+    if (searchQuery) {
+        whereConditions.title = {
+            contains: searchQuery,
+        };
+    }
+
     return prisma.recipe.findMany({
-        where: {
-            AND: (filters?.tags?.length > 0 ? filters.tags : []).map(
-                (tagId) => ({
-                    tags: {
-                        some: {
-                            id: tagId,
-                        },
-                    },
-                })
-            ),
-        },
+        where: whereConditions,
         include: {
             author: {
                 select: { email: true },
             },
             tags: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        skip: skip,
+        take: pageSize,
     });
 }
 
@@ -102,6 +121,37 @@ export async function toggleFavorite(recipeId: number) {
     });
 
     return { success: true };
+}
+
+export async function getRecipeCount(filters: {
+    tags?: string;
+    q?: string;
+}): Promise<number> {
+    const tagIds = filters?.tags ? filters.tags.split(',') : [];
+    const searchQuery = filters?.q || '';
+
+    // Build where conditions
+    const whereConditions: Prisma.RecipeWhereInput = {};
+
+    // Add tag filtering
+    if (tagIds.length > 0) {
+        whereConditions.tags = {
+            some: {
+                id: { in: tagIds },
+            },
+        };
+    }
+
+    // Add search filtering
+    if (searchQuery) {
+        whereConditions.title = {
+            contains: searchQuery,
+        };
+    }
+
+    return prisma.recipe.count({
+        where: whereConditions,
+    });
 }
 
 /**
