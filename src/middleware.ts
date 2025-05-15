@@ -40,10 +40,11 @@ export default auth((req) => {
             if (cookieHeader) {
                 const recipeFilters = JSON.parse(cookieHeader);
                 const tags = recipeFilters.tags;
-
-                if (tags && tags.length > 0) {
+                const q = recipeFilters.q;
+                if ((tags && tags.length > 0) || q) {
                     const url = new URL(nextUrl.href);
                     url.searchParams.set('tags', tags.join(','));
+                    url.searchParams.set('q', q);
                     return Response.redirect(url);
                 }
             }

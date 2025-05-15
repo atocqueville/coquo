@@ -15,12 +15,7 @@ export default async function FavoritePage() {
                     </h1>
                 </div>
             </header>
-            <RecipeList recipes={recipes}>
-                <p className="text-muted-foreground max-w-md mb-6">
-                    Vous n&apos;avez pas de recettes enregistrées. Ajoutez des
-                    recettes à vos favoris pour les retrouver ici.
-                </p>
-            </RecipeList>
+            <RecipeList recipes={recipes} isFavorite></RecipeList>
         </div>
     );
 }

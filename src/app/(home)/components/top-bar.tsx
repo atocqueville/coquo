@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -29,7 +30,8 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             'recipeFilters',
             JSON.stringify({
                 tags: selectedTags,
-                search: searchQuery,
+                q: searchQuery,
+                page: '1',
             }),
             {
                 maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -40,7 +42,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         router.push('/');
     };
 
-    // Load saved filters from cookies and sync with URL on initial render
+    /** INITIAL LOAD TO MAKE FILTERS SYNC WITH URL */
     useEffect(() => {
         try {
             // Get current URL params
@@ -48,9 +50,10 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             const urlTagsParam = url.searchParams.get('tags');
             const urlSearchParam = url.searchParams.get('q');
             const urlTags = urlTagsParam ? urlTagsParam.split(',') : [];
+            const urlPageParam = url.searchParams.get('page');
 
             // Determine which tags to use (URL has priority)
-            if (urlTags.length > 0 || urlSearchParam) {
+            if (urlTags.length > 0 || urlSearchParam || urlPageParam) {
                 // URL has params, update cookies and state
                 setSelectedTags(urlTags);
                 if (urlSearchParam) setSearchQuery(urlSearchParam);
@@ -60,7 +63,8 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                     'recipeFilters',
                     JSON.stringify({
                         tags: urlTags,
-                        search: urlSearchParam || '',
+                        q: urlSearchParam || '',
+                        page: urlPageParam || '1',
                     }),
                     {
                         maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -71,12 +75,11 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         } catch (error) {
             console.error('Error syncing filters:', error);
         }
-    }, [router]); // Include the router since it's used inside the effect
+    }, [router]);
 
     /** TRIGGER SAVE FILTERS AND REFRESH URL */
     useEffect(() => {
         saveFilters();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedTags]);
 
     // Debounced search handler
@@ -102,7 +105,8 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                 'recipeFilters',
                 JSON.stringify({
                     tags: selectedTags,
-                    search: value,
+                    q: value,
+                    page: '1',
                 }),
                 {
                     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -111,7 +115,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             );
 
             // Update URL
-            router.push(`?${params.toString()}`);
+            router.push(`/`);
         }, 500),
         [selectedTags, router]
     );

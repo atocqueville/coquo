@@ -2,12 +2,18 @@ import RecipeItem from './recipe-item';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import Image from 'next/image';
 
+const EMPTY_MESSAGE = `Aucune recette ne correspond à vos critères de recherche. Essayez d'ajuster vos filtres ou de rechercher autre chose.`;
+
+const EMPTY_MESSAGE_FAVORITE = `Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici.`;
+
 export default function RecipeList({
     recipes,
     children,
+    isFavorite,
 }: {
     recipes: RecipeWithTagsAndAuthor[];
     children?: React.ReactNode;
+    isFavorite?: boolean;
 }) {
     const hasRecipes = recipes.length > 0;
 
@@ -32,9 +38,12 @@ export default function RecipeList({
                     <h3 className="text-2xl font-semibold text-gray-800 mb-2">
                         Aucune recette trouvée
                     </h3>
-                    {children}
+                    <p className="text-muted-foreground max-w-md mb-6">
+                        {isFavorite ? EMPTY_MESSAGE_FAVORITE : EMPTY_MESSAGE}
+                    </p>
                 </div>
             )}
+            {children}
         </section>
     );
 }
