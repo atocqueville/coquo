@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
+import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
 
 const IngredientsList = ({ ingredients }: { ingredients: string[] }) => {
     return (
@@ -70,6 +71,11 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         </span>
                                     </Link>
                                 </Button>
+                            </div>
+
+                            {/* Wake Lock Switch - positioned in top right corner */}
+                            <div className="absolute top-4 right-4 z-10">
+                                <DynamicWakeLockWrapper />
                             </div>
 
                             {/* Cooking info and tags overlaying the image */}

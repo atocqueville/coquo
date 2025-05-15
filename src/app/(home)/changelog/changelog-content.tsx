@@ -134,6 +134,8 @@ const changeTypeConfig: Record<
     },
 };
 
+const BETA = true;
+
 export function ChangelogContent() {
     const [expandedVersions, setExpandedVersions] = useState<
         Record<string, boolean>
@@ -152,88 +154,108 @@ export function ChangelogContent() {
 
     return (
         <div className="space-y-6">
-            {changelogData.map((versionData) => (
-                <div
-                    key={versionData.version}
-                    className="relative border rounded-md"
-                >
-                    <div className="sticky top-0 z-10 bg-background/95 px-3 py-2 backdrop-blur border-b">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-lg font-bold">
-                                    v{versionData.version}
-                                </h2>
-                                <Badge
-                                    variant="outline"
-                                    className="flex items-center gap-1 text-xs text-muted-foreground"
-                                >
-                                    <Calendar className="h-3 w-3" />
-                                    {versionData.date}
-                                </Badge>
+            {BETA ? (
+                <div className="bg-yellow-500 text-white p-4 rounded-md">
+                    <p>
+                        Cette fonctionnalité est en cours de développement et
+                        n&apos;est pas encore disponible.
+                    </p>
+                </div>
+            ) : (
+                <>
+                    {changelogData.map((versionData) => (
+                        <div
+                            key={versionData.version}
+                            className="relative border rounded-md"
+                        >
+                            <div className="sticky top-0 z-10 bg-background/95 px-3 py-2 backdrop-blur border-b">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-lg font-bold">
+                                            v{versionData.version}
+                                        </h2>
+                                        <Badge
+                                            variant="outline"
+                                            className="flex items-center gap-1 text-xs text-muted-foreground"
+                                        >
+                                            <Calendar className="h-3 w-3" />
+                                            {versionData.date}
+                                        </Badge>
+                                    </div>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-6 w-6 p-0"
+                                        onClick={() =>
+                                            toggleVersion(versionData.version)
+                                        }
+                                    >
+                                        <ChevronDown
+                                            className={cn(
+                                                'h-3 w-3 transition-transform',
+                                                {
+                                                    'rotate-180':
+                                                        !expandedVersions[
+                                                            versionData.version
+                                                        ],
+                                                }
+                                            )}
+                                        />
+                                        <span className="sr-only">
+                                            {expandedVersions[
+                                                versionData.version
+                                            ]
+                                                ? 'Réduire'
+                                                : 'Développer'}
+                                        </span>
+                                    </Button>
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    {versionData.description}
+                                </p>
                             </div>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 w-6 p-0"
-                                onClick={() =>
-                                    toggleVersion(versionData.version)
-                                }
-                            >
-                                <ChevronDown
-                                    className={cn(
-                                        'h-3 w-3 transition-transform',
-                                        {
-                                            'rotate-180':
-                                                !expandedVersions[
-                                                    versionData.version
-                                                ],
+
+                            {expandedVersions[versionData.version] && (
+                                <div className="px-3 py-2 space-y-0 divide-y">
+                                    {versionData.changes.map(
+                                        (change, index) => {
+                                            const config =
+                                                changeTypeConfig[
+                                                    change.type as ChangeType
+                                                ];
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="py-2"
+                                                >
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge
+                                                            className={cn(
+                                                                config.badgeClassName
+                                                            )}
+                                                        >
+                                                            <span className="flex items-center gap-1">
+                                                                {config.icon}
+                                                                {config.label}
+                                                            </span>
+                                                        </Badge>
+                                                        <h3 className="text-sm font-medium">
+                                                            {change.title}
+                                                        </h3>
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground mt-0.5 pl-14">
+                                                        {change.description}
+                                                    </p>
+                                                </div>
+                                            );
                                         }
                                     )}
-                                />
-                                <span className="sr-only">
-                                    {expandedVersions[versionData.version]
-                                        ? 'Réduire'
-                                        : 'Développer'}
-                                </span>
-                            </Button>
+                                </div>
+                            )}
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                            {versionData.description}
-                        </p>
-                    </div>
-
-                    {expandedVersions[versionData.version] && (
-                        <div className="px-3 py-2 space-y-0 divide-y">
-                            {versionData.changes.map((change, index) => {
-                                const config =
-                                    changeTypeConfig[change.type as ChangeType];
-                                return (
-                                    <div key={index} className="py-2">
-                                        <div className="flex items-center gap-2">
-                                            <Badge
-                                                className={cn(
-                                                    config.badgeClassName
-                                                )}
-                                            >
-                                                <span className="flex items-center gap-1">
-                                                    {config.icon}
-                                                    {config.label}
-                                                </span>
-                                            </Badge>
-                                            <h3 className="text-sm font-medium">
-                                                {change.title}
-                                            </h3>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mt-0.5 pl-14">
-                                            {change.description}
-                                        </p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
-            ))}
+                    ))}
+                </>
+            )}
         </div>
     );
 }

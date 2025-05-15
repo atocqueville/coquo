@@ -1,29 +1,18 @@
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import { ChangelogContent } from './changelog-content';
 
 export default function ChangelogPage() {
     return (
-        <div className="min-h-screen bg-muted/30">
-            <div className="container py-4 px-4 md:py-6">
-                <div className="mb-4 flex items-center gap-2">
-                    <Button variant="outline" size="icon" asChild>
-                        <Link href="/">
-                            <ChevronLeft className="h-4 w-4" />
-                            <span className="sr-only">Retour</span>
-                        </Link>
-                    </Button>
-                    <h1 className="text-xl font-bold">
+        <div className="flex flex-col min-h-screen">
+            <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
+                <div className="container flex items-center justify-between h-16 px-4">
+                    <h1 className="text-lg font-bold sm:text-2xl whitespace-nowrap mr-4">
                         Journal des modifications
                     </h1>
                 </div>
-
-                <div className="max-w-3xl">
-                    <ChangelogContent />
-                </div>
-            </div>
+            </header>
+            <section className="container py-4 px-4 md:py-6">
+                <ChangelogContent />
+            </section>
         </div>
     );
 }
