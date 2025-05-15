@@ -1,6 +1,6 @@
 import type React from 'react';
 import AccountTab from './account';
-import { getUserById } from '@/data/user';
+import { getUserById } from '@/lib/api/user';
 import { auth } from '@/auth';
 import type { User } from '@prisma/client';
 

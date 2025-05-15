@@ -5,13 +5,30 @@ import prisma from '@/lib/prisma';
 import { compare, genSalt, hash } from 'bcryptjs';
 import { userAuthSchema } from '@/schemas';
 import { z } from 'zod';
-import { getUserByEmail } from '@/data/user';
 
 const SALT_ROUNDS = 6;
 
 const hashPassword = async (password: string) => {
     const salt = await genSalt(SALT_ROUNDS);
     return await hash(password, salt);
+};
+
+export const getUserByEmail = async (email: string) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { email } });
+        return user;
+    } catch {
+        return null;
+    }
+};
+
+export const getUserById = async (id: string) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { id } });
+        return user;
+    } catch {
+        return null;
+    }
 };
 
 export async function createUser(
