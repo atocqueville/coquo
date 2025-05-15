@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const path = require('path');
 const express = require('express');
-var cors = require('cors');
-const app = express();
+const cors = require('cors');
 const { v4 } = require('uuid');
 const morgan = require('morgan');
 const multer = require('multer');
+const sharp = require('sharp');
+
+const app = express();
 
 const MEDIA_PATH = process.env.MEDIA_PATH || '../config/media';
+const ABS_MEDIA_PATH = path.resolve(__dirname, MEDIA_PATH);
+
 console.log('MEDIA ENV', MEDIA_PATH);
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => callback(null, MEDIA_PATH),
-    filename: (req, file, callback) =>
-        callback(
-            null,
-            v4() + '-' + Date.now() + path.extname(file.originalname)
-        ),
-});
+
+// Use memory storage so we can compress manually
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.use(cors());
@@ -27,14 +26,24 @@ app.use(
         '[:date[iso]] :method :url :status :res[content-length] - :response-time ms'
     )
 );
-app.use('/media', express.static(path.resolve(__dirname, MEDIA_PATH)));
+app.use('/media', express.static(ABS_MEDIA_PATH));
 
-app.post('/file', upload.single('file'), (req, res) => {
-    if (req.file) {
-        const shortPath = req.file.path.replace(MEDIA_PATH + '/', '');
-        res.json({ path: shortPath });
-    } else {
-        res.json({ success: false });
+app.post('/file', upload.single('file'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ success: false });
+
+    const { buffer } = req.file;
+    const id = `${v4()}-${Date.now()}`;
+    const filename = `${id}.webp`;
+    const outputPath = path.join(ABS_MEDIA_PATH, filename);
+
+    try {
+        await sharp(buffer).webp({ quality: 75 }).toFile(outputPath);
+
+        const shortPath = filename;
+        return res.json({ path: shortPath });
+    } catch (err) {
+        console.error('Image compression failed:', err);
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 

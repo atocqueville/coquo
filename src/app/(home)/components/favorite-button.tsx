@@ -43,7 +43,8 @@ export default function FavoriteButton({
             className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center"
         >
             <Heart
-                className={`h-4 w-4 transition-colors stroke-white hover:fill-red-200 ${
+                color={isFavorite ? '#fb2c36' : '#fff'}
+                className={`hover:fill-red-400  ${
                     isFavorite
                         ? 'fill-red-500 stroke-red-500'
                         : 'text-muted-foreground'

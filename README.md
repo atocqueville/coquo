@@ -12,7 +12,7 @@ Self hosted recipe manager written in Next.js.
 - [x] Add a Favorite star to recipes
 - [x] Add a step list with checkboxes to grey out completed steps
 - [x] Find a way to label recipes (tags ?)
-- [ ] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
+- [x] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
 - [ ] Upload a profile picture when credentials signin
 - [ ] Google OAuth
 - [ ] Redesign create form
