@@ -12,7 +12,7 @@ export default function RecipeList({
     const hasRecipes = recipes.length > 0;
 
     return (
-        <main className="flex-1 container px-4 py-6">
+        <section className="flex-1 container px-4 py-6">
             {hasRecipes ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {recipes.map((recipe) => (
@@ -21,7 +21,7 @@ export default function RecipeList({
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center sm:py-16 px-4 text-center">
-                    <div className="relative w-96 h-96 mb-6">
+                    <div className="relative w-full h-64 sm:w-96 sm:h-96 mb-6">
                         <Image
                             src="/empty-plate.png"
                             alt="No recipes found"
@@ -35,6 +35,6 @@ export default function RecipeList({
                     {children}
                 </div>
             )}
-        </main>
+        </section>
     );
 }
