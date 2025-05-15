@@ -6,19 +6,31 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { badgeLabel } from '@/components/ui/badge';
-import type { Tag } from '@prisma/client';
+import type { Tag, User } from '@prisma/client';
 import { setCookie, destroyCookie } from 'nookies';
 import { AdvancedSearchButton } from './advanced-search-button';
 
-export default function TopBar({ tags }: { tags: Tag[] }) {
+export default function TopBar({
+    tags,
+    users,
+}: {
+    tags: Tag[];
+    users: User[];
+}) {
     const router = useRouter();
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [selectedUser, setSelectedUser] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState('');
 
     const tagOptions = tags.map((tag) => ({
         value: tag.id,
         variant: tag.name,
         label: badgeLabel[tag.name as keyof typeof badgeLabel],
+    }));
+
+    const userOptions = users.map((user) => ({
+        value: user.id,
+        label: user.name || user.email || 'Utilisateur anonyme',
     }));
 
     /** SAVE FILTERS TO COOKIE AND REFRESH URL */
@@ -30,6 +42,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             'recipeFilters',
             JSON.stringify({
                 tags: selectedTags,
+                user: selectedUser,
                 q: searchQuery,
                 page: '1',
             }),
@@ -64,6 +77,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                     JSON.stringify({
                         tags: urlTags,
                         q: urlSearchParam || '',
+                        user: selectedUser || '',
                         page: urlPageParam || '1',
                     }),
                     {
@@ -80,7 +94,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
     /** TRIGGER SAVE FILTERS AND REFRESH URL */
     useEffect(() => {
         saveFilters();
-    }, [selectedTags]);
+    }, [selectedTags, selectedUser]);
 
     // Debounced search handler
     const debouncedSearch = useCallback(
@@ -106,6 +120,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                 JSON.stringify({
                     tags: selectedTags,
                     q: value,
+                    user: selectedUser,
                     page: '1',
                 }),
                 {
@@ -117,7 +132,7 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
             // Update URL
             router.push(`/`);
         }, 500),
-        [selectedTags, router]
+        [selectedTags, selectedUser, router]
     );
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,11 +145,16 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
         setSelectedTags(values);
     };
 
+    const handleUserChange = (value: string) => {
+        setSelectedUser(value);
+    };
+
     const resetFilters = () => {
         destroyCookie(null, 'recipeFilters');
 
         // Reset state
         setSelectedTags([]);
+        setSelectedUser('');
         setSearchQuery('');
 
         router.push('/');
@@ -159,8 +179,11 @@ export default function TopBar({ tags }: { tags: Tag[] }) {
                     </div>
                     <AdvancedSearchButton
                         selectedTags={selectedTags}
+                        selectedUser={selectedUser}
                         tagOptions={tagOptions}
+                        userOptions={userOptions}
                         onTagsChange={handleTagsChange}
+                        onUserChange={handleUserChange}
                         onResetFilters={resetFilters}
                     />
                 </div>

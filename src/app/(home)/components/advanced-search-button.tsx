@@ -9,22 +9,37 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { MultiSelect } from '@/components/ui/multi-select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
 interface AdvancedSearchButtonProps {
     selectedTags: string[];
+    selectedUser: string;
     tagOptions: Array<{ value: string; variant: string; label: string }>;
     onTagsChange: (values: string[]) => void;
+    onUserChange: (value: string) => void;
     onResetFilters: () => void;
+    userOptions: Array<{ value: string; label: string }>;
 }
 
 export function AdvancedSearchButton({
     selectedTags,
     tagOptions,
+    userOptions,
+    selectedUser,
     onTagsChange,
+    onUserChange,
     onResetFilters,
 }: AdvancedSearchButtonProps) {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+    const hasActiveFilters = selectedTags.length > 0 || selectedUser !== '';
 
     return (
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -32,20 +47,18 @@ export function AdvancedSearchButton({
                 <Button
                     variant="outline"
                     className={`h-9 w-9 sm:px-4 sm:py-2 sm:w-auto ${
-                        selectedTags.length > 0
+                        hasActiveFilters
                             ? 'bg-emerald-400 hover:bg-emerald-400/80 border-secondary text-primary relative'
                             : ''
                     }`}
                 >
                     <span className="hidden sm:block">Recherche avancée</span>
                     <Filter
-                        className={
-                            selectedTags.length > 0 ? 'text-primary' : ''
-                        }
+                        className={hasActiveFilters ? 'text-primary' : ''}
                     />
-                    {selectedTags.length > 0 && (
+                    {hasActiveFilters && (
                         <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] rounded-full flex items-center justify-center text-primary-foreground">
-                            {selectedTags.length}
+                            {selectedTags.length + (selectedUser ? 1 : 0)}
                         </span>
                     )}
                 </Button>
@@ -63,6 +76,28 @@ export function AdvancedSearchButton({
                             defaultValue={selectedTags}
                             placeholder="Sélectionner des tags"
                         />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="tags-filter">Auteurs</Label>
+                        <Select
+                            value={selectedUser}
+                            onValueChange={onUserChange}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Auteurs" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {userOptions.map((user) => (
+                                    <SelectItem
+                                        key={user.value}
+                                        value={user.value}
+                                    >
+                                        {user.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="flex justify-end mt-4">

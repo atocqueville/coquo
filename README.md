@@ -21,8 +21,7 @@ Self hosted recipe manager written in Next.js.
 - [ ] Add remaining filters:
   - [x] Title text search
   - [x] Tags
-  - [ ] Author
-  - [ ] Difficulty
+  - [x] Author
 
 ## Feature Ideas
 - [ ] fuzzy text search

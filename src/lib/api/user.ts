@@ -111,6 +111,10 @@ export async function updatePassword(
     });
 }
 
+export async function getAllUsers() {
+    return prisma.user.findMany();
+}
+
 export async function getUnverifiedUsers() {
     const users = await prisma.user.findMany({
         where: { emailVerified: null },

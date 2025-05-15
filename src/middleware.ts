@@ -36,15 +36,16 @@ export default auth((req) => {
         try {
             // Access cookies directly from the request
             const cookieHeader = req.cookies.get('recipeFilters')?.value;
-
             if (cookieHeader) {
                 const recipeFilters = JSON.parse(cookieHeader);
                 const tags = recipeFilters.tags;
                 const q = recipeFilters.q;
-                if ((tags && tags.length > 0) || q) {
+                const user = recipeFilters.user;
+                if ((tags && tags.length > 0) || q || user) {
                     const url = new URL(nextUrl.href);
                     url.searchParams.set('tags', tags.join(','));
                     url.searchParams.set('q', q);
+                    url.searchParams.set('user', user);
                     return Response.redirect(url);
                 }
             }

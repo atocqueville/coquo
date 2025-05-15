@@ -18,37 +18,15 @@ export type RecipeWithTagsAndAuthor = Prisma.RecipeGetPayload<{
 export async function getRecipes(filters: {
     tags?: string;
     q?: string;
+    user?: string;
     page?: string;
 }): Promise<RecipeWithTagsAndAuthor[]> {
-    const tagIds = filters?.tags ? filters.tags.split(',') : [];
-    const searchQuery = filters?.q || '';
     const currentPage = parseInt(filters?.page || '1', 10);
     const pageSize = 10;
     const skip = (currentPage - 1) * pageSize;
 
-    // Build where conditions
-    const whereConditions: Prisma.RecipeWhereInput = {};
-
-    // Add tag filtering
-    if (tagIds.length > 0) {
-        whereConditions.AND = tagIds.map((tagId) => ({
-            tags: {
-                some: {
-                    id: tagId,
-                },
-            },
-        }));
-    }
-
-    // Add search filtering
-    if (searchQuery) {
-        whereConditions.title = {
-            contains: searchQuery,
-        };
-    }
-
     return prisma.recipe.findMany({
-        where: whereConditions,
+        where: buildRecipeWhereInput(filters),
         include: {
             author: {
                 select: { email: true },
@@ -149,31 +127,10 @@ export async function toggleFavorite(recipeId: number) {
 export async function getRecipeCount(filters: {
     tags?: string;
     q?: string;
+    user?: string;
 }): Promise<number> {
-    const tagIds = filters?.tags ? filters.tags.split(',') : [];
-    const searchQuery = filters?.q || '';
-
-    // Build where conditions
-    const whereConditions: Prisma.RecipeWhereInput = {};
-
-    // Add tag filtering
-    if (tagIds.length > 0) {
-        whereConditions.tags = {
-            some: {
-                id: { in: tagIds },
-            },
-        };
-    }
-
-    // Add search filtering
-    if (searchQuery) {
-        whereConditions.title = {
-            contains: searchQuery,
-        };
-    }
-
     return prisma.recipe.count({
-        where: whereConditions,
+        where: buildRecipeWhereInput(filters),
     });
 }
 
@@ -209,4 +166,36 @@ const mapCreateRecipeFormDataToRecipeDb = (
         servings: createRecipeFormData.servings,
         difficulty: 0,
     };
+};
+
+const buildRecipeWhereInput = (filters: {
+    tags?: string;
+    q?: string;
+    user?: string;
+}): Prisma.RecipeWhereInput => {
+    const whereConditions: Prisma.RecipeWhereInput = {};
+
+    if (filters.tags && filters.tags.length > 0) {
+        whereConditions.AND = filters.tags.split(',').map((tagId) => ({
+            tags: {
+                some: {
+                    id: tagId,
+                },
+            },
+        }));
+    }
+
+    if (filters.q) {
+        whereConditions.title = {
+            contains: filters.q,
+        };
+    }
+
+    if (filters.user) {
+        whereConditions.author = {
+            id: filters.user,
+        };
+    }
+
+    return whereConditions;
 };
