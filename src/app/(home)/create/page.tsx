@@ -1,5 +1,4 @@
 import { getTags } from '@/lib/api/tags';
-import CreateRecipeFormLegacy from './components/create-recipe-form';
 import { CreateRecipeForm } from './components/create-recipe-v2';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +16,7 @@ export default async function CreateRecipePage() {
                 </div>
             </header>
             <section className="flex-1 container px-4 py-6">
-                <CreateRecipeForm />
+                <CreateRecipeForm tags={tags} />
             </section>
         </div>
     );

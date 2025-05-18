@@ -29,76 +29,76 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
+import type { Tag } from '@prisma/client';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+
+import { uploadImage } from '@/lib/api/file-storage';
+import { createRecipe } from '@/lib/api/recipe';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import type { CreateRecipeSchema } from '@/schemas';
+
+type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
 const formSchema = z.object({
     title: z.string().min(2, {
-        message: 'Recipe title must be at least 2 characters.',
+        message: 'Le titre de la recette doit contenir au moins 2 caractères.',
     }),
-    picture: z.string().optional(),
-    ingredients: z.string().min(10, {
-        message: 'Please add some ingredients (at least 10 characters).',
+    picture: z.instanceof(File).optional(),
+    ingredients: z.string().min(1, {
+        message: 'Ajoutez des ingrédients',
     }),
     steps: z
         .array(
             z.object({
                 title: z.string().min(2, {
-                    message: 'Step title must be at least 2 characters.',
+                    message:
+                        "Le titre de l'étape doit contenir au moins 2 caractères.",
                 }),
                 instructions: z
                     .array(
-                        z.string().min(10, {
+                        z.string().min(5, {
                             message:
-                                'Instruction must be at least 10 characters.',
+                                'Une instruction doit contenir au moins 5 caractères.',
                         })
                     )
                     .min(1, {
-                        message: 'Please add at least one instruction.',
+                        message: 'Ajoutez au moins une instruction.',
                     }),
             })
         )
         .min(1, {
-            message: 'Please add at least one step.',
+            message: 'Ajoutez au moins une étape.',
         }),
-    difficulty: z.coerce.number().min(1).max(5),
+    difficulty: z.coerce.number().min(1).max(3),
     prepTime: z.coerce.number().min(1, {
-        message: 'Prep time must be at least 1 minute.',
+        message: "Le temps de préparation doit être d'au moins 1 minute.",
     }),
     cookTime: z.coerce.number().min(0, {
-        message: 'Cook time must be 0 or more minutes.',
+        message: 'Le temps de cuisson doit être de 0 ou plus minutes.',
     }),
     servings: z.coerce.number().min(1, {
-        message: 'Recipe must serve at least 1 person.',
+        message: 'La recette doit servir au moins 1 personne.',
     }),
     tags: z.array(z.string()).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function CreateRecipeForm() {
+type CreateRecipeFormProps = {
+    tags: Tag[];
+};
+
+export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-    // Define available tags
-    const availableTags = [
-        'Breakfast',
-        'Lunch',
-        'Dinner',
-        'Dessert',
-        'Vegetarian',
-        'Vegan',
-        'Gluten-Free',
-        'Dairy-Free',
-        'Low-Carb',
-        'Quick',
-        'Easy',
-        'Gourmet',
-    ];
-
+    const router = useRouter();
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: '',
-            picture: '',
+            picture: undefined,
             ingredients: '',
             steps: [{ title: '', instructions: [''] }],
             difficulty: 1,
@@ -115,14 +115,6 @@ export function CreateRecipeForm() {
         name: 'steps',
     });
 
-    function onSubmit(values: FormValues) {
-        // Include selected tags in the form values
-        values.tags = selectedTags;
-        console.log(values);
-        // Here you would typically send the data to your API
-        alert('Recipe submitted successfully!');
-    }
-
     function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
         if (file) {
@@ -130,7 +122,7 @@ export function CreateRecipeForm() {
             reader.onloadend = () => {
                 const result = reader.result as string;
                 setImagePreview(result);
-                form.setValue('picture', result);
+                form.setValue('picture', file);
             };
             reader.readAsDataURL(file);
         }
@@ -169,20 +161,57 @@ export function CreateRecipeForm() {
         );
     };
 
+    const handleSubmit = async (values: FormValues) => {
+        let uploadedImagePath: string = '';
+
+        values.tags = selectedTags;
+
+        try {
+            if (values.picture) {
+                const uploadFileResponse = await uploadImage([values.picture]);
+                uploadedImagePath = uploadFileResponse.path;
+            }
+
+            const recipe: CreateRecipeFormData = {
+                title: values.title,
+                picture: uploadedImagePath,
+                ingredients: values.ingredients.split('\n'),
+                steps: values.steps,
+                tags: selectedTags,
+                prepTime: values.prepTime,
+                cookTime: values.cookTime,
+                servings: values.servings,
+                difficulty: values.difficulty,
+            };
+
+            await createRecipe(recipe);
+        } catch (err) {
+            console.log(err);
+            toast.error(
+                'Une erreur est survenue lors de la création de la recette'
+            );
+        } finally {
+            toast.success('Recette créée avec succès');
+            router.push('/');
+        }
+    };
+
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-8"
+            >
                 <Card>
                     <CardContent className="pt-6">
                         <div className="flex flex-col md:flex-row gap-6">
                             {/* Left column - Image (1/3 width) */}
-                            <div className="md:w-1/3">
+                            <div className="md:w-1/3 flex justify-center items-center">
                                 <FormField
                                     control={form.control}
                                     name="picture"
                                     render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Recipe Image</FormLabel>
+                                        <FormItem className="flex-1">
                                             <FormControl>
                                                 <div
                                                     className="relative aspect-square w-full cursor-pointer overflow-hidden rounded-md border border-dashed border-input bg-muted/50 hover:bg-muted/80"
@@ -200,15 +229,15 @@ export function CreateRecipeForm() {
                                                                 imagePreview ||
                                                                 '/placeholder.svg'
                                                             }
-                                                            alt="Recipe preview"
+                                                            alt="Aperçu de la recette"
                                                             className="h-full w-full object-cover"
                                                         />
                                                     ) : (
                                                         <div className="flex h-full w-full flex-col items-center justify-center">
                                                             <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
                                                             <p className="text-sm text-muted-foreground">
-                                                                Click to upload
-                                                                an image
+                                                                Télécharger une
+                                                                image
                                                             </p>
                                                         </div>
                                                     )}
@@ -237,10 +266,12 @@ export function CreateRecipeForm() {
                                     name="title"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Recipe Title</FormLabel>
+                                            <FormLabel>
+                                                Titre de la recette
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Delicious Chocolate Cake"
+                                                    placeholder="Délicieux gâteau au chocolat"
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -257,7 +288,7 @@ export function CreateRecipeForm() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Prep Time (min)
+                                                    Temps de préparation (min)
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
@@ -280,7 +311,7 @@ export function CreateRecipeForm() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Cook Time (min)
+                                                    Temps de cuisson (min)
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
@@ -305,7 +336,7 @@ export function CreateRecipeForm() {
                                         name="servings"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Servings</FormLabel>
+                                                <FormLabel>Portions</FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
                                                         <Users className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -327,13 +358,13 @@ export function CreateRecipeForm() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Difficulty
+                                                    Difficulté
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="space-y-4">
                                                         <Slider
                                                             min={1}
-                                                            max={5}
+                                                            max={3}
                                                             step={1}
                                                             defaultValue={[
                                                                 field.value,
@@ -348,9 +379,11 @@ export function CreateRecipeForm() {
                                                             className="py-4"
                                                         />
                                                         <div className="flex justify-between text-xs text-muted-foreground">
-                                                            <span>Easy</span>
-                                                            <span>Medium</span>
-                                                            <span>Hard</span>
+                                                            <span>Facile</span>
+                                                            <span>Moyen</span>
+                                                            <span>
+                                                                Difficile
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </FormControl>
@@ -372,21 +405,20 @@ export function CreateRecipeForm() {
                                     Tags
                                 </div>
                                 <div className="mt-2 flex flex-wrap gap-2">
-                                    {availableTags.map((tag) => (
-                                        <Button
-                                            key={tag}
-                                            type="button"
-                                            variant={
-                                                selectedTags.includes(tag)
-                                                    ? 'default'
-                                                    : 'outline'
-                                            }
-                                            size="sm"
-                                            onClick={() => toggleTag(tag)}
-                                            className="rounded-full"
+                                    {tags.map((tag) => (
+                                        <Badge
+                                            key={tag.id}
+                                            variant={tag.name as any}
+                                            onClick={() => toggleTag(tag.id)}
+                                            className={cn(
+                                                selectedTags.includes(tag.id)
+                                                    ? ''
+                                                    : 'grayscale',
+                                                'cursor-pointer'
+                                            )}
                                         >
-                                            {tag}
-                                        </Button>
+                                            {tag.name}
+                                        </Badge>
                                     ))}
                                 </div>
                             </div>
@@ -399,7 +431,7 @@ export function CreateRecipeForm() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex items-center justify-between">
-                                            <FormLabel>Ingredients</FormLabel>
+                                            <FormLabel>Ingrédients</FormLabel>
                                             <TooltipProvider>
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
@@ -410,21 +442,23 @@ export function CreateRecipeForm() {
                                                         >
                                                             <Info className="h-4 w-4" />
                                                             <span className="sr-only">
-                                                                Ingredients
-                                                                format info
+                                                                Infos sur le
+                                                                format des
+                                                                ingrédients
                                                             </span>
                                                         </Button>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
                                                         <p>
-                                                            Enter each
-                                                            ingredient on a new
-                                                            line
+                                                            Saisissez chaque
+                                                            ingrédient sur une
+                                                            nouvelle ligne
                                                         </p>
                                                         <p>
-                                                            Format: "2 cups
-                                                            flour" or "1 tbsp
-                                                            olive oil"
+                                                            Format: "2 tasses de
+                                                            farine" ou "1 c. à
+                                                            soupe d'huile
+                                                            d'olive"
                                                         </p>
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -432,18 +466,14 @@ export function CreateRecipeForm() {
                                         </div>
                                         <FormControl>
                                             <Textarea
-                                                placeholder="2 cups all-purpose flour
-1/2 cup unsalted butter, softened
-1 cup granulated sugar
-2 large eggs
-1 tsp vanilla extract"
+                                                placeholder="Ajoutez un ingrédient par ligne"
                                                 className="min-h-32 font-mono text-sm"
                                                 {...field}
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            List all ingredients with quantities
-                                            and measurements.
+                                            Listez tous les ingrédients avec
+                                            leurs quantités et mesures.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -458,7 +488,7 @@ export function CreateRecipeForm() {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    Recipe Steps
+                                    Étapes de la recette
                                 </div>
                                 <Button
                                     type="button"
@@ -467,7 +497,7 @@ export function CreateRecipeForm() {
                                     onClick={addStep}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
-                                    Add Step
+                                    Ajouter une étape
                                 </Button>
                             </div>
 
@@ -495,7 +525,7 @@ export function CreateRecipeForm() {
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Remove step
+                                                            Supprimer l'étape
                                                         </span>
                                                     </Button>
                                                 )}
@@ -506,7 +536,7 @@ export function CreateRecipeForm() {
                                                     {stepIndex + 1}
                                                 </div>
                                                 <h3 className="text-sm font-medium">
-                                                    Step {stepIndex + 1}
+                                                    Étape {stepIndex + 1}
                                                 </h3>
                                             </div>
 
@@ -517,11 +547,11 @@ export function CreateRecipeForm() {
                                                     render={({ field }) => (
                                                         <FormItem>
                                                             <FormLabel>
-                                                                Step Title
+                                                                Titre de l'étape
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <Input
-                                                                    placeholder="Prepare the batter"
+                                                                    placeholder="Préparer la pâte"
                                                                     {...field}
                                                                 />
                                                             </FormControl>
@@ -546,7 +576,8 @@ export function CreateRecipeForm() {
                                                             }
                                                         >
                                                             <Plus className="mr-2 h-3 w-3" />
-                                                            Add Instruction
+                                                            Ajouter une
+                                                            instruction
                                                         </Button>
                                                     </div>
 
@@ -576,7 +607,7 @@ export function CreateRecipeForm() {
                                                                                                 1}
                                                                                         </div>
                                                                                         <Textarea
-                                                                                            placeholder="Mix the flour, sugar, and baking powder in a large bowl..."
+                                                                                            placeholder="Mélangez la farine, le sucre et la levure chimique dans un grand bol..."
                                                                                             className="min-h-20"
                                                                                             {...field}
                                                                                         />
@@ -602,8 +633,8 @@ export function CreateRecipeForm() {
                                                                         >
                                                                             <Trash2 className="h-4 w-4" />
                                                                             <span className="sr-only">
-                                                                                Remove
-                                                                                instruction
+                                                                                Supprimer
+                                                                                l'instruction
                                                                             </span>
                                                                         </Button>
                                                                     )}
@@ -622,10 +653,7 @@ export function CreateRecipeForm() {
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="button" variant="outline">
-                        Save as Draft
-                    </Button>
-                    <Button type="submit">Create Recipe</Button>
+                    <Button type="submit">Créer la recette</Button>
                 </div>
             </form>
         </Form>

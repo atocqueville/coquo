@@ -164,7 +164,7 @@ const mapCreateRecipeFormDataToRecipeDb = (
         prepTime: createRecipeFormData.prepTime,
         cookTime: createRecipeFormData.cookTime,
         servings: createRecipeFormData.servings,
-        difficulty: 0,
+        difficulty: createRecipeFormData.difficulty,
     };
 };
 

@@ -47,4 +47,5 @@ export const CreateRecipeSchema = z.object({
     prepTime: z.number().min(0),
     cookTime: z.number().min(0),
     tags: z.array(z.string()).min(0),
+    difficulty: z.number().min(1).max(3),
 });
