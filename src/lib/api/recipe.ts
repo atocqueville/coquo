@@ -86,7 +86,6 @@ export async function getRecipeById(id: string): Promise<RecipeUi> {
                 instructions: step.instructions.split(';'),
             };
         }),
-        tags: recipeDb.tags.map((tag) => tag.name),
     };
 
     return recipeUi;
@@ -100,6 +99,49 @@ export async function createRecipe(formData: CreateRecipeFormData) {
     );
     await prisma.recipe.create({ data: recipeFormToRecipeDb });
     revalidatePath('/');
+}
+
+export async function updateRecipe(id: number, formData: CreateRecipeFormData) {
+    const session = await auth();
+
+    // Delete existing steps to replace them with new ones
+    await prisma.recipeStep.deleteMany({
+        where: {
+            recipeId: id,
+        },
+    });
+
+    // Map form data to DB structure
+    const recipeData = {
+        title: formData.title,
+        picture: formData.picture,
+        steps: {
+            create: formData.steps.map((step) => ({
+                title: step.title,
+                instructions: step.instructions.join(';'),
+            })),
+        },
+        ingredients: formData.ingredients.join(';'),
+        tags: {
+            set: [], // Clear existing tags
+            connect: formData.tags.map((tag) => ({
+                id: tag,
+            })),
+        },
+        prepTime: formData.prepTime,
+        cookTime: formData.cookTime,
+        servings: formData.servings,
+        difficulty: formData.difficulty,
+    };
+
+    // Update the recipe
+    await prisma.recipe.update({
+        where: { id },
+        data: recipeData,
+    });
+
+    revalidatePath('/');
+    revalidatePath(`/r/${id}`);
 }
 
 export async function toggleFavorite(recipeId: number) {

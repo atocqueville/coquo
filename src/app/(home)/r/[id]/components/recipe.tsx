@@ -1,5 +1,12 @@
 import Image from 'next/image';
-import { Carrot, ChefHat, ChevronLeft, CookingPot, Users } from 'lucide-react';
+import {
+    Carrot,
+    ChefHat,
+    ChevronLeft,
+    CookingPot,
+    Pencil,
+    Users,
+} from 'lucide-react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { Button } from '@/components/ui/button';
@@ -54,7 +61,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                 priority
                             />
                             {/* Back button - fixed position for better visibility */}
-                            <div className="absolute top-4 left-4 z-10">
+                            <div className="absolute top-4 left-4 z-10 flex gap-2">
                                 <Button
                                     variant="outline"
                                     size="sm"
@@ -68,6 +75,19 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         </span>
                                         <span className="sm:hidden">
                                             Retour
+                                        </span>
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    asChild
+                                    className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
+                                >
+                                    <Link href={`/r/${recipe.id}/edit`}>
+                                        <Pencil className="mr-1 h-4 w-4" />
+                                        <span className="hidden sm:inline">
+                                            Modifier
                                         </span>
                                     </Link>
                                 </Button>

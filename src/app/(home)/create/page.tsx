@@ -1,5 +1,5 @@
 import { getTags } from '@/lib/api/tags';
-import { CreateRecipeForm } from './components/create-recipe-v2';
+import { CreateRecipeForm } from './components/create-recipe-form';
 
 export const dynamic = 'force-dynamic';
 

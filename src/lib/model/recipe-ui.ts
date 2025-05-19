@@ -7,7 +7,10 @@ export interface RecipeUi {
     cookTime: number;
     prepTime: number;
     servings: number;
-    tags: string[];
+    tags: Array<{
+        id: string;
+        name: string;
+    }>;
     steps: Array<{
         id: number;
         title: string;

@@ -34,18 +34,31 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 import { uploadImage } from '@/lib/api/file-storage';
-import { createRecipe } from '@/lib/api/recipe';
+import { createRecipe, updateRecipe } from '@/lib/api/recipe';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import type { CreateRecipeSchema } from '@/schemas';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
+// Custom type for handling File in both client and server environments
+const FileSchema = z
+    .any()
+    .refine(
+        (file) =>
+            file === undefined ||
+            file === null ||
+            (typeof File !== 'undefined' && file instanceof File),
+        {
+            message: 'Must be a File or undefined',
+        }
+    );
+
 const formSchema = z.object({
     title: z.string().min(2, {
         message: 'Le titre de la recette doit contenir au moins 2 caractères.',
     }),
-    picture: z.instanceof(File).optional(),
+    picture: FileSchema.optional(),
     ingredients: z.string().min(1, {
         message: 'Ajoutez des ingrédients',
     }),
@@ -88,25 +101,81 @@ type FormValues = z.infer<typeof formSchema>;
 
 type CreateRecipeFormProps = {
     tags: Tag[];
+    initialData?: {
+        title: string;
+        picture?: string;
+        ingredients: string;
+        steps: {
+            title: string;
+            instructions: string[];
+        }[];
+        difficulty: number;
+        prepTime: number;
+        cookTime: number;
+        servings: number;
+        tags: string[];
+    };
+    recipeId?: number;
 };
 
-export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+export function CreateRecipeForm({
+    tags,
+    initialData,
+    recipeId,
+}: CreateRecipeFormProps) {
+    // Format image URL to use the image proxy for existing images
+    const formatImageUrl = (imagePath: string | undefined) => {
+        if (!imagePath) return null;
+
+        // For existing images stored on the server, use the image proxy
+        if (!imagePath.startsWith('data:')) {
+            return `/api/image-proxy?imageId=${imagePath}`;
+        }
+
+        // For data URLs (new uploads from FileReader), return as is
+        return imagePath;
+    };
+
+    const initialImageUrl = formatImageUrl(initialData?.picture);
+
+    const [selectedTags, setSelectedTags] = useState<string[]>(
+        initialData?.tags || []
+    );
+    const [imagePreview, setImagePreview] = useState<string | null>(
+        initialImageUrl
+    );
+    const [isExistingImage, setIsExistingImage] = useState<boolean>(
+        !!initialData?.picture
+    );
+
+    console.log('Image preview URL:', imagePreview);
+
     const router = useRouter();
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            title: '',
-            picture: undefined,
-            ingredients: '',
-            steps: [{ title: '', instructions: [''] }],
-            difficulty: 1,
-            prepTime: 15,
-            cookTime: 30,
-            servings: 4,
-            tags: [],
-        },
+        defaultValues: initialData
+            ? {
+                  title: initialData.title,
+                  picture: undefined,
+                  ingredients: initialData.ingredients,
+                  steps: initialData.steps,
+                  difficulty: initialData.difficulty,
+                  prepTime: initialData.prepTime,
+                  cookTime: initialData.cookTime,
+                  servings: initialData.servings,
+                  tags: initialData.tags,
+              }
+            : {
+                  title: '',
+                  picture: undefined,
+                  ingredients: '',
+                  steps: [{ title: '', instructions: [''] }],
+                  difficulty: 1,
+                  prepTime: 15,
+                  cookTime: 30,
+                  servings: 4,
+                  tags: [],
+              },
     });
 
     // Field array for steps
@@ -122,6 +191,7 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
             reader.onloadend = () => {
                 const result = reader.result as string;
                 setImagePreview(result);
+                setIsExistingImage(false);
                 form.setValue('picture', file);
             };
             reader.readAsDataURL(file);
@@ -164,13 +234,20 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
     const handleSubmit = async (values: FormValues) => {
         let uploadedImagePath: string = '';
 
+        // If we're keeping the existing image, use the original path, not the proxy URL
+        if (isExistingImage && initialData?.picture) {
+            uploadedImagePath = initialData.picture;
+        }
+
         values.tags = selectedTags;
 
         try {
-            if (values.picture) {
+            // Only upload a new image if we have a File instance
+            if (values.picture instanceof File) {
                 const uploadFileResponse = await uploadImage([values.picture]);
                 uploadedImagePath = uploadFileResponse.path;
             }
+            // If isExistingImage is false and no new picture, leave uploadedImagePath empty
 
             const recipe: CreateRecipeFormData = {
                 title: values.title,
@@ -184,15 +261,24 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
                 difficulty: values.difficulty,
             };
 
-            await createRecipe(recipe);
+            if (recipeId) {
+                // Update existing recipe
+                await updateRecipe(recipeId, recipe);
+                toast.success('Recette mise à jour avec succès');
+                router.push(`/r/${recipeId}`);
+            } else {
+                // Create new recipe
+                await createRecipe(recipe);
+                toast.success('Recette créée avec succès');
+                router.push('/');
+            }
         } catch (err) {
             console.log(err);
             toast.error(
-                'Une erreur est survenue lors de la création de la recette'
+                recipeId
+                    ? 'Une erreur est survenue lors de la mise à jour de la recette'
+                    : 'Une erreur est survenue lors de la création de la recette'
             );
-        } finally {
-            toast.success('Recette créée avec succès');
-            router.push('/');
         }
     };
 
@@ -206,12 +292,15 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
                     <CardContent className="pt-6">
                         <div className="flex flex-col md:flex-row gap-6">
                             {/* Left column - Image (1/3 width) */}
-                            <div className="md:w-1/3 flex justify-center items-center">
+                            <div className="md:w-1/3 flex justify-center">
                                 <FormField
                                     control={form.control}
                                     name="picture"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
+                                            <FormLabel>
+                                                Image de la recette
+                                            </FormLabel>
                                             <FormControl>
                                                 <div
                                                     className="relative aspect-square w-full cursor-pointer overflow-hidden rounded-md border border-dashed border-input bg-muted/50 hover:bg-muted/80"
@@ -224,14 +313,42 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
                                                     }
                                                 >
                                                     {imagePreview ? (
-                                                        <img
-                                                            src={
-                                                                imagePreview ||
-                                                                '/placeholder.svg'
-                                                            }
-                                                            alt="Aperçu de la recette"
-                                                            className="h-full w-full object-cover"
-                                                        />
+                                                        <div className="relative h-full w-full">
+                                                            <img
+                                                                src={
+                                                                    imagePreview
+                                                                }
+                                                                alt="Aperçu de la recette"
+                                                                className="h-full w-full object-cover"
+                                                            />
+                                                            <Button
+                                                                type="button"
+                                                                variant="destructive"
+                                                                size="icon"
+                                                                className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.stopPropagation();
+                                                                    setImagePreview(
+                                                                        null
+                                                                    );
+                                                                    setIsExistingImage(
+                                                                        false
+                                                                    );
+                                                                    form.setValue(
+                                                                        'picture',
+                                                                        undefined
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                                <span className="sr-only">
+                                                                    Supprimer
+                                                                    l'image
+                                                                </span>
+                                                            </Button>
+                                                        </div>
                                                     ) : (
                                                         <div className="flex h-full w-full flex-col items-center justify-center">
                                                             <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
@@ -413,8 +530,8 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
                                             className={cn(
                                                 selectedTags.includes(tag.id)
                                                     ? ''
-                                                    : 'grayscale',
-                                                'cursor-pointer'
+                                                    : 'bg-muted text-muted-foreground border-gray',
+                                                'cursor-pointer transition-all duration-150'
                                             )}
                                         >
                                             {tag.name}
@@ -653,7 +770,11 @@ export function CreateRecipeForm({ tags }: CreateRecipeFormProps) {
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="submit">Créer la recette</Button>
+                    <Button type="submit">
+                        {recipeId
+                            ? 'Mettre à jour la recette'
+                            : 'Créer la recette'}
+                    </Button>
                 </div>
             </form>
         </Form>
