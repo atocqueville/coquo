@@ -14,9 +14,9 @@ Self hosted recipe manager written in Next.js.
 - [x] Find a way to label recipes (tags ?)
 - [x] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
 - [ ] Google OAuth
-- [ ] Redesign create form
+- [x] Redesign create form
   - [x] Add difficulty input
-  - [ ] Add option to be in edit mode
+  - [x] Add option to be in edit mode
 - [x] Add remaining filters:
   - [x] Title text search
   - [x] Tags
