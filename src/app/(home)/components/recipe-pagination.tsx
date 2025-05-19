@@ -8,8 +8,7 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { getRecipeCount } from '@/lib/api/recipe';
-
-const ITEMS_PER_PAGE = 10;
+import { ITEMS_PER_PAGE } from '@/lib/utils';
 
 export default async function RecipePagination({
     currentPage,

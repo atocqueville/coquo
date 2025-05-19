@@ -6,33 +6,38 @@ import AdministrationWrapper from './administration/administration-wrapper';
 
 export default function SettingsPage() {
     return (
-        <div className="min-h-screen bg-muted/30">
-            <div className="container py-6 px-4 md:py-10">
-                <div className="mb-6 flex items-center gap-2">
-                    <h1 className="text-2xl font-bold">Paramètres</h1>
+        <div className="flex flex-col min-h-screen">
+            <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
+                <div className="container flex items-center justify-between h-16 px-4">
+                    <h1 className="text-lg font-bold sm:text-2xl whitespace-nowrap mr-4">
+                        Paramètres
+                    </h1>
                 </div>
+            </header>
+            <div className="bg-muted/30 flex-grow">
+                <div className="container py-6 px-4 md:py-10">
+                    <Tabs defaultValue="account" className="space-y-6">
+                        <TabsList className="grid w-full max-w-md grid-cols-2">
+                            <TabsTrigger value="account">
+                                <User className="mr-2 h-4 w-4" />
+                                Compte
+                            </TabsTrigger>
 
-                <Tabs defaultValue="account" className="space-y-6">
-                    <TabsList className="grid w-full max-w-md grid-cols-2">
-                        <TabsTrigger value="account">
-                            <User className="mr-2 h-4 w-4" />
-                            Compte
-                        </TabsTrigger>
+                            <TabsTrigger value="admin">
+                                <Shield className="mr-2 h-4 w-4" />
+                                Administration
+                            </TabsTrigger>
+                        </TabsList>
 
-                        <TabsTrigger value="admin">
-                            <Shield className="mr-2 h-4 w-4" />
-                            Administration
-                        </TabsTrigger>
-                    </TabsList>
+                        <TabsContent value="account" className="space-y-6">
+                            <AccountWrapper />
+                        </TabsContent>
 
-                    <TabsContent value="account" className="space-y-6">
-                        <AccountWrapper />
-                    </TabsContent>
-
-                    <TabsContent value="admin" className="space-y-6">
-                        <AdministrationWrapper />
-                    </TabsContent>
-                </Tabs>
+                        <TabsContent value="admin" className="space-y-6">
+                            <AdministrationWrapper />
+                        </TabsContent>
+                    </Tabs>
+                </div>
             </div>
         </div>
     );

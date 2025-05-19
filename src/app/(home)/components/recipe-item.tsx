@@ -1,11 +1,60 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { toDifficulty } from '@/lib/pipes/toDifficulty';
 import { Badge } from '@/components/ui/badge';
+import { Clock } from 'lucide-react';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import { currentUser } from '@/lib/auth';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
 import FavoriteButton from './favorite-button';
+
+// Helper function to get difficulty badge props
+const getDifficultyProps = (difficulty: number) => {
+    switch (difficulty) {
+        case 1:
+            return {
+                color: 'bg-green-100 text-green-700 border border-green-200',
+                label: 'Facile',
+            };
+        case 2:
+            return {
+                color: 'bg-amber-100 text-amber-700 border border-amber-200',
+                label: 'Moyen',
+            };
+        case 3:
+            return {
+                color: 'bg-red-100 text-red-700 border border-red-200',
+                label: 'Difficile',
+            };
+        default:
+            return {
+                color: 'bg-gray-100 text-gray-700 border border-gray-200',
+                label: 'Inconnu',
+            };
+    }
+};
+
+// Helper function to format time display
+const formatTime = (recipe: RecipeWithTagsAndAuthor) => {
+    // Calculate total time (assuming prepTime exists, otherwise use default of 10 min)
+    const prepTime = recipe.prepTime || 10;
+    const cookTime = recipe.cookTime || 0;
+    const totalTime = prepTime + cookTime;
+
+    // Format minutes to hours and minutes if >= 60
+    const formatMinutes = (minutes: number) => {
+        if (minutes < 60) return `${minutes}mn`;
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        if (remainingMinutes === 0) return `${hours}h`;
+        return `${hours}h${(remainingMinutes < 10 ? '0' : '') + remainingMinutes}mn`;
+    };
+
+    return {
+        prep: formatMinutes(prepTime),
+        cook: formatMinutes(cookTime),
+        total: formatMinutes(totalTime),
+    };
+};
 
 export default async function RecipeItem({
     recipe,
@@ -14,6 +63,7 @@ export default async function RecipeItem({
 }) {
     const user = await currentUser();
     const starredRecipeIds = await getUserStarredRecipeIds(user?.id as string);
+    const timeInfo = formatTime(recipe);
 
     return (
         <>
@@ -35,11 +85,14 @@ export default async function RecipeItem({
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-12">
                         <div className="flex justify-between text-white">
-                            <span className="text-sm font-medium">
-                                {recipe.cookTime}mn
+                            <span className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 text-xs font-medium">
+                                <Clock className="h-3 w-3" />
+                                <span>{timeInfo.total}</span>
                             </span>
-                            <span className="text-sm font-medium">
-                                {toDifficulty(recipe.difficulty)}
+                            <span
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyProps(recipe.difficulty).color}`}
+                            >
+                                {getDifficultyProps(recipe.difficulty).label}
                             </span>
                         </div>
                     </div>

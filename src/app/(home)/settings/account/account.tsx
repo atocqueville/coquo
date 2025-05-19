@@ -81,7 +81,7 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
                             </div>
                         </div>
                         <div className="flex justify-start">
-                            <Button type="submit">
+                            <Button type="submit" variant="coquo">
                                 Enregistrer les modifications
                             </Button>
                         </div>

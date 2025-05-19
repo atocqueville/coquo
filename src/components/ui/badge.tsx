@@ -44,6 +44,7 @@ const badgeVariants = cva(
                 lunch: 'border-pink-400 bg-pink-100 text-pink-900',
                 dinner: 'border-violet-400 bg-violet-100 text-violet-900',
                 spicy: 'border-red-400 bg-red-200 text-red-800',
+                coquo: 'border-[hsl(210,65%,40%)] bg-[hsl(210,65%,40%)] text-white',
             },
             size: {
                 default: 'px-2.5 py-0.5 text-xs',

@@ -19,6 +19,9 @@ const buttonVariants = cva(
                     'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-primary underline-offset-4 hover:underline',
+                'coquo-light':
+                    'border border-input bg-background text-primary hover:text-white hover:bg-[hsl(210,60%,32%)] hover:border-[hsl(210,60%,32%)] data-[state=active]:bg-[hsl(210,65%,40%)] data-[state=active]:hover:bg-[hsl(210,60%,32%)] data-[state=active]:border-[hsl(210,65%,40%)] data-[state=active]:text-secondary',
+                coquo: 'border border-input bg-[hsl(210,65%,40%)] text-secondary hover:bg-[hsl(210,60%,32%)] hover:border-[hsl(210,60%,32%)]',
             },
             size: {
                 default: 'h-9 px-4 py-2',

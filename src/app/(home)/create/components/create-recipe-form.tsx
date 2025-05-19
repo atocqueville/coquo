@@ -299,7 +299,7 @@ export function CreateRecipeForm({
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
                                             <FormLabel>
-                                                Image de la recette
+                                                Photo de la recette
                                             </FormLabel>
                                             <FormControl>
                                                 <div
@@ -770,7 +770,7 @@ export function CreateRecipeForm({
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="submit">
+                    <Button variant="coquo" type="submit">
                         {recipeId
                             ? 'Mettre à jour la recette'
                             : 'Créer la recette'}

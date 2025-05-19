@@ -30,9 +30,16 @@ export function SidebarLinks() {
                                             asChild
                                             isActive={pathname === item.href}
                                             disabled={pathname === item.href}
+                                            className="transition-colors duration-200"
                                         >
                                             <a href={item.href}>
-                                                <item.icon className="h-5 w-5" />
+                                                <item.icon
+                                                    className={`transition-all duration-200 ${
+                                                        pathname === item.href
+                                                            ? ''
+                                                            : 'text-sidebar-foreground hover:scale-110'
+                                                    }`}
+                                                />
                                             </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
@@ -48,10 +55,16 @@ export function SidebarLinks() {
                             asChild
                             isActive={pathname === '/settings'}
                             disabled={pathname === '/settings'}
+                            className="transition-colors duration-200"
                         >
                             <a href={'/settings'}>
-                                <Settings />
-                                <span>Settings</span>
+                                <Settings
+                                    className={`transition-all duration-200 ${
+                                        pathname === '/settings'
+                                            ? ''
+                                            : 'text-sidebar-foreground hover:scale-110'
+                                    }`}
+                                />
                             </a>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

@@ -139,7 +139,7 @@ export default function AdministrationTab({
                                             ).toLocaleDateString('fr-FR')}
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant="default">
+                                            <Badge variant="coquo">
                                                 En attente
                                             </Badge>
                                         </TableCell>

@@ -3,6 +3,7 @@ import {
     Carrot,
     ChefHat,
     ChevronLeft,
+    Clock,
     CookingPot,
     Pencil,
     Users,
@@ -23,6 +24,44 @@ import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
+
+// Helper function to get difficulty badge props
+const getDifficultyProps = (difficulty: number) => {
+    switch (difficulty) {
+        case 1:
+            return {
+                color: 'bg-green-100 text-green-700 border border-green-200',
+                label: 'Facile',
+            };
+        case 2:
+            return {
+                color: 'bg-amber-100 text-amber-700 border border-amber-200',
+                label: 'Moyen',
+            };
+        case 3:
+            return {
+                color: 'bg-red-100 text-red-700 border border-red-200',
+                label: 'Difficile',
+            };
+        default:
+            return {
+                color: 'bg-gray-100 text-gray-700 border border-gray-200',
+                label: 'Inconnu',
+            };
+    }
+};
+
+// Helper function to format time display
+const formatTime = (recipe: RecipeUi) => {
+    const prepTime = recipe.prepTime || 10;
+    const cookTime = recipe.cookTime || 0;
+    const totalTime = prepTime + cookTime;
+
+    return {
+        prep: `${prepTime}mn`,
+        cook: `${cookTime}mn`,
+    };
+};
 
 const IngredientsList = ({ ingredients }: { ingredients: string[] }) => {
     return (
@@ -45,6 +84,8 @@ const IngredientsList = ({ ingredients }: { ingredients: string[] }) => {
 };
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
+    const timeInfo = formatTime(recipe);
+
     return (
         <div className="flex min-h-screen flex-col">
             <main className="flex-1">
@@ -86,9 +127,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                 >
                                     <Link href={`/r/${recipe.id}/edit`}>
                                         <Pencil className="mr-1 h-4 w-4" />
-                                        <span className="hidden sm:inline">
-                                            Modifier
-                                        </span>
+                                        <span className="inline">Modifier</span>
                                     </Link>
                                 </Button>
                             </div>
@@ -102,31 +141,37 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             <div className="absolute bottom-0 left-0 right-0 z-10 p-4">
                                 {/* Cooking time */}
                                 <div className="flex flex-wrap gap-2 sm:gap-3 mt-2">
-                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
-                                        <ChefHat className="mr-2 h-4 w-4 text-primary" />
-                                        <span className="font-medium">
-                                            {recipe.prepTime}mn
-                                        </span>
+                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                        <ChefHat className="mr-1 h-4 w-4" />
+                                        <span>{timeInfo.prep}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
                                             préparation
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
-                                        <CookingPot className="mr-2 h-4 w-4 text-primary" />
-                                        <span className="font-medium">
-                                            {recipe.cookTime}mn
-                                        </span>
+                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                        <CookingPot className="mr-1 h-4 w-4" />
+                                        <span>{timeInfo.cook}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
                                             cuisson
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center h-9 px-3 bg-background rounded-lg shadow-md border text-sm">
-                                        <Users className="mr-2 h-4 w-4 text-primary" />
-                                        <span className="font-medium">
-                                            {recipe.servings}
+                                    <div
+                                        className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium shadow-sm ${getDifficultyProps(recipe.difficulty).color}`}
+                                    >
+                                        <span>
+                                            {
+                                                getDifficultyProps(
+                                                    recipe.difficulty
+                                                ).label
+                                            }
                                         </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                        <Users className="mr-1 h-4 w-4" />
+                                        <span>{recipe.servings}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
                                             personnes
                                         </span>

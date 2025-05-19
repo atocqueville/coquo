@@ -45,19 +45,14 @@ export function AdvancedSearchButton({
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant="outline"
-                    className={`h-9 w-9 sm:px-4 sm:py-2 sm:w-auto ${
-                        hasActiveFilters
-                            ? 'bg-emerald-400 hover:bg-emerald-400/80 border-secondary text-primary relative'
-                            : ''
-                    }`}
+                    variant="coquo-light"
+                    data-state={hasActiveFilters ? 'active' : undefined}
+                    className="h-9 w-9 sm:px-4 sm:py-2 sm:w-auto relative"
                 >
                     <span className="hidden sm:block">Recherche avancée</span>
-                    <Filter
-                        className={hasActiveFilters ? 'text-primary' : ''}
-                    />
+                    <Filter className={hasActiveFilters ? 'text-white' : ''} />
                     {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] rounded-full flex items-center justify-center text-primary-foreground">
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-[hsl(206,85%,65%)] text-[10px] rounded-full flex items-center justify-center text-[hsl(210,90%,15%)] font-semibold">
                             {selectedTags.length + (selectedUser ? 1 : 0)}
                         </span>
                     )}

@@ -8,6 +8,7 @@ import { auth } from '@/auth';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { z } from 'zod';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
+import { ITEMS_PER_PAGE } from '@/lib/utils';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -22,8 +23,7 @@ export async function getRecipes(filters: {
     page?: string;
 }): Promise<RecipeWithTagsAndAuthor[]> {
     const currentPage = parseInt(filters?.page || '1', 10);
-    const pageSize = 10;
-    const skip = (currentPage - 1) * pageSize;
+    const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
     return prisma.recipe.findMany({
         where: buildRecipeWhereInput(filters),
@@ -37,7 +37,7 @@ export async function getRecipes(filters: {
             createdAt: 'desc',
         },
         skip: skip,
-        take: pageSize,
+        take: ITEMS_PER_PAGE,
     });
 }
 

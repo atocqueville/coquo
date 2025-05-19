@@ -12,7 +12,7 @@ export async function AppSidebar() {
     const user = await currentUser();
 
     return (
-        <div className="z-20 md:border-r border-border bg-background">
+        <div className="z-20 bg-background">
             <Sidebar collapsible="icon">
                 <SidebarHeader>
                     <SidebarMenu>
