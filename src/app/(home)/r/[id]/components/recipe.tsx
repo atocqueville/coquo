@@ -3,7 +3,6 @@ import {
     Carrot,
     ChefHat,
     ChevronLeft,
-    Clock,
     CookingPot,
     Pencil,
     Users,
@@ -55,7 +54,6 @@ const getDifficultyProps = (difficulty: number) => {
 const formatTime = (recipe: RecipeUi) => {
     const prepTime = recipe.prepTime || 10;
     const cookTime = recipe.cookTime || 0;
-    const totalTime = prepTime + cookTime;
 
     return {
         prep: `${prepTime}mn`,

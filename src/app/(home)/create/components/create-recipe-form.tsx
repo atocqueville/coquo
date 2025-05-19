@@ -1,6 +1,7 @@
 'use client';
 
 import type React from 'react';
+import Image from 'next/image';
 
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -296,7 +297,7 @@ export function CreateRecipeForm({
                                 <FormField
                                     control={form.control}
                                     name="picture"
-                                    render={({ field }) => (
+                                    render={() => (
                                         <FormItem className="flex-1">
                                             <FormLabel>
                                                 Photo de la recette
@@ -314,10 +315,11 @@ export function CreateRecipeForm({
                                                 >
                                                     {imagePreview ? (
                                                         <div className="relative h-full w-full">
-                                                            <img
+                                                            <Image
                                                                 src={
                                                                     imagePreview
                                                                 }
+                                                                fill
                                                                 alt="Aperçu de la recette"
                                                                 className="h-full w-full object-cover"
                                                             />
@@ -345,7 +347,7 @@ export function CreateRecipeForm({
                                                                 <Trash2 className="h-4 w-4" />
                                                                 <span className="sr-only">
                                                                     Supprimer
-                                                                    l'image
+                                                                    l&apos;image
                                                                 </span>
                                                             </Button>
                                                         </div>
@@ -525,7 +527,7 @@ export function CreateRecipeForm({
                                     {tags.map((tag) => (
                                         <Badge
                                             key={tag.id}
-                                            variant={tag.name as any}
+                                            variant={tag.name as never}
                                             onClick={() => toggleTag(tag.id)}
                                             className={cn(
                                                 selectedTags.includes(tag.id)
@@ -572,10 +574,12 @@ export function CreateRecipeForm({
                                                             nouvelle ligne
                                                         </p>
                                                         <p>
-                                                            Format: "2 tasses de
-                                                            farine" ou "1 c. à
-                                                            soupe d'huile
-                                                            d'olive"
+                                                            Format: &quot;2
+                                                            tasses de
+                                                            farine&quot; ou
+                                                            &quot;1 c. à soupe
+                                                            d&apos;huile
+                                                            d&apos;olive&quot;
                                                         </p>
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -642,7 +646,8 @@ export function CreateRecipeForm({
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Supprimer l'étape
+                                                            Supprimer
+                                                            l&apos;étape
                                                         </span>
                                                     </Button>
                                                 )}
@@ -664,7 +669,8 @@ export function CreateRecipeForm({
                                                     render={({ field }) => (
                                                         <FormItem>
                                                             <FormLabel>
-                                                                Titre de l'étape
+                                                                Titre de
+                                                                l&apos;étape
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <Input
@@ -751,7 +757,7 @@ export function CreateRecipeForm({
                                                                             <Trash2 className="h-4 w-4" />
                                                                             <span className="sr-only">
                                                                                 Supprimer
-                                                                                l'instruction
+                                                                                l&apos;instruction
                                                                             </span>
                                                                         </Button>
                                                                     )}

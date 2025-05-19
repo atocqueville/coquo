@@ -102,8 +102,6 @@ export async function createRecipe(formData: CreateRecipeFormData) {
 }
 
 export async function updateRecipe(id: number, formData: CreateRecipeFormData) {
-    const session = await auth();
-
     // Delete existing steps to replace them with new ones
     await prisma.recipeStep.deleteMany({
         where: {
