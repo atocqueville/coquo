@@ -29,7 +29,7 @@ export default async function RecipePagination({
     return (
         <>
             {totalPages > 1 && (
-                <Pagination className="mt-6 mb-16 md:mt-8 md:mb-0">
+                <Pagination className="my-4">
                     <PaginationContent>
                         {currentPage > 1 && (
                             <PaginationItem>

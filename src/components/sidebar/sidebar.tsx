@@ -1,16 +1,15 @@
+'use client';
+
 import {
     Sidebar,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { currentUser } from '@/lib/auth';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { SidebarLinks } from '@/components/sidebar/sidebar-links';
 
-export async function AppSidebar() {
-    const user = await currentUser();
-
+export function AppSidebar() {
     return (
         <div className="z-20 bg-background">
             <Sidebar collapsible="icon">
@@ -19,12 +18,9 @@ export async function AppSidebar() {
                         <SidebarMenuItem>
                             <Avatar className="h-8 w-8">
                                 <AvatarImage
-                                    src={user?.image as string}
-                                    alt="user image profile"
+                                    src={'/blue-banana_192.png'}
+                                    alt="coquo logo"
                                 />
-                                <AvatarFallback>
-                                    {user?.name?.charAt(0)?.toUpperCase()}
-                                </AvatarFallback>
                             </Avatar>
                         </SidebarMenuItem>
                     </SidebarMenu>

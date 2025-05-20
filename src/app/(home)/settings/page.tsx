@@ -3,6 +3,7 @@ import { User, Shield } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AccountWrapper from '@/app/(home)/settings/account/account-wrapper';
 import AdministrationWrapper from './administration/administration-wrapper';
+import CustomizationTab from './customization/customization';
 
 export default function SettingsPage() {
     return (
@@ -17,10 +18,15 @@ export default function SettingsPage() {
             <div className="bg-muted/30 flex-grow">
                 <div className="container py-6 px-4 md:py-10">
                     <Tabs defaultValue="account" className="space-y-6">
-                        <TabsList className="grid w-full max-w-md grid-cols-2">
+                        <TabsList className="grid w-full max-w-md grid-cols-3">
                             <TabsTrigger value="account">
                                 <User className="mr-2 h-4 w-4" />
                                 Compte
+                            </TabsTrigger>
+
+                            <TabsTrigger value="customization">
+                                <Shield className="mr-2 h-4 w-4" />
+                                Customization
                             </TabsTrigger>
 
                             <TabsTrigger value="admin">
@@ -31,6 +37,13 @@ export default function SettingsPage() {
 
                         <TabsContent value="account" className="space-y-6">
                             <AccountWrapper />
+                        </TabsContent>
+
+                        <TabsContent
+                            value="customization"
+                            className="space-y-6"
+                        >
+                            <CustomizationTab />
                         </TabsContent>
 
                         <TabsContent value="admin" className="space-y-6">

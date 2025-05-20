@@ -44,7 +44,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
     return (
         <div
             className={cn(
-                'fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t bg-background',
+                'fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-[hsl(210,60%,32%)] border-t bg-sidebar pb-safe',
                 className
             )}
         >
@@ -52,14 +52,16 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                 <Link
                     key={route.href}
                     href={route.href}
-                    className={cn(
-                        'flex h-full w-full flex-col items-center justify-center',
-                        pathname === route.href
-                            ? 'text-primary'
-                            : 'text-muted-foreground'
-                    )}
+                    className="flex h-full w-full flex-col items-center justify-center text-sidebar-foreground"
                 >
-                    <div className="flex h-6 w-6 items-center justify-center">
+                    <div
+                        className={cn(
+                            'flex items-center justify-center',
+                            pathname === route.href
+                                ? 'h-10 w-10 bg-sidebar-accent rounded-md'
+                                : 'h-6 w-6'
+                        )}
+                    >
                         <route.icon />
                     </div>
                     <span className="sr-only">{route.label}</span>
@@ -70,7 +72,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                 <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <button
-                            className="flex h-full w-full flex-col items-center justify-center text-muted-foreground"
+                            className="flex h-full w-full flex-col items-center justify-center text-sidebar-foreground"
                             aria-label="Plus d'options"
                         >
                             <div className="flex h-6 w-6 items-center justify-center">
@@ -81,7 +83,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                     </SheetTrigger>
                     <SheetContent
                         side="bottom"
-                        className="h-auto rounded-t-xl pb-safe"
+                        className="h-auto rounded-t-xl pb-safe bg-sidebar border-t-0"
                     >
                         <SheetHeader className="text-left">
                             <VisuallyHidden asChild>
@@ -93,15 +95,17 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                                 <Link
                                     key={route.href}
                                     href={route.href}
-                                    className={cn(
-                                        'flex flex-col items-center justify-center rounded-md p-3 text-center',
-                                        pathname === route.href
-                                            ? 'bg-primary/10 text-primary'
-                                            : 'text-muted-foreground hover:bg-muted'
-                                    )}
+                                    className="flex flex-col items-center justify-center rounded-md p-3 text-center text-sidebar-foreground"
                                     onClick={() => setOpen(false)}
                                 >
-                                    <div className="mb-1 flex h-6 w-6 items-center justify-center">
+                                    <div
+                                        className={cn(
+                                            'flex items-center justify-center mb-1',
+                                            pathname === route.href
+                                                ? 'h-10 w-10 bg-sidebar-accent rounded-md'
+                                                : 'h-6 w-6'
+                                        )}
+                                    >
                                         <route.icon />
                                     </div>
                                     <span className="text-xs">
