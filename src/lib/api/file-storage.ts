@@ -2,7 +2,9 @@
 
 import { FILE_STORAGE_URL } from './express.constants';
 
-export async function uploadImage(fileList: File[]): Promise<{ path: string }> {
+export async function uploadImage(
+    fileList: File[]
+): Promise<{ success: boolean; error?: Error; path?: string }> {
     if (!fileList[0]) {
         throw new Error('No file provided');
     }
@@ -13,9 +15,15 @@ export async function uploadImage(fileList: File[]): Promise<{ path: string }> {
         body: formData,
     })
         .then((response) => {
-            return response.json();
+            return response.json().then((data) => {
+                if (data.success) {
+                    return { success: true, path: data.path };
+                } else {
+                    return { success: false, error: new Error(data.error) };
+                }
+            });
         })
         .catch((e) => {
-            console.log('error', e);
+            return { success: false, error: e };
         });
 }

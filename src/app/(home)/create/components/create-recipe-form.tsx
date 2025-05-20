@@ -148,8 +148,6 @@ export function CreateRecipeForm({
         !!initialData?.picture
     );
 
-    console.log('Image preview URL:', imagePreview);
-
     const router = useRouter();
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -245,10 +243,14 @@ export function CreateRecipeForm({
             // Only upload a new image if we have a File instance
             if (values.picture instanceof File) {
                 const uploadFileResponse = await uploadImage([values.picture]);
-                uploadedImagePath = uploadFileResponse.path;
+
+                if (!uploadFileResponse.success) {
+                    throw new Error('Failed to upload image');
+                }
+
+                uploadedImagePath = uploadFileResponse.path as string;
             }
             // If isExistingImage is false and no new picture, leave uploadedImagePath empty
-
             const recipe: CreateRecipeFormData = {
                 title: values.title,
                 picture: uploadedImagePath,

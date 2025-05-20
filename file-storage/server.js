@@ -38,9 +38,8 @@ app.post('/file', upload.single('file'), async (req, res) => {
 
     try {
         await sharp(buffer).webp({ quality: 75 }).toFile(outputPath);
-
         const shortPath = filename;
-        return res.json({ path: shortPath });
+        return res.json({ success: true, path: shortPath });
     } catch (err) {
         console.error('Image compression failed:', err);
         return res.status(500).json({ success: false, error: err.message });
