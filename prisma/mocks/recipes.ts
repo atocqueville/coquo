@@ -1,4 +1,6 @@
-const aubergineRotie = {
+import type { Prisma } from '@prisma/client';
+
+export const aubergineRotie: Omit<Prisma.RecipeCreateInput, 'author'> = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',
     picture: 'potimarron.jpg',
     difficulty: 3,
@@ -23,12 +25,9 @@ const aubergineRotie = {
             },
         ],
     },
-    tags: {
-        connect: [{ name: 'vegetarian' }, { name: 'quick' }],
-    },
 };
 
-const potimarron = {
+export const potimarron: Omit<Prisma.RecipeCreateInput, 'author'> = {
     title: 'Gnocchis à la crème de potimarron et noisettes',
     picture: 'gnocchis.jpg',
     difficulty: 1,
@@ -49,12 +48,4 @@ const potimarron = {
             },
         ],
     },
-    tags: {
-        connect: [{ name: 'winter' }, { name: 'lunch' }, { name: 'vegan' }],
-    },
-};
-
-module.exports = {
-    aubergineRotie,
-    potimarron,
 };

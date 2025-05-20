@@ -47,7 +47,9 @@ export function AdvancedSearchButton({
             <PopoverTrigger asChild>
                 <Button
                     variant="coquo-light"
-                    data-state={hasActiveFilters ? 'active' : undefined}
+                    data-state={
+                        hasActiveFilters || isPopoverOpen ? 'active' : undefined
+                    }
                     className="h-9 w-9 sm:px-4 sm:py-2 sm:w-auto relative"
                 >
                     <span className="hidden sm:block">Recherche avancée</span>

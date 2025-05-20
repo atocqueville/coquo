@@ -58,7 +58,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-RUN cp prisma/seed.prod.js prisma/seed.js
 
 # Express File-Storage
 COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage

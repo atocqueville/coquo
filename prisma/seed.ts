@@ -1,26 +1,30 @@
-const { PrismaClient } = require('@prisma/client');
-const { tags } = require('./mocks/tags.js');
-const { aubergineRotie, potimarron } = require('./mocks/recipes.js');
+import { PrismaClient, type Prisma, type Tag } from '@prisma/client';
+import { aubergineRotie, potimarron } from './mocks/recipes';
 const prisma = new PrismaClient();
 
 /**
  * Returns a random number of tags (between min and max inclusive)
  */
-function getRandomTags(tagsList, min = 1, max = 3) {
+function getRandomTags(tagsList: Tag[], min = 1, max = 3) {
     // Create a copy of the tags array to avoid modifying the original
-    const tagsCopy = [...tagsList.map((tag) => tag.name)];
+    const tagIds = [...tagsList.map((tag) => tag.id)];
     // Shuffle the tags array
-    for (let i = tagsCopy.length - 1; i > 0; i--) {
+    for (let i = tagIds.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [tagsCopy[i], tagsCopy[j]] = [tagsCopy[j], tagsCopy[i]];
+        [tagIds[i], tagIds[j]] = [tagIds[j], tagIds[i]];
     }
     // Get a random number between min and max
     const numTags = Math.floor(Math.random() * (max - min + 1)) + min;
     // Return the first numTags elements
-    return tagsCopy.slice(0, numTags).map((tag) => ({ name: tag }));
+    return tagIds.slice(0, numTags).map((tagId) => ({ id: tagId }));
 }
 
-function getRandomRecipes(recipeTemplates, minCount, maxCount) {
+function getRandomRecipes(
+    recipeTemplates: Omit<Prisma.RecipeCreateInput, 'author'>[],
+    minCount: number,
+    maxCount: number,
+    tags: Tag[]
+) {
     const count =
         Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
     const recipes = [];
@@ -38,13 +42,7 @@ function getRandomRecipes(recipeTemplates, minCount, maxCount) {
 }
 
 async function main() {
-    await prisma.tag.createMany({
-        data: tags.map((tag) => ({
-            name: tag.name,
-            color: tag.color,
-            type: 'system',
-        })),
-    });
+    const tags = await prisma.tag.findMany();
 
     await prisma.user.upsert({
         where: { email: 'alice@prisma.io' },
@@ -56,7 +54,12 @@ async function main() {
                 '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
             name: 'Alice',
             recipes: {
-                create: getRandomRecipes([aubergineRotie, potimarron], 2, 5),
+                create: getRandomRecipes(
+                    [aubergineRotie, potimarron],
+                    2,
+                    5,
+                    tags
+                ),
             },
         },
     });
@@ -72,7 +75,12 @@ async function main() {
             password:
                 '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
             recipes: {
-                create: getRandomRecipes([aubergineRotie, potimarron], 3, 8),
+                create: getRandomRecipes(
+                    [aubergineRotie, potimarron],
+                    3,
+                    8,
+                    tags
+                ),
             },
             starredRecipes: {
                 connect: [{ id: 1 }, { id: 2 }],
