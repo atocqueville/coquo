@@ -103,13 +103,7 @@ export default async function RecipeItem({
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
                         {recipe.tags.map((tag) => (
-                            <Badge
-                                key={tag.id}
-                                variant={tag.name as never}
-                                size="sm"
-                            >
-                                {tag.name}
-                            </Badge>
+                            <Badge key={tag.id} tag={tag} size="sm" />
                         ))}
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import { CheckIcon, ChevronDown, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Badge, getTagLabel } from '@/components/ui/badge';
 import {
     Popover,
     PopoverContent,
@@ -18,20 +18,19 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-
+import type { Tag } from '@prisma/client';
 /**
- * Props for MultiSelect component
+ * Props for MultiTagSelect component
  */
-interface MultiSelectProps
+interface MultiTagSelectProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /**
      * An array of option objects to be displayed in the multi-select component.
      * Each option object has a label, value, and an optional icon.
      */
     options: {
-        label: string;
         value: string;
-        variant: string;
+        tag: Tag;
     }[];
 
     /**
@@ -63,9 +62,9 @@ interface MultiSelectProps
     className?: string;
 }
 
-export const MultiSelect = React.forwardRef<
+export const MultiTagSelect = React.forwardRef<
     HTMLButtonElement,
-    MultiSelectProps
+    MultiTagSelectProps
 >(
     (
         {
@@ -142,16 +141,14 @@ export const MultiSelect = React.forwardRef<
                                         return (
                                             <Badge
                                                 key={value}
-                                                variant={
-                                                    option?.variant as never
-                                                }
+                                                tag={option?.tag}
                                                 clickable
                                                 onClick={(event) => {
                                                     event.stopPropagation();
                                                     toggleOption(value);
                                                 }}
                                                 size="sm"
-                                            ></Badge>
+                                            />
                                         );
                                     })}
                                 </div>
@@ -215,7 +212,9 @@ export const MultiSelect = React.forwardRef<
                                             >
                                                 <CheckIcon className="h-4 w-4" />
                                             </div>
-                                            <span>{option.label}</span>
+                                            <span>
+                                                {getTagLabel(option?.tag)}
+                                            </span>
                                         </CommandItem>
                                     );
                                 })}
@@ -228,4 +227,4 @@ export const MultiSelect = React.forwardRef<
     }
 );
 
-MultiSelect.displayName = 'MultiSelect';
+MultiTagSelect.displayName = 'MultiTagSelect';

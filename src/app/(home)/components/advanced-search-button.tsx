@@ -8,7 +8,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import { MultiSelect } from '@/components/ui/multi-select';
+import { MultiTagSelect } from '@/components/ui/multi-tag-select';
 import {
     Select,
     SelectContent,
@@ -17,11 +17,12 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import type { Tag } from '@prisma/client';
 
 interface AdvancedSearchButtonProps {
     selectedTags: string[];
     selectedUser: string;
-    tagOptions: Array<{ value: string; variant: string; label: string }>;
+    tags: Tag[];
     onTagsChange: (values: string[]) => void;
     onUserChange: (value: string) => void;
     onResetFilters: () => void;
@@ -30,7 +31,7 @@ interface AdvancedSearchButtonProps {
 
 export function AdvancedSearchButton({
     selectedTags,
-    tagOptions,
+    tags,
     userOptions,
     selectedUser,
     onTagsChange,
@@ -64,9 +65,12 @@ export function AdvancedSearchButton({
 
                     <div className="space-y-2">
                         <Label htmlFor="tags-filter">Tags</Label>
-                        <MultiSelect
+                        <MultiTagSelect
                             id="tags-filter"
-                            options={tagOptions}
+                            options={tags.map((tag) => ({
+                                value: tag.id,
+                                tag,
+                            }))}
                             onValueChange={onTagsChange}
                             defaultValue={selectedTags}
                             placeholder="Sélectionner des tags"

@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { badgeLabel } from '@/components/ui/badge';
 import type { Tag, User } from '@prisma/client';
 import { setCookie, destroyCookie } from 'nookies';
 import { AdvancedSearchButton } from './advanced-search-button';
@@ -21,12 +20,6 @@ export default function TopBar({
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedUser, setSelectedUser] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState('');
-
-    const tagOptions = tags.map((tag) => ({
-        value: tag.id,
-        variant: tag.name,
-        label: badgeLabel[tag.name as keyof typeof badgeLabel],
-    }));
 
     const userOptions = users.map((user) => ({
         value: user.id,
@@ -180,7 +173,7 @@ export default function TopBar({
                     <AdvancedSearchButton
                         selectedTags={selectedTags}
                         selectedUser={selectedUser}
-                        tagOptions={tagOptions}
+                        tags={tags}
                         userOptions={userOptions}
                         onTagsChange={handleTagsChange}
                         onUserChange={handleUserChange}

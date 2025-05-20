@@ -9,7 +9,11 @@ async function main() {
 
     if (existingTags.length === 0) {
         await prisma.tag.createMany({
-            data: tags.map((tag) => ({ name: tag })),
+            data: tags.map((tag) => ({
+                name: tag.name,
+                color: tag.color,
+                type: 'system',
+            })),
         });
         console.log('[PRISMA] Seeded tags.');
     } else {

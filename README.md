@@ -23,6 +23,7 @@ Self hosted recipe manager written in Next.js.
   - [x] Author
 
 ## Feature Ideas
+- [ ] i18n
 - [ ] fuzzy text search
 - [ ] Create new tags
 - [ ] Implement push notifications for PWA

@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/tooltip';
 import type { Tag } from '@prisma/client';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 
 import { uploadImage } from '@/lib/api/file-storage';
 import { createRecipe, updateRecipe } from '@/lib/api/recipe';
@@ -527,17 +526,15 @@ export function CreateRecipeForm({
                                     {tags.map((tag) => (
                                         <Badge
                                             key={tag.id}
-                                            variant={tag.name as never}
+                                            tag={tag}
                                             onClick={() => toggleTag(tag.id)}
-                                            className={cn(
+                                            variant={
                                                 selectedTags.includes(tag.id)
-                                                    ? ''
-                                                    : 'bg-muted text-muted-foreground border-gray',
-                                                'cursor-pointer transition-all duration-150'
-                                            )}
-                                        >
-                                            {tag.name}
-                                        </Badge>
+                                                    ? undefined
+                                                    : 'unselected'
+                                            }
+                                            className="cursor-pointer transition-all duration-150"
+                                        />
                                     ))}
                                 </div>
                             </div>

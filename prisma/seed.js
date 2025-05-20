@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
  */
 function getRandomTags(tagsList, min = 1, max = 3) {
     // Create a copy of the tags array to avoid modifying the original
-    const tagsCopy = [...tagsList];
+    const tagsCopy = [...tagsList.map((tag) => tag.name)];
     // Shuffle the tags array
     for (let i = tagsCopy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -39,7 +39,11 @@ function getRandomRecipes(recipeTemplates, minCount, maxCount) {
 
 async function main() {
     await prisma.tag.createMany({
-        data: tags.map((tag) => ({ name: tag })),
+        data: tags.map((tag) => ({
+            name: tag.name,
+            color: tag.color,
+            type: 'system',
+        })),
     });
 
     await prisma.user.upsert({
