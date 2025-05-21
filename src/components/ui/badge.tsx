@@ -78,12 +78,11 @@ function Badge({
     // If tag is provided, use it for the display text
     if (tag) {
         displayText = getTagLabel(tag);
-
         // Only apply tag styling if no explicit variant is provided
         if (!variant) {
             const base = tinycolor(tag.color);
             const bg = base.clone().setAlpha(0.15).toRgbString();
-            const text = base.clone().darken(40).toHexString();
+            const text = base.clone().darken(30).toHexString();
             const border = base.toHexString();
             style = {
                 backgroundColor: bg,

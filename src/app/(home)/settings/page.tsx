@@ -1,5 +1,5 @@
 import type React from 'react';
-import { User, Shield } from 'lucide-react';
+import { User, Shield, Palette } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AccountWrapper from '@/app/(home)/settings/account/account-wrapper';
 import AdministrationWrapper from './administration/administration-wrapper';
@@ -25,7 +25,7 @@ export default function SettingsPage() {
                             </TabsTrigger>
 
                             <TabsTrigger value="customization">
-                                <Shield className="mr-2 h-4 w-4" />
+                                <Palette className="mr-2 h-4 w-4" />
                                 Customization
                             </TabsTrigger>
 

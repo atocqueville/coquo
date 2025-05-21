@@ -9,12 +9,14 @@ const sharp = require('sharp');
 
 const app = express();
 
+/**
+ * The media path is different for docker and local development
+ * This is a workaround to make it work in local
+ * When in production, the MEDIA_PATH variable is set in the ecosystem.config.js file
+ */
 const MEDIA_PATH = process.env.MEDIA_PATH || '../config/media';
 const ABS_MEDIA_PATH = path.resolve(__dirname, MEDIA_PATH);
 
-console.log('MEDIA ENV', MEDIA_PATH);
-
-// Use memory storage so we can compress manually
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 

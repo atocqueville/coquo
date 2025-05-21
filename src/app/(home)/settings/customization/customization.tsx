@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { createTag } from '@/lib/api/tags';
 
 export default function CustomizationTab() {
     const [newTagName, setNewTagName] = useState('');
@@ -18,6 +20,12 @@ export default function CustomizationTab() {
 
     const handleAddTag = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        createTag({
+            name: newTagName,
+            color: newTagColor,
+            id: newTagName,
+            type: 'user',
+        });
     };
 
     return (
@@ -30,7 +38,7 @@ export default function CustomizationTab() {
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleAddTag} className="mb-6 space-y-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
                         <div className="space-y-2">
                             <Label htmlFor="tag-name">Nom du tag</Label>
                             <Input
@@ -50,30 +58,38 @@ export default function CustomizationTab() {
                                 onChange={(e) => setNewTagColor(e.target.value)}
                             />
                         </div>
-                    </div>
 
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium">Aperçu:</span>
-                            new tag preview here
+                        <div className="space-y-2">
+                            <Label htmlFor="tag-icon">Aperçu</Label>
+                            <div>
+                                <Badge
+                                    size="lg"
+                                    tag={{
+                                        type: 'user',
+                                        color: newTagColor,
+                                        name: newTagName,
+                                        id: newTagName,
+                                    }}
+                                />
+                            </div>
                         </div>
-                        <Button type="submit">Ajouter un tag</Button>
+
+                        <div className="flex items-end">
+                            <Button variant="coquo" type="submit">
+                                Créer le tag
+                            </Button>
+                        </div>
                     </div>
                 </form>
 
                 <div className="space-y-4">
                     <h3 className="text-sm font-medium">Tags personnalisés</h3>
 
-                    {/* tags list here */}
-                    {false ? (
-                        ''
-                    ) : (
-                        <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
-                            <p className="text-muted-foreground">
-                                Aucun tag personnalisé
-                            </p>
-                        </div>
-                    )}
+                    <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
+                        <p className="text-muted-foreground">
+                            Aucun tag personnalisé
+                        </p>
+                    </div>
                 </div>
             </CardContent>
         </Card>
