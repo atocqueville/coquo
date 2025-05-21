@@ -46,7 +46,7 @@ app.post('/file', upload.single('file'), async (req, res) => {
     }
 });
 
-app.listen(3040, 'localhost', (err) => {
+app.listen(3040, '127.0.0.1', (err) => {
     if (err) console.error(err);
     else
         console.info(

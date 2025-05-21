@@ -6,7 +6,6 @@ Self hosted recipe manager written in Next.js.
 
 ## TODO
 - Fix ingredients scroll
-- Fix image upload
 - Refacto .env config
 
 ## Needed for v1
