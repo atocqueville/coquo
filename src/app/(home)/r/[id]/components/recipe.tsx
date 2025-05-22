@@ -96,6 +96,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                 src={`/api/image-proxy?imageId=${recipe.picture}`}
                                 alt={`recipe top view`}
                                 fill
+                                sizes="(max-width: 768px) 100vw, 768px"
                                 className="object-cover"
                                 priority
                             />
@@ -139,7 +140,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             <div className="absolute bottom-0 left-0 right-0 z-10 p-4">
                                 {/* Cooking time */}
                                 <div className="flex flex-wrap gap-2 sm:gap-3 mt-2">
-                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                    <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
                                         <ChefHat className="mr-1 h-4 w-4" />
                                         <span>{timeInfo.prep}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
@@ -147,7 +148,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                    <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
                                         <CookingPot className="mr-1 h-4 w-4" />
                                         <span>{timeInfo.cook}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
@@ -167,7 +168,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
+                                    <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
                                         <Users className="mr-1 h-4 w-4" />
                                         <span>{recipe.servings}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">

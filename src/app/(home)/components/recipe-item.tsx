@@ -77,6 +77,7 @@ export default async function RecipeItem({
                         src={`/api/image-proxy?imageId=${recipe.picture}`}
                         alt="recipe top view"
                         fill
+                        sizes="(max-width: 640px) 50vw, 25vw"
                         className="object-cover transition-transform group-hover:scale-105"
                     />
                     <FavoriteButton

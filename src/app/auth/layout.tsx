@@ -19,6 +19,8 @@ export default function CustomAuthLayout({
                     src="/healthy-food.jpg"
                     className="object-cover"
                     fill
+                    sizes="50vw"
+                    priority
                 />
                 <div
                     style={{ top: '150px' }}

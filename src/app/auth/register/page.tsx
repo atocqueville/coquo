@@ -1,34 +1,32 @@
-import { Metadata } from 'next';
+import { RegisterForm } from '@/app/auth/register/register-form';
+import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
 
-import { CookingPotIcon } from 'lucide-react';
-import { LoginForm } from '@/app/api/auth/(custom-auth)/login/login-form';
-
-export const metadata: Metadata = {
-    title: 'Login',
-    description: 'Login to your account',
+export const metadata = {
+    title: 'Créer un compte',
+    description: 'Créez un compte pour commencer.',
 };
 
-export default function LoginPage() {
+export default function RegisterPage() {
     return (
         <div className="lg:p-8">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                 <div className="flex flex-col space-y-2 text-center">
-                    <CookingPotIcon className="mx-auto h-6 w-6" />
+                    <UserRoundPen className="mx-auto h-6 w-6" />
                     <h1 className="text-2xl font-semibold tracking-tight">
-                        Welcome back
+                        Créer un compte
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Enter your email to sign in to your account
+                        Entrez votre email ci-dessous pour créer votre compte
                     </p>
                 </div>
-                <LoginForm />
+                <RegisterForm />
                 <p className="px-8 text-center text-sm text-muted-foreground">
                     <Link
-                        href="/api/auth/register"
+                        href="/auth/login"
                         className="hover:text-brand underline underline-offset-4"
                     >
-                        Don&apos;t have an account? Sign Up
+                        J&apos;ai déjà un compte
                     </Link>
                 </p>
             </div>

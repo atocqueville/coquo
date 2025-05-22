@@ -8,6 +8,7 @@ declare module 'next-auth' {
     interface Session {
         user: {
             role?: 'ADMIN' | 'USER';
+            emailVerified?: Date | null;
         } & DefaultSession['user'];
     }
 }
@@ -20,18 +21,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         strategy: 'jwt',
     },
     pages: {
-        signIn: '/api/auth/login',
+        signIn: '/auth/login',
+        error: '/auth/error',
     },
     adapter: PrismaAdapter(prisma),
     callbacks: {
-        async signIn({ user }) {
-            const existingUser = await getUserById(user.id as string);
-            if (!existingUser) throw new Error('User not found');
-            if (!existingUser.emailVerified)
-                throw new Error('Email not verified');
-
-            return true;
-        },
         async session({ token, session }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub;
@@ -44,8 +38,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (session.user) {
                 session.user.name = token.name;
                 session.user.email = token.email as string;
-                //   session.user.isOAuth = token.isOAuth as boolean;
-                //   session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+                session.user.emailVerified = token.emailVerified as Date | null;
             }
 
             return session;
@@ -54,17 +47,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (!token.sub) return token;
 
             const existingUser = await getUserById(token.sub);
-
             if (!existingUser) return token;
 
-            // const existingAccount = await getAccountByUserId(existingUser.id);
-
-            // token.isOAuth = !!existingAccount;
             token.name = existingUser.name;
             token.email = existingUser.email;
             token.role = existingUser.role;
-            // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-
+            token.emailVerified = existingUser.emailVerified;
             return token;
         },
     },

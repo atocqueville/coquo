@@ -34,7 +34,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
         try {
             await createUser(data);
-            console.log('User created');
         } catch (error) {
             console.log(error);
         }
@@ -61,7 +60,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
                         </Label>
                         <Input
                             id="email"
-                            placeholder="name@example.com"
+                            placeholder="nom@exemple.com"
                             type="email"
                             autoCapitalize="none"
                             autoComplete="email"
@@ -100,7 +99,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
                         )}
                         <Input
                             id="name"
-                            placeholder="Ton petit surnom"
+                            placeholder="Votre surnom"
                             type="text"
                             disabled={isLoading}
                             {...register('name')}

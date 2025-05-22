@@ -17,7 +17,7 @@ Self hosted recipe manager written in Next.js.
 - [x] Add a step list with checkboxes to grey out completed steps
 - [x] Find a way to label recipes (tags ?)
 - [x] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
-- [ ] Google OAuth
+- [x] Google OAuth
 - [x] Redesign create form
   - [x] Add difficulty input
   - [x] Add option to be in edit mode
@@ -29,7 +29,7 @@ Self hosted recipe manager written in Next.js.
 ## Feature Ideas
 - [ ] i18n
 - [ ] fuzzy text search
-- [ ] Create new tags
+- [x] Create new tags
 - [ ] Implement push notifications for PWA
 - [ ] Add a "Print" feature => https://www.npmjs.com/package/react-to-print
 - [ ] Add a HTML parser with package cheerio, then https://github.com/Charlie85270/recipes-parser to get recipes from marmiton

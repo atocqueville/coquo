@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth';
+import { getToken } from 'next-auth/jwt';
 
 import authConfig from '@/auth.config';
 import {
@@ -10,9 +11,19 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
+
+    // For more reliable email verification check, get the token directly
+    // This is necessary because middleware doesn't always have access to the full session user
+    let isEmailVerified = !!req.auth?.user?.emailVerified;
+
+    // If we couldn't get it from the session user, try getting it from the token
+    if (isLoggedIn && !isEmailVerified) {
+        const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+        isEmailVerified = !!token?.emailVerified;
+    }
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -29,6 +40,11 @@ export default auth((req) => {
         }
 
         return;
+    }
+
+    // If user is logged in but email is not verified, redirect to error page
+    if (isLoggedIn && !isEmailVerified && !isPublicRoute) {
+        return Response.redirect(new URL('/auth/error', nextUrl));
     }
 
     // If authenticated and navigating to homepage, add filters from cookie to searchParams
@@ -61,12 +77,8 @@ export default auth((req) => {
         }
 
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-
         return Response.redirect(
-            new URL(
-                `/api/auth/login?callbackUrl=${encodedCallbackUrl}`,
-                nextUrl
-            )
+            new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
         );
     }
 

@@ -5,7 +5,7 @@ import { FileText, Heart, Home, PlusCircle, Settings } from 'lucide-react';
  * These routes do not require authentication.
  * @type {string[]}
  */
-export const publicRoutes = ['/auth/new-verification'];
+export const publicRoutes = ['/auth/new-verification', '/auth/error'];
 
 export const appRoutes = [
     {
@@ -41,9 +41,8 @@ export const appRoutes = [
  * @type {string[]}
  */
 export const authRoutes = [
-    '/api/auth/login',
-    '/api/auth/register',
-    '/api/auth/error',
+    '/auth/login',
+    '/auth/register',
     // '/auth/reset',
     // '/auth/new-password',
 ];

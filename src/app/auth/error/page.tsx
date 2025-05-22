@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { AlertTriangle, ArrowLeft, LifeBuoy, Mail } from 'lucide-react';
+import { AlertTriangle, LifeBuoy, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -37,9 +36,10 @@ export default async function ErrorPage() {
                 <CardContent className="pt-6">
                     <div className="space-y-4">
                         <p>
-                            Pour accéder à votre compte, il doit d&apos;abord
-                            être validé par votre administrateur. Une demande a
-                            été envoyée à<strong> {adminEmail}</strong>.
+                            Votre compte doit d&apos;abord être validé par un
+                            administrateur pour pouvoir y accéder. Une demande
+                            de validation a été envoyée à{' '}
+                            <strong> {adminEmail}</strong>.
                         </p>
 
                         <div className="rounded-lg bg-muted p-4">
@@ -64,16 +64,14 @@ export default async function ErrorPage() {
                 <CardFooter className="flex flex-col gap-4">
                     <div className="w-full flex flex-col gap-2 sm:flex-row">
                         <Button variant="outline" className="flex-1" asChild>
-                            <Link href="/">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Retour à l&apos;accueil
-                            </Link>
-                        </Button>
-                        <Button variant="outline" className="flex-1" asChild>
-                            <Link href="/contact">
+                            <a
+                                href="https://github.com/atocqueville/coquo/issues"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 <LifeBuoy className="mr-2 h-4 w-4" />
                                 Contacter le support
-                            </Link>
+                            </a>
                         </Button>
                     </div>
 

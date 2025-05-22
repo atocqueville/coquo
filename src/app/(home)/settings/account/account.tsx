@@ -32,13 +32,12 @@ import { toast } from 'sonner';
 
 export default function AccountTab({ currentUser }: { currentUser: User }) {
     const [name, setName] = useState(currentUser.name);
-    const [email, setEmail] = useState(currentUser.email);
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await updateUser(currentUser.id, { name, email });
+            await updateUser(currentUser.id, { name });
             toast.success('Profil mis à jour avec succès');
         } catch (err) {
             console.error(err);
@@ -69,18 +68,8 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
                                     required
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    value={email ?? ''}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
                         </div>
-                        <div className="flex justify-start">
+                        <div className="flex justify-end">
                             <Button type="submit" variant="coquo">
                                 Enregistrer les modifications
                             </Button>
