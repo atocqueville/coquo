@@ -6,55 +6,8 @@ import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import { currentUser } from '@/lib/auth';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
 import FavoriteButton from './favorite-button';
-
-// Helper function to get difficulty badge props
-const getDifficultyProps = (difficulty: number) => {
-    switch (difficulty) {
-        case 1:
-            return {
-                color: 'bg-green-100 text-green-700 border border-green-200',
-                label: 'Facile',
-            };
-        case 2:
-            return {
-                color: 'bg-amber-100 text-amber-700 border border-amber-200',
-                label: 'Moyen',
-            };
-        case 3:
-            return {
-                color: 'bg-red-100 text-red-700 border border-red-200',
-                label: 'Difficile',
-            };
-        default:
-            return {
-                color: 'bg-gray-100 text-gray-700 border border-gray-200',
-                label: 'Inconnu',
-            };
-    }
-};
-
-// Helper function to format time display
-const formatTime = (recipe: RecipeWithTagsAndAuthor) => {
-    // Calculate total time (assuming prepTime exists, otherwise use default of 10 min)
-    const prepTime = recipe.prepTime || 10;
-    const cookTime = recipe.cookTime || 0;
-    const totalTime = prepTime + cookTime;
-
-    // Format minutes to hours and minutes if >= 60
-    const formatMinutes = (minutes: number) => {
-        if (minutes < 60) return `${minutes}mn`;
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        if (remainingMinutes === 0) return `${hours}h`;
-        return `${hours}h${(remainingMinutes < 10 ? '0' : '') + remainingMinutes}mn`;
-    };
-
-    return {
-        prep: formatMinutes(prepTime),
-        cook: formatMinutes(cookTime),
-        total: formatMinutes(totalTime),
-    };
-};
+import { getDifficultyProps } from '@/utils/difficulty';
+import { formatTime } from '@/utils/time-format';
 
 export default async function RecipeItem({
     recipe,

@@ -25,43 +25,8 @@ import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
 import { cn } from '@/lib/utils';
-
-// Helper function to get difficulty badge props
-const getDifficultyProps = (difficulty: number) => {
-    switch (difficulty) {
-        case 1:
-            return {
-                color: 'bg-green-100 text-green-700 border border-green-200',
-                label: 'Facile',
-            };
-        case 2:
-            return {
-                color: 'bg-amber-100 text-amber-700 border border-amber-200',
-                label: 'Moyen',
-            };
-        case 3:
-            return {
-                color: 'bg-red-100 text-red-700 border border-red-200',
-                label: 'Difficile',
-            };
-        default:
-            return {
-                color: 'bg-gray-100 text-gray-700 border border-gray-200',
-                label: 'Inconnu',
-            };
-    }
-};
-
-// Helper function to format time display
-const formatTime = (recipe: RecipeUi) => {
-    const prepTime = recipe.prepTime || 10;
-    const cookTime = recipe.cookTime || 0;
-
-    return {
-        prep: `${prepTime}mn`,
-        cook: `${cookTime}mn`,
-    };
-};
+import { getDifficultyProps } from '@/utils/difficulty';
+import { formatTime } from '@/utils/time-format';
 
 const IngredientsList = ({
     ingredients,
