@@ -7,22 +7,24 @@ import {
     Pencil,
     Users,
 } from 'lucide-react';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from '@/components/ui/sheet';
+    Drawer,
+    DrawerContent,
+    DrawerOverlay,
+    DrawerPortal,
+    DrawerTitle,
+    DrawerTrigger,
+} from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
+import { cn } from '@/lib/utils';
 
 // Helper function to get difficulty badge props
 const getDifficultyProps = (difficulty: number) => {
@@ -61,23 +63,21 @@ const formatTime = (recipe: RecipeUi) => {
     };
 };
 
-const IngredientsList = ({ ingredients }: { ingredients: string[] }) => {
+const IngredientsList = ({
+    ingredients,
+    className,
+}: {
+    ingredients: string[];
+    className?: string;
+}) => {
     return (
-        <>
-            <h1 className="pt-6 pb-4 px-6 text-2xl font-bold">Ingrédients</h1>
-            <Separator className="" />
-            <div className="p-6">
-                <ScrollArea>
-                    <ul className="space-y-4">
-                        {ingredients.map((ingredient, index) => (
-                            <CrossableCheckbox id={ingredient} key={index}>
-                                {ingredient}
-                            </CrossableCheckbox>
-                        ))}
-                    </ul>
-                </ScrollArea>
-            </div>
-        </>
+        <ul className={cn('space-y-4', className)}>
+            {ingredients.map((ingredient, index) => (
+                <CrossableCheckbox id={ingredient} key={index}>
+                    {ingredient}
+                </CrossableCheckbox>
+            ))}
+        </ul>
     );
 };
 
@@ -86,10 +86,10 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
 
     return (
         <div className="flex min-h-screen flex-col">
-            <main className="flex-1">
-                <div className="flex flex-col md:flex-row">
+            <main className="flex-1 overflow-hidden">
+                <div className="flex flex-col md:flex-row h-screen">
                     {/* Recipe content */}
-                    <div className="flex-1">
+                    <div className="flex-1 overflow-y-auto" id="recipe-content">
                         {/* Recipe hero image */}
                         <div className="relative h-[300px] sm:h-[400px]">
                             <Image
@@ -193,37 +193,40 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
 
                                 {/* Ingredients sheet trigger for mobile */}
                                 <div className="md:hidden">
-                                    <Sheet>
-                                        <SheetTrigger asChild>
+                                    <Drawer>
+                                        <DrawerTrigger asChild>
                                             <Button
                                                 size="sm"
                                                 className="flex items-center gap-2 whitespace-nowrap ml-2"
+                                                variant="outline"
                                             >
                                                 <Carrot className="h-4 w-4" />
-                                                <span className="hidden xs:inline">
-                                                    Voir les ingrédients
-                                                </span>
                                                 <span className="xs:hidden">
                                                     Ingrédients
                                                 </span>
                                             </Button>
-                                        </SheetTrigger>
-                                        <SheetContent
-                                            side="bottom"
-                                            className="p-0"
-                                        >
-                                            <SheetHeader className="text-left">
-                                                <VisuallyHidden asChild>
-                                                    <SheetTitle>
+                                        </DrawerTrigger>
+                                        <DrawerPortal>
+                                            <DrawerOverlay className="fixed inset-0 bg-black/40" />
+                                            <DrawerContent className="flex flex-col rounded-t-[10px] mt-24 h-[80%] lg:h-[320px] fixed bottom-0 left-0 right-0 outline-none">
+                                                <VisuallyHidden>
+                                                    <DrawerTitle>
                                                         Ingrédients
-                                                    </SheetTitle>
+                                                    </DrawerTitle>
                                                 </VisuallyHidden>
-                                            </SheetHeader>
-                                            <IngredientsList
-                                                ingredients={recipe.ingredients}
-                                            />
-                                        </SheetContent>
-                                    </Sheet>
+                                                <div className="p-4 bg-white rounded-t-[10px] flex-1 overflow-y-auto">
+                                                    <div className="max-w-md mx-auto space-y-4">
+                                                        <IngredientsList
+                                                            className="mx-4"
+                                                            ingredients={
+                                                                recipe.ingredients
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </DrawerContent>
+                                        </DrawerPortal>
+                                    </Drawer>
                                 </div>
                             </div>
                         </div>
@@ -246,9 +249,26 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                     </div>
 
                     {/* Sticky ingredients panel - desktop only */}
-                    <div className="hidden md:block md:w-80 md:border-l">
-                        <div className="sticky top-0">
-                            <IngredientsList ingredients={recipe.ingredients} />
+                    <div
+                        className="hidden md:block md:w-80 md:border-l h-screen overflow-y-auto"
+                        id="ingredients-panel"
+                    >
+                        <div className="h-full">
+                            <div className="flex flex-col h-full">
+                                <div className="sticky top-0 bg-white z-10">
+                                    <h1 className="pt-6 pb-4 px-6 text-2xl font-bold">
+                                        Ingrédients
+                                    </h1>
+                                    <Separator className="" />
+                                </div>
+                                <div className="p-6 flex-1 overflow-y-auto">
+                                    <ScrollArea>
+                                        <IngredientsList
+                                            ingredients={recipe.ingredients}
+                                        />
+                                    </ScrollArea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

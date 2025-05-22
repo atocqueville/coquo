@@ -4,28 +4,6 @@
 
 Self hosted recipe manager written in Next.js.
 
-## TODO
-- Fix ingredients scroll
-- Refacto .env config
-
-## Needed for v1
-
-- [x] Get a Logo (and a color scheme ?)
-- [x] Add a "Keep screen awake" feature => https://www.npmjs.com/package/react-screen-wake-lock
-- [x] Add "Season" to recipes
-- [x] Add a Favorite star to recipes
-- [x] Add a step list with checkboxes to grey out completed steps
-- [x] Find a way to label recipes (tags ?)
-- [x] Image compression with https://dev.to/franciscomendes10866/image-compression-with-node-js-4d7h
-- [x] Google OAuth
-- [x] Redesign create form
-  - [x] Add difficulty input
-  - [x] Add option to be in edit mode
-- [x] Add remaining filters:
-  - [x] Title text search
-  - [x] Tags
-  - [x] Author
-
 ## Feature Ideas
 - [ ] i18n
 - [ ] fuzzy text search
