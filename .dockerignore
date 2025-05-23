@@ -10,3 +10,7 @@ README.md
 config/db/*
 config/logs/*
 config/*.json
+
+# Environment files
+.env
+.env.*

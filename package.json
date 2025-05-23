@@ -9,15 +9,13 @@
         "start": "next start",
         "lint": "next lint",
         "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
-        "prisma:gen": "npx dotenv -e .env.local -- prisma generate",
         "prisma:reset": "npx dotenv -e .env.local -- prisma migrate reset",
         "prisma:migrate": "npx dotenv -e .env.local -- prisma migrate dev --name",
         "db:seed": "npx dotenv -e .env.local -- prisma db seed",
         "db:push": "npx dotenv -e .env.local -- prisma db push",
         "db:pull": "npx dotenv -e .env.local -- prisma db pull",
-        "docker:build": "docker build -t coquo .",
-        "docker:run": "docker-compose down && docker compose up -d",
-        "build:prod": "dotenv -e .env.local -- prisma generate && next build"
+        "build:prod": "prisma generate && next build",
+        "docker:build": "docker build -t coquo ."
     },
     "prisma": {
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
     // Check if Google auth environment variables are set
-    const showSocialLogin =
-        process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET;
+    const showSocialLogin = Boolean(
+        process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+    );
 
     return (
         <div className="lg:p-8">

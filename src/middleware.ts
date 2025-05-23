@@ -21,10 +21,12 @@ export default auth(async (req) => {
 
     // If we couldn't get it from the session user, try getting it from the token
     if (isLoggedIn && !isEmailVerified) {
-        console.log('Getting token from middleware', process.env.AUTH_SECRET);
-        const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-        console.log('[Token]', token);
-        isEmailVerified = !!token?.emailVerified;
+        const token = await getToken({
+            req,
+            secret: process.env.AUTH_SECRET,
+            secureCookie: nextUrl.protocol === 'https:',
+        });
+        isEmailVerified = !!token?.emailVerified || token?.role === 'ADMIN';
     }
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
@@ -46,10 +48,6 @@ export default auth(async (req) => {
 
     // If user is logged in but email is not verified, redirect to error page
     if (isLoggedIn && !isEmailVerified && !isPublicRoute) {
-        console.log('Redirecting to error page');
-        console.log('isLoggedIn', isLoggedIn);
-        console.log('isEmailVerified', isEmailVerified);
-        console.log('isPublicRoute', isPublicRoute);
         return Response.redirect(new URL('/auth/error', nextUrl));
     }
 
