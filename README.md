@@ -21,14 +21,14 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 
 - 📱 **Progressive Web App** - Install on any device and access your recipes offline
 - 🏷️ **Tag organization** - Create and assign tags to keep your recipes organized
-- 🖨️ **Print-friendly format** - Print your recipes with a clean layout
-- 🌙 **Dark mode** - Easy on the eyes during those late-night cooking sessions
 - 🔒 **Self-hosted** - Keep your recipe data private and under your control
 - ⏰ **Keep screen awake** - Prevent your device from sleeping while cooking
 - 🔐 **Whitelist management** - Grant or revoke user access to your recipe collection
 
 ## Features to Come
 
+- 🖨️ **Print-friendly format** - Print your recipes with a clean layout
+- 🌙 **Dark mode** - Easy on the eyes during those late-night cooking sessions
 - 🔔 **Push notifications** - Stay updated with recipe reminders
 - 🔄 **Recipe import** - Import recipes from popular cooking websites with cheerio
 - 🌐 **Internationalization** - Support for multiple languages
