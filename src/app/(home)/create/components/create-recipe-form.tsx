@@ -5,7 +5,16 @@ import Image from 'next/image';
 
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Clock, Flame, Info, Plus, Trash2, Upload, Users } from 'lucide-react';
+import {
+    Clock,
+    Flame,
+    Info,
+    Plus,
+    Trash2,
+    Upload,
+    Users,
+    Loader2,
+} from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -149,6 +158,7 @@ export function CreateRecipeForm({
     const [isExistingImages, setIsExistingImages] = useState<boolean[]>(
         initialImageUrls.map(() => true)
     );
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const router = useRouter();
     const form = useForm<FormValues>({
@@ -238,6 +248,7 @@ export function CreateRecipeForm({
     };
 
     const handleSubmit = async (values: FormValues) => {
+        setIsSubmitting(true);
         let uploadedImagePaths: string[] = [];
 
         values.tags = selectedTags;
@@ -289,6 +300,8 @@ export function CreateRecipeForm({
                     ? 'Une erreur est survenue lors de la mise à jour de la recette'
                     : 'Une erreur est survenue lors de la création de la recette'
             );
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -888,10 +901,25 @@ export function CreateRecipeForm({
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button variant="coquo" type="submit">
-                        {recipeId
-                            ? 'Mettre à jour la recette'
-                            : 'Créer la recette'}
+                    <Button
+                        variant="coquo"
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                {recipeId
+                                    ? 'Mise à jour en cours...'
+                                    : 'Création en cours...'}
+                            </>
+                        ) : (
+                            <>
+                                {recipeId
+                                    ? 'Mettre à jour la recette'
+                                    : 'Créer la recette'}
+                            </>
+                        )}
                     </Button>
                 </div>
             </form>

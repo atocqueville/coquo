@@ -35,9 +35,9 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 - 💬 **Comments** - Add notes and comments to each recipe
 - 🔍 **Fuzzy text search** - Find recipes quickly even with partial or misspelled terms
 
-## Screenshots
+## Preview
 
-*Coming soon*
+<img src="public/screenshot.jpeg" alt="Coquo Screenshot"/>
 
 ## Usage
 
@@ -72,9 +72,14 @@ services:
 To start the development server:
 
 ```bash
+yarn install # Install every needed dependencies
+yarn prisma:reset # Remove your eventual existing database, creates an empty one and plays migrations
+
 yarn dev # Start the Next.js web app
-yarn start:fs # Start the file uploader proxy
+yarn start:fs # Start the file uploader proxy in another terminal
 ```
+
+You can then log in with the combo `alex@admin.io` / `azerty`
 
 ### Building and pushing the Docker image
 

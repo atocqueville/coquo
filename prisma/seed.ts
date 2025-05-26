@@ -43,25 +43,6 @@ function getRandomRecipes(
 
 async function main() {
     const tags = await prisma.tag.findMany();
-    // await prisma.user.upsert({
-    //     where: { email: 'alice@prisma.io' },
-    //     update: {},
-    //     create: {
-    //         role: 'USER',
-    //         email: 'alice@prisma.io',
-    //         password:
-    //             '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
-    //         name: 'Alice',
-    //         // recipes: {
-    //         //     create: getRandomRecipes(
-    //         //         [aubergineRotie, potimarron],
-    //         //         2,
-    //         //         5,
-    //         //         tags
-    //         //     ),
-    //         // },
-    //     },
-    // });
 
     await prisma.user.upsert({
         where: { email: 'alex@prisma.io' },
@@ -73,17 +54,17 @@ async function main() {
             name: 'Alex',
             password:
                 '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
-            // recipes: {
-            //     create: getRandomRecipes(
-            //         [aubergineRotie, potimarron],
-            //         3,
-            //         8,
-            //         tags
-            //     ),
-            // },
-            // starredRecipes: {
-            //     connect: [{ id: 1 }, { id: 2 }],
-            // },
+            recipes: {
+                create: getRandomRecipes(
+                    [aubergineRotie, potimarron],
+                    3,
+                    8,
+                    tags
+                ),
+            },
+            starredRecipes: {
+                connect: [{ id: 1 }, { id: 2 }],
+            },
         },
     });
 }
