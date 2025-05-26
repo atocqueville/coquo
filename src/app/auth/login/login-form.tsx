@@ -35,7 +35,6 @@ export function LoginForm() {
                 redirectTo: '/',
             });
         } catch (error) {
-            console.log(error);
             if (error instanceof AuthError) {
                 switch (error.name) {
                     case 'CredentialsSignin':

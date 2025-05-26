@@ -34,9 +34,9 @@ interface OldRecipesData {
 // Mapping from old categories to new tag names
 const categoryToTagMapping: Record<string, string> = {
     dessert: 'tag_dessert',
-    dish: 'tag_lunch', // You might want to adjust this mapping
-    appetizer: 'tag_lunch',
-    other: 'tag_lunch',
+    dish: 'tag_main',
+    appetizer: 'tag_starter',
+    other: 'tag_main',
 };
 
 // Parse duration strings to extract minutes
@@ -152,7 +152,7 @@ async function main() {
                 );
 
                 // Get or create user
-                const userId = 'cmb56dipy0000u2epvu1cn20k';
+                const userId = 'cmb59v8ci0000orv2wp5ryinf';
 
                 // Parse times
                 const prepTime = parseDuration(

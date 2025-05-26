@@ -37,7 +37,7 @@ export async function getRecipes(filters: {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            title: 'asc',
         },
         skip: skip,
         take: ITEMS_PER_PAGE,

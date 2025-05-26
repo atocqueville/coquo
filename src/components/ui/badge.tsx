@@ -7,19 +7,17 @@ import type { Tag } from '@prisma/client';
 
 const i18nBadgeLabel = {
     vegetarian: 'Végétarien',
-    vegan: 'Végan',
     meat: 'Viande',
     fish: 'Poisson',
     'gluten-free': 'Sans gluten',
-    'dairy-free': 'Sans lactose',
     quick: 'Rapide',
     summer: 'Été',
     winter: 'Hiver',
     autumn: 'Automne',
     spring: 'Printemps',
     dessert: 'Dessert',
-    lunch: 'Déjeuner',
-    dinner: 'Dîner',
+    starter: 'Entrée',
+    main: 'Plat',
     spicy: 'Épicé',
 };
 
