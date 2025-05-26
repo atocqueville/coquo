@@ -24,6 +24,8 @@ import { CrossableCheckbox } from '@/components/ui/crossable-checkbox';
 import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
+import RecipeDeleteButton from './recipe-delete-button';
+import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
 import { getDifficultyProps } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
@@ -48,6 +50,8 @@ const IngredientsList = ({
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     const timeInfo = formatTime(recipe);
+    const session = await auth();
+    const isAuthor = session?.user?.id === recipe.userId;
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -84,7 +88,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                     </Link>
                                 </Button>
                                 <Button
-                                    variant="outline"
+                                    variant="coquo"
                                     size="sm"
                                     asChild
                                     className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
@@ -94,6 +98,11 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         <span className="inline">Modifier</span>
                                     </Link>
                                 </Button>
+                                {isAuthor && (
+                                    <RecipeDeleteButton
+                                        recipeId={recipe.id.toString()}
+                                    />
+                                )}
                             </div>
 
                             {/* Wake Lock Switch - positioned in top right corner */}

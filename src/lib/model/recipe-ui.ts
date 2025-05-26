@@ -2,6 +2,7 @@ export interface RecipeUi {
     id: number;
     title: string;
     picture: string | null;
+    userId: string;
     ingredients: string[];
     difficulty: number;
     cookTime: number;

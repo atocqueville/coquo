@@ -1,0 +1,48 @@
+{
+    "recipes": [
+        {
+            "categories": ["dessert"],
+            "people": 6,
+            "name": "gâteau noix/amandes",
+            "duration": {
+                "cuisson": "30 mn",
+                "preparation": "10 mn"
+            },
+            "steps": [
+                {
+                    "image": "",
+                    "instructions": "Faire fondre le beurre. Y incorporer le sucre, les oeufs entiers, les amandes, les noix et enfin la farine.\n\nFaire cuire 30 mn à 180°\n\nFacultatif (je ne l'ai pas fait) :\nA froid, recouvrir le gâteau d'un glaçage sucre glace avec 1/2 tasse de café",
+                    "ingredients": "125 g de beurre\n175 g de sucre\n5 oeufs\n125 g de cerneaux de noix\n125 g de poudre d'amandes\n50 g de farine",
+                    "stepName": "Étape 1"
+                }
+            ],
+            "id": "02z62sh1ZWphaJJedkXl",
+            "author": "syAi73IKQwe4KJUq1eNj52LuiMF2"
+        },
+        {
+            "people": 8,
+            "name": "Cake au Citron",
+            "categories": ["dessert"],
+            "id": "UlSWKGC2JZKXqodvMGN3",
+            "steps": [
+                {
+                    "stepName": "Cake au Citron",
+                    "ingredients": "65g de beurre\n190g de farine\n200g de sucre\n3 oeufs\n95 g de crème liquide entière\n1 gros citron non traité\n1/2 cuillère à café de levure chimique\n2 cuillère à soupe de rhum brun",
+                    "image": "01933808e34e58c",
+                    "instructions": "Préchauffez le four à 150° chaleur tournante et graissez un moule à cake de 20cm de long.\nFaites fondre le beurre et réservez.\nZestez le citron et mélangez les zestes au sucre en poudre.\nDans le bol du robot, cassez les oeufs entiers et ajoutez le sucre parfumé au citron. Fouettez pour que le mélange blanchisse. \nAjoutez le jus de citron (en garder un peu pour le sirop d’imbibage), le rhum, la crème entière et le sel et fouettez à nouveau.\nTamisez la farine avec la levure et ajoutez la progressivement au mélange précédent en mélangeant délicatement avec une maryse. \nAjoutez le beurre fondu refroidi et mélangez doucement. \nVersez la pâte dans le moule et enfournez pendant 40 minutes environ. Le cake est cuit quand la lame d'un couteau plantée en son centre ressort sèche. \nPendant la cuisson du cake, préparez le sirop d'imbibage."
+                },
+                {
+                    "image": "",
+                    "ingredients": "75 g d’eau minérale\n30 g de sucre en poudre\n1 cuillère à soupe de jus de citron",
+                    "stepName": "Sirop d’imbibage",
+                    "instructions": "Faites bouillir l'eau et le sucre.\nRetirez du feu et ajoutez le jus de citron, mélangez.\nAvant que le cake ne refroidisse, versez la totalité du sirop sur le gâteau."
+                }
+            ],
+            "author": "syAi73IKQwe4KJUq1eNj52LuiMF2",
+            "duration": {
+                "preparation": "15",
+                "cuisson": "40"
+            }
+        }
+    ]
+}

@@ -48,6 +48,33 @@ app.post('/file', upload.single('file'), async (req, res) => {
     }
 });
 
+app.post('/files', upload.array('files', 10), async (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        return res
+            .status(400)
+            .json({ success: false, message: 'No files provided' });
+    }
+
+    try {
+        const uploadedFiles = [];
+
+        for (const file of req.files) {
+            const { buffer } = file;
+            const id = `${v4()}-${Date.now()}`;
+            const filename = `${id}.webp`;
+            const outputPath = path.join(ABS_MEDIA_PATH, filename);
+
+            await sharp(buffer).webp({ quality: 75 }).toFile(outputPath);
+            uploadedFiles.push(filename);
+        }
+
+        return res.json({ success: true, paths: uploadedFiles });
+    } catch (err) {
+        console.error('Image compression failed:', err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 app.listen(3040, '127.0.0.1', (err) => {
     if (err) console.error(err);
     else

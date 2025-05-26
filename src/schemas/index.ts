@@ -33,7 +33,7 @@ export const UserLoginSchema = z.object({
 
 export const CreateRecipeSchema = z.object({
     title: z.string().min(1),
-    picture: z.string().optional(),
+    images: z.array(z.string()).optional(),
     ingredients: z.array(z.string()).min(1),
     steps: z
         .array(

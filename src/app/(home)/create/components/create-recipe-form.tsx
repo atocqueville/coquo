@@ -33,7 +33,7 @@ import {
 import type { Tag } from '@prisma/client';
 import { Badge } from '@/components/ui/badge';
 
-import { uploadImage } from '@/lib/api/file-storage';
+import { uploadImages } from '@/lib/api/file-storage';
 import { createRecipe, updateRecipe } from '@/lib/api/recipe';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -58,7 +58,7 @@ const formSchema = z.object({
     title: z.string().min(2, {
         message: 'Le titre de la recette doit contenir au moins 2 caractères.',
     }),
-    picture: FileSchema.optional(),
+    pictures: z.array(FileSchema).optional(),
     ingredients: z.string().min(1, {
         message: 'Ajoutez des ingrédients',
     }),
@@ -103,7 +103,7 @@ type CreateRecipeFormProps = {
     tags: Tag[];
     initialData?: {
         title: string;
-        picture?: string;
+        images?: string[];
         ingredients: string;
         steps: {
             title: string;
@@ -136,16 +136,18 @@ export function CreateRecipeForm({
         return imagePath;
     };
 
-    const initialImageUrl = formatImageUrl(initialData?.picture);
+    const initialImageUrls =
+        initialData?.images
+            ?.map(formatImageUrl)
+            .filter((url): url is string => url !== null) || [];
 
     const [selectedTags, setSelectedTags] = useState<string[]>(
         initialData?.tags || []
     );
-    const [imagePreview, setImagePreview] = useState<string | null>(
-        initialImageUrl
-    );
-    const [isExistingImage, setIsExistingImage] = useState<boolean>(
-        !!initialData?.picture
+    const [imagePreviews, setImagePreviews] =
+        useState<string[]>(initialImageUrls);
+    const [isExistingImages, setIsExistingImages] = useState<boolean[]>(
+        initialImageUrls.map(() => true)
     );
 
     const router = useRouter();
@@ -154,7 +156,7 @@ export function CreateRecipeForm({
         defaultValues: initialData
             ? {
                   title: initialData.title,
-                  picture: undefined,
+                  pictures: undefined,
                   ingredients: initialData.ingredients,
                   steps: initialData.steps,
                   difficulty: initialData.difficulty,
@@ -165,7 +167,7 @@ export function CreateRecipeForm({
               }
             : {
                   title: '',
-                  picture: undefined,
+                  pictures: undefined,
                   ingredients: '',
                   steps: [{ title: '', instructions: [''] }],
                   difficulty: 1,
@@ -183,16 +185,22 @@ export function CreateRecipeForm({
     });
 
     function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                setImagePreview(result);
-                setIsExistingImage(false);
-                form.setValue('picture', file);
-            };
-            reader.readAsDataURL(file);
+        const files = e.target.files;
+        if (files) {
+            const fileArray = Array.from(files);
+            const currentPictures = form.getValues('pictures') || [];
+
+            fileArray.forEach((file) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const result = reader.result as string;
+                    setImagePreviews((prev) => [...prev, result]);
+                    setIsExistingImages((prev) => [...prev, false]);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            form.setValue('pictures', [...currentPictures, ...fileArray]);
         }
     }
 
@@ -230,26 +238,29 @@ export function CreateRecipeForm({
     };
 
     const handleSubmit = async (values: FormValues) => {
-        let uploadedImagePath: string = '';
+        let uploadedImagePaths: string[] = [];
 
-        // If we're keeping the existing image, use the original path, not the proxy URL
-        if (isExistingImage && initialData?.picture) {
-            uploadedImagePath = initialData.picture;
+        // If we're keeping the existing images, use the original paths, not the proxy URLs
+        if (
+            isExistingImages.every((isExisting) => isExisting) &&
+            initialData?.images
+        ) {
+            uploadedImagePaths = initialData.images;
         }
 
         values.tags = selectedTags;
 
         try {
-            // Only upload a new image if we have a File instance
-            if (values.picture instanceof File) {
-                const uploadFileResponse = await uploadImage([values.picture]);
-                uploadedImagePath = uploadFileResponse.path as string;
+            // Only upload new images if we have File instances
+            if (values.pictures && values.pictures.length > 0) {
+                const uploadFilesResponse = await uploadImages(values.pictures);
+                uploadedImagePaths = uploadFilesResponse.paths;
             }
 
-            // If isExistingImage is false and no new picture, leave uploadedImagePath empty
+            // If isExistingImages is false and no new pictures, leave uploadedImagePaths empty
             const recipe: CreateRecipeFormData = {
                 title: values.title,
-                picture: uploadedImagePath,
+                images: uploadedImagePaths,
                 ingredients: values.ingredients.split('\n'),
                 steps: values.steps,
                 tags: selectedTags,
@@ -289,15 +300,15 @@ export function CreateRecipeForm({
                 <Card>
                     <CardContent className="pt-6">
                         <div className="flex flex-col md:flex-row gap-6">
-                            {/* Left column - Image (1/3 width) */}
+                            {/* Left column - Images (1/3 width) */}
                             <div className="md:w-1/3 flex justify-center">
                                 <FormField
                                     control={form.control}
-                                    name="picture"
+                                    name="pictures"
                                     render={() => (
                                         <FormItem className="flex-1">
                                             <FormLabel>
-                                                Photo de la recette
+                                                Photos de la recette
                                             </FormLabel>
                                             <FormControl>
                                                 <div
@@ -305,66 +316,110 @@ export function CreateRecipeForm({
                                                     onClick={() =>
                                                         document
                                                             .getElementById(
-                                                                'picture-upload'
+                                                                'pictures-upload'
                                                             )
                                                             ?.click()
                                                     }
                                                 >
-                                                    {imagePreview ? (
+                                                    {imagePreviews.length >
+                                                    0 ? (
                                                         <div className="relative h-full w-full">
-                                                            <Image
-                                                                src={
-                                                                    imagePreview
-                                                                }
-                                                                fill
-                                                                alt="Aperçu de la recette"
-                                                                className="h-full w-full object-cover"
-                                                            />
-                                                            <Button
-                                                                type="button"
-                                                                variant="destructive"
-                                                                size="icon"
-                                                                className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation();
-                                                                    setImagePreview(
-                                                                        null
-                                                                    );
-                                                                    setIsExistingImage(
-                                                                        false
-                                                                    );
-                                                                    form.setValue(
-                                                                        'picture',
-                                                                        undefined
-                                                                    );
-                                                                }}
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">
-                                                                    Supprimer
-                                                                    l&apos;image
-                                                                </span>
-                                                            </Button>
+                                                            <div className="flex h-full w-full gap-4">
+                                                                {imagePreviews.map(
+                                                                    (
+                                                                        preview,
+                                                                        index
+                                                                    ) => (
+                                                                        <div
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            className="relative h-full w-full"
+                                                                        >
+                                                                            <Image
+                                                                                src={
+                                                                                    preview
+                                                                                }
+                                                                                fill
+                                                                                alt={`Aperçu de la recette - Image ${index + 1}`}
+                                                                                className="h-full w-full object-cover"
+                                                                            />
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="destructive"
+                                                                                size="icon"
+                                                                                className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
+                                                                                onClick={(
+                                                                                    e
+                                                                                ) => {
+                                                                                    e.stopPropagation();
+                                                                                    setImagePreviews(
+                                                                                        imagePreviews.filter(
+                                                                                            (
+                                                                                                _,
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i !==
+                                                                                                index
+                                                                                        )
+                                                                                    );
+                                                                                    setIsExistingImages(
+                                                                                        isExistingImages.filter(
+                                                                                            (
+                                                                                                _,
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i !==
+                                                                                                index
+                                                                                        )
+                                                                                    );
+                                                                                    const currentPictures =
+                                                                                        form.getValues(
+                                                                                            'pictures'
+                                                                                        ) ||
+                                                                                        [];
+                                                                                    form.setValue(
+                                                                                        'pictures',
+                                                                                        currentPictures.filter(
+                                                                                            (
+                                                                                                _,
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i !==
+                                                                                                index
+                                                                                        )
+                                                                                    );
+                                                                                }}
+                                                                            >
+                                                                                <Trash2 className="h-4 w-4" />
+                                                                                <span className="sr-only">
+                                                                                    Supprimer
+                                                                                    l&apos;image
+                                                                                </span>
+                                                                            </Button>
+                                                                        </div>
+                                                                    )
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     ) : (
                                                         <div className="flex h-full w-full flex-col items-center justify-center">
                                                             <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
                                                             <p className="text-sm text-muted-foreground">
-                                                                Télécharger une
-                                                                image
+                                                                Télécharger des
+                                                                images
                                                             </p>
                                                         </div>
                                                     )}
                                                     <input
-                                                        id="picture-upload"
+                                                        id="pictures-upload"
                                                         type="file"
                                                         accept="image/*"
                                                         className="hidden"
                                                         onChange={
                                                             handleImageUpload
                                                         }
+                                                        multiple
                                                     />
                                                 </div>
                                             </FormControl>
