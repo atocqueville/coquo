@@ -122,7 +122,7 @@ async function main() {
         // Read the recipes JSON file
         const recipesPath = path.join(
             process.cwd(),
-            'prisma/mocks/recipes-light.json'
+            'prisma/mocks/recipes-full.json'
         );
 
         if (!fs.existsSync(recipesPath)) {
@@ -152,7 +152,7 @@ async function main() {
                 );
 
                 // Get or create user
-                const userId = 'cmb3umm3g0000yvaxf2wrcgzc';
+                const userId = 'cmb56dipy0000u2epvu1cn20k';
 
                 // Parse times
                 const prepTime = parseDuration(

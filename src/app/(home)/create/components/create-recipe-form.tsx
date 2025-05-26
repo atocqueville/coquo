@@ -240,24 +240,26 @@ export function CreateRecipeForm({
     const handleSubmit = async (values: FormValues) => {
         let uploadedImagePaths: string[] = [];
 
-        // If we're keeping the existing images, use the original paths, not the proxy URLs
-        if (
-            isExistingImages.every((isExisting) => isExisting) &&
-            initialData?.images
-        ) {
-            uploadedImagePaths = initialData.images;
-        }
-
         values.tags = selectedTags;
 
         try {
-            // Only upload new images if we have File instances
+            // Handle image uploads
             if (values.pictures && values.pictures.length > 0) {
                 const uploadFilesResponse = await uploadImages(values.pictures);
                 uploadedImagePaths = uploadFilesResponse.paths;
             }
 
-            // If isExistingImages is false and no new pictures, leave uploadedImagePaths empty
+            // If we're editing and keeping existing images, combine them with new ones
+            if (
+                initialData?.images &&
+                isExistingImages.some((isExisting) => isExisting)
+            ) {
+                const existingImages = initialData.images.filter(
+                    (_, index) => isExistingImages[index]
+                );
+                uploadedImagePaths = [...existingImages, ...uploadedImagePaths];
+            }
+
             const recipe: CreateRecipeFormData = {
                 title: values.title,
                 images: uploadedImagePaths,
@@ -281,8 +283,7 @@ export function CreateRecipeForm({
                 toast.success('Recette créée avec succès');
                 router.push('/');
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             toast.error(
                 recipeId
                     ? 'Une erreur est survenue lors de la mise à jour de la recette'
@@ -309,6 +310,17 @@ export function CreateRecipeForm({
                                         <FormItem className="flex-1">
                                             <FormLabel>
                                                 Photos de la recette
+                                                {imagePreviews.length > 0 && (
+                                                    <span className="ml-2 text-sm text-muted-foreground">
+                                                        ({imagePreviews.length}{' '}
+                                                        image
+                                                        {imagePreviews.length >
+                                                        1
+                                                            ? 's'
+                                                            : ''}
+                                                        )
+                                                    </span>
+                                                )}
                                             </FormLabel>
                                             <FormControl>
                                                 <div
@@ -323,84 +335,134 @@ export function CreateRecipeForm({
                                                 >
                                                     {imagePreviews.length >
                                                     0 ? (
-                                                        <div className="relative h-full w-full">
-                                                            <div className="flex h-full w-full gap-4">
-                                                                {imagePreviews.map(
-                                                                    (
-                                                                        preview,
-                                                                        index
-                                                                    ) => (
-                                                                        <div
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            className="relative h-full w-full"
-                                                                        >
-                                                                            <Image
-                                                                                src={
-                                                                                    preview
+                                                        <div className="relative h-full w-full p-2">
+                                                            <div
+                                                                className={`grid gap-2 h-full ${
+                                                                    imagePreviews.length ===
+                                                                    1
+                                                                        ? 'grid-cols-1'
+                                                                        : imagePreviews.length <=
+                                                                            4
+                                                                          ? 'grid-cols-2'
+                                                                          : 'grid-cols-3'
+                                                                }`}
+                                                            >
+                                                                {imagePreviews
+                                                                    .slice(0, 6)
+                                                                    .map(
+                                                                        (
+                                                                            preview,
+                                                                            index
+                                                                        ) => (
+                                                                            <div
+                                                                                key={
+                                                                                    index
                                                                                 }
-                                                                                fill
-                                                                                alt={`Aperçu de la recette - Image ${index + 1}`}
-                                                                                className="h-full w-full object-cover"
-                                                                            />
-                                                                            <Button
-                                                                                type="button"
-                                                                                variant="destructive"
-                                                                                size="icon"
-                                                                                className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
-                                                                                onClick={(
-                                                                                    e
-                                                                                ) => {
-                                                                                    e.stopPropagation();
-                                                                                    setImagePreviews(
-                                                                                        imagePreviews.filter(
-                                                                                            (
-                                                                                                _,
-                                                                                                i
-                                                                                            ) =>
-                                                                                                i !==
-                                                                                                index
-                                                                                        )
-                                                                                    );
-                                                                                    setIsExistingImages(
-                                                                                        isExistingImages.filter(
-                                                                                            (
-                                                                                                _,
-                                                                                                i
-                                                                                            ) =>
-                                                                                                i !==
-                                                                                                index
-                                                                                        )
-                                                                                    );
-                                                                                    const currentPictures =
-                                                                                        form.getValues(
-                                                                                            'pictures'
-                                                                                        ) ||
-                                                                                        [];
-                                                                                    form.setValue(
-                                                                                        'pictures',
-                                                                                        currentPictures.filter(
-                                                                                            (
-                                                                                                _,
-                                                                                                i
-                                                                                            ) =>
-                                                                                                i !==
-                                                                                                index
-                                                                                        )
-                                                                                    );
-                                                                                }}
+                                                                                className="relative aspect-square rounded-md overflow-hidden"
                                                                             >
-                                                                                <Trash2 className="h-4 w-4" />
-                                                                                <span className="sr-only">
-                                                                                    Supprimer
-                                                                                    l&apos;image
-                                                                                </span>
-                                                                            </Button>
-                                                                        </div>
-                                                                    )
-                                                                )}
+                                                                                <Image
+                                                                                    src={
+                                                                                        preview
+                                                                                    }
+                                                                                    fill
+                                                                                    alt={`Aperçu de la recette - Image ${index + 1}`}
+                                                                                    className="object-cover"
+                                                                                />
+                                                                                <Button
+                                                                                    type="button"
+                                                                                    variant="destructive"
+                                                                                    size="icon"
+                                                                                    className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
+                                                                                    onClick={(
+                                                                                        e
+                                                                                    ) => {
+                                                                                        e.stopPropagation();
+
+                                                                                        // Remove from preview arrays
+                                                                                        setImagePreviews(
+                                                                                            imagePreviews.filter(
+                                                                                                (
+                                                                                                    _,
+                                                                                                    i
+                                                                                                ) =>
+                                                                                                    i !==
+                                                                                                    index
+                                                                                            )
+                                                                                        );
+
+                                                                                        const newIsExistingImages =
+                                                                                            isExistingImages.filter(
+                                                                                                (
+                                                                                                    _,
+                                                                                                    i
+                                                                                                ) =>
+                                                                                                    i !==
+                                                                                                    index
+                                                                                            );
+                                                                                        setIsExistingImages(
+                                                                                            newIsExistingImages
+                                                                                        );
+
+                                                                                        // Only filter pictures array if this is a new upload (not existing)
+                                                                                        if (
+                                                                                            !isExistingImages[
+                                                                                                index
+                                                                                            ]
+                                                                                        ) {
+                                                                                            const currentPictures =
+                                                                                                form.getValues(
+                                                                                                    'pictures'
+                                                                                                ) ||
+                                                                                                [];
+                                                                                            // Find the index in the pictures array (only counting non-existing images)
+                                                                                            let pictureIndex = 0;
+                                                                                            for (
+                                                                                                let i = 0;
+                                                                                                i <
+                                                                                                index;
+                                                                                                i++
+                                                                                            ) {
+                                                                                                if (
+                                                                                                    !isExistingImages[
+                                                                                                        i
+                                                                                                    ]
+                                                                                                ) {
+                                                                                                    pictureIndex++;
+                                                                                                }
+                                                                                            }
+                                                                                            form.setValue(
+                                                                                                'pictures',
+                                                                                                currentPictures.filter(
+                                                                                                    (
+                                                                                                        _,
+                                                                                                        i
+                                                                                                    ) =>
+                                                                                                        i !==
+                                                                                                        pictureIndex
+                                                                                                )
+                                                                                            );
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    <Trash2 className="h-4 w-4" />
+                                                                                    <span className="sr-only">
+                                                                                        Supprimer
+                                                                                        l&apos;image
+                                                                                    </span>
+                                                                                </Button>
+                                                                            </div>
+                                                                        )
+                                                                    )}
                                                             </div>
+                                                            {imagePreviews.length >
+                                                                6 && (
+                                                                <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                                                                    +
+                                                                    {imagePreviews.length -
+                                                                        6}{' '}
+                                                                    plus
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     ) : (
                                                         <div className="flex h-full w-full flex-col items-center justify-center">

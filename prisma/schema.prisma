@@ -46,21 +46,21 @@ model Account {
 }
 
 model Recipe {
-  id          Int          @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   title       String
-  picture     String?
   ingredients String
   steps       RecipeStep[]
+  images      RecipeImage[]
   difficulty  Int
   prepTime    Int
   cookTime    Int
   servings    Int
-  tags        Tag[]        @relation("RecipeTags")
+  tags        Tag[]         @relation("RecipeTags")
   userId      String
-  author      User         @relation(fields: [userId], references: [id])
-  starredBy   User[]       @relation("Favorites")
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
+  author      User          @relation(fields: [userId], references: [id])
+  starredBy   User[]        @relation("Favorites")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 }
 
 model Tag {
@@ -77,4 +77,12 @@ model RecipeStep {
   recipeId     Int
   title        String
   instructions String
+}
+
+model RecipeImage {
+  id       Int    @id @default(autoincrement())
+  path     String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId Int
+  order    Int    @default(0)
 }

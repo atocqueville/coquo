@@ -26,13 +26,21 @@ export default async function RecipeItem({
                 className="group overflow-hidden rounded-lg border bg-card text-card-foreground shadow transition-all hover:shadow-md"
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                        src={`/api/image-proxy?imageId=${recipe.picture}`}
-                        alt="recipe top view"
-                        fill
-                        sizes="(max-width: 640px) 50vw, 25vw"
-                        className="object-cover transition-transform group-hover:scale-105"
-                    />
+                    {recipe.images && recipe.images.length > 0 ? (
+                        <Image
+                            src={`/api/image-proxy?imageId=${recipe.images[0].path}`}
+                            alt="recipe top view"
+                            fill
+                            sizes="(max-width: 640px) 50vw, 25vw"
+                            className="object-cover transition-transform group-hover:scale-105"
+                        />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                            <span className="text-muted-foreground">
+                                Pas d&apos;image
+                            </span>
+                        </div>
+                    )}
                     <FavoriteButton
                         recipeId={recipe.id}
                         userStarredIds={starredRecipeIds ?? []}

@@ -1,8 +1,17 @@
 export interface RecipeUi {
     id: number;
     title: string;
-    picture: string | null;
+    images: Array<{
+        id: number;
+        path: string;
+        order: number;
+    }>;
     userId: string;
+    author: {
+        id: string;
+        email: string | null;
+        name: string | null;
+    };
     ingredients: string[];
     difficulty: number;
     cookTime: number;

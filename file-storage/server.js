@@ -32,7 +32,6 @@ app.use('/media', express.static(ABS_MEDIA_PATH));
 
 app.post('/file', upload.single('file'), async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false });
-
     const { buffer } = req.file;
     const id = `${v4()}-${Date.now()}`;
     const filename = `${id}.webp`;

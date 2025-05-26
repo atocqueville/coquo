@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import {
     Carrot,
     ChefHat,
@@ -29,6 +28,7 @@ import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
 import { getDifficultyProps } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
+import RecipeImageCarousel from './recipe-image-carousel';
 
 const IngredientsList = ({
     ingredients,
@@ -49,9 +49,9 @@ const IngredientsList = ({
 };
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
-    const timeInfo = formatTime(recipe);
     const session = await auth();
     const isAuthor = session?.user?.id === recipe.userId;
+    const timeInfo = formatTime(recipe);
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -59,54 +59,57 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                 <div className="flex flex-col md:flex-row h-screen">
                     {/* Recipe content */}
                     <div className="flex-1 overflow-y-auto" id="recipe-content">
-                        {/* Recipe hero image */}
+                        {/* Recipe hero image(s) */}
                         <div className="relative h-[300px] sm:h-[400px]">
-                            <Image
-                                src={`/api/image-proxy?imageId=${recipe.picture}`}
-                                alt={`recipe top view`}
-                                fill
-                                sizes="(max-width: 768px) 100vw, 768px"
-                                className="object-cover"
-                                priority
-                            />
+                            {recipe.images && recipe.images.length > 0 ? (
+                                <RecipeImageCarousel images={recipe.images} />
+                            ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-muted">
+                                    <span className="text-muted-foreground text-lg">
+                                        Pas d&apos;image disponible
+                                    </span>
+                                </div>
+                            )}
+
                             {/* Back button - fixed position for better visibility */}
-                            <div className="absolute top-4 left-4 z-10 flex gap-2">
+                            <div className="absolute top-4 left-4 z-20">
                                 <Button
-                                    variant="outline"
-                                    size="sm"
+                                    variant="secondary"
+                                    size="icon"
+                                    className="rounded-full bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg"
                                     asChild
-                                    className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
                                 >
                                     <Link href="/">
-                                        <ChevronLeft className="mr-1" />
-                                        <span className="hidden sm:inline">
-                                            Retour aux recettes
-                                        </span>
-                                        <span className="sm:hidden">
-                                            Retour
+                                        <ChevronLeft className="h-4 w-4" />
+                                        <span className="sr-only">
+                                            Retour à la liste des recettes
                                         </span>
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="coquo"
-                                    size="sm"
-                                    asChild
-                                    className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
-                                >
-                                    <Link href={`/r/${recipe.id}/edit`}>
-                                        <Pencil className="mr-1 h-4 w-4" />
-                                        <span className="inline">Modifier</span>
-                                    </Link>
-                                </Button>
-                                {isAuthor && (
+                            </div>
+
+                            {isAuthor && (
+                                <div className="absolute top-4 left-16 z-20 flex gap-2">
+                                    <Button
+                                        variant="secondary"
+                                        size="icon"
+                                        className="rounded-full bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg"
+                                        asChild
+                                    >
+                                        <Link href={`/r/${recipe.id}/edit`}>
+                                            <Pencil className="h-4 w-4" />
+                                            <span className="sr-only">
+                                                Modifier la recette
+                                            </span>
+                                        </Link>
+                                    </Button>
                                     <RecipeDeleteButton
                                         recipeId={recipe.id.toString()}
                                     />
-                                )}
-                            </div>
+                                </div>
+                            )}
 
-                            {/* Wake Lock Switch - positioned in top right corner */}
-                            <div className="absolute top-4 right-4 z-10">
+                            <div className="absolute top-4 right-4 z-20">
                                 <DynamicWakeLockWrapper />
                             </div>
 
@@ -158,12 +161,23 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             {/* Intentionally empty - spacing between image and title */}
                         </div>
 
+                        {/* Author */}
+                        <div className="px-6">
+                            {recipe.author.email && (
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    Recette ajoutée par {recipe.author.name}
+                                </p>
+                            )}
+                        </div>
+
                         {/* Sticky title and ingredients button */}
                         <div className="sticky top-0 bg-white z-10 border-b">
                             <div className="flex items-center justify-between px-6 py-3">
-                                <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal">
-                                    {recipe.title}
-                                </h1>
+                                <div className="flex-1 min-w-0">
+                                    <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal">
+                                        {recipe.title}
+                                    </h1>
+                                </div>
 
                                 {/* Ingredients sheet trigger for mobile */}
                                 <div className="md:hidden">

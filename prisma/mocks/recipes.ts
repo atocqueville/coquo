@@ -2,7 +2,6 @@ import type { Prisma } from '@prisma/client';
 
 export const aubergineRotie: Omit<Prisma.RecipeCreateInput, 'author'> = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',
-    picture: 'potimarron.jpg',
     difficulty: 3,
     servings: 4,
     prepTime: 45,
@@ -13,7 +12,7 @@ export const aubergineRotie: Omit<Prisma.RecipeCreateInput, 'author'> = {
         create: [
             {
                 title: `L'aubergine`,
-                instructions: `Préchauffez votre four à 220°C en chaleur tournante !;Pendant ce temps, coupez les aubergines en 2 dans le sens de la longueur et quadrillez la chair avec un couteau, sans découper la peau.;Déposez-les sur une plaque allant au four. Versez un bon filet d’huile d'olive. Salez légèrement, poivrez.;Enfournez 35 min jusqu'à ce qu'elles soient cuites.;Pendant ce temps, faites cuire les graines de couscous et préparez la sauce.`,
+                instructions: `Préchauffez votre four à 220°C en chaleur tournante !;Pendant ce temps, coupez les aubergines en 2 dans le sens de la longueur et quadrillez la chair avec un couteau, sans découper la peau.;Déposez-les sur une plaque allant au four. Versez un bon filet d'huile d'olive. Salez légèrement, poivrez.;Enfournez 35 min jusqu'à ce qu'elles soient cuites.;Pendant ce temps, faites cuire les graines de couscous et préparez la sauce.`,
             },
             {
                 title: `Les graines de couscous`,
@@ -29,7 +28,6 @@ export const aubergineRotie: Omit<Prisma.RecipeCreateInput, 'author'> = {
 
 export const potimarron: Omit<Prisma.RecipeCreateInput, 'author'> = {
     title: 'Gnocchis à la crème de potimarron et noisettes',
-    picture: 'gnocchis.jpg',
     difficulty: 1,
     servings: 2,
     prepTime: 15,

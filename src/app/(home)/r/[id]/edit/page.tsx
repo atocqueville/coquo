@@ -16,7 +16,7 @@ export default async function EditRecipePage({
     // Convert recipe to form format expected by CreateRecipeForm
     const initialData = {
         title: recipe.title,
-        picture: recipe.picture || undefined,
+        images: recipe.images?.map((img) => img.path) || [],
         ingredients: recipe.ingredients.join('\n'),
         steps: recipe.steps.map((step) => ({
             title: step.title,

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 const config: Config = {
     darkMode: ['class'],
@@ -6,6 +7,29 @@ const config: Config = {
         './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
         './src/components/**/*.{js,ts,jsx,tsx,mdx}',
         './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    ],
+    safelist: [
+        // Difficulty badge classes from getDifficultyProps
+        'bg-green-100',
+        'text-green-700',
+        'border-green-200',
+        'bg-amber-100',
+        'text-amber-700',
+        'border-amber-200',
+        'bg-red-100',
+        'text-red-700',
+        'border-red-200',
+        'bg-gray-100',
+        'text-gray-700',
+        'border-gray-200',
+        // Changelog badge classes
+        'bg-green-500',
+        'hover:bg-green-600',
+        'bg-blue-500',
+        'hover:bg-blue-600',
+        'bg-amber-500',
+        'hover:bg-amber-600',
+        'bg-yellow-500',
     ],
     theme: {
         container: {
@@ -73,6 +97,6 @@ const config: Config = {
             },
         },
     },
-    plugins: [require('tailwindcss-animate')],
+    plugins: [tailwindcssAnimate],
 };
 export default config;

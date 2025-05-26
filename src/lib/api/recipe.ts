@@ -76,6 +76,9 @@ export async function getRecipeById(id: string): Promise<RecipeUi> {
         include: {
             steps: true,
             tags: true,
+            author: {
+                select: { email: true, name: true, id: true },
+            },
             images: {
                 orderBy: { order: 'asc' },
             },
