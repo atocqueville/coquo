@@ -1,11 +1,10 @@
 {
     "name": "coquo",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "dev": "next dev",
         "start:fs": "npm start --prefix file-storage",
-        "build": "next build",
         "start": "next start",
         "lint": "next lint",
         "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
