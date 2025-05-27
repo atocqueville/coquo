@@ -1,0 +1,39 @@
+name: Publish Docker image
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        environment: coquo
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: Get version from package.json
+              id: package_version
+              run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+            - name: Log in to Docker Hub
+              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+            - name: Build Docker image
+              run: yarn docker:build
+
+            - name: Tag Docker image
+              run: |
+                  docker tag coquo ${{ secrets.DOCKER_USERNAME }}/coquo:${{ env.VERSION }}
+                  docker tag coquo ${{ secrets.DOCKER_USERNAME }}/coquo:latest
+
+            - name: Push Docker image
+              run: |
+                  docker push ${{ secrets.DOCKER_USERNAME }}/coquo:${{ env.VERSION }}
+                  docker push ${{ secrets.DOCKER_USERNAME }}/coquo:latest
