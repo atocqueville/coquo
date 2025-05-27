@@ -90,7 +90,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
 
                             {isAuthor && (
-                                <div className="absolute top-4 left-16 z-20 flex gap-2">
+                                <div className="absolute top-4 left-16 z-20 flex gap-3">
                                     <Button
                                         variant="secondary"
                                         size="icon"

@@ -47,11 +47,11 @@ export default function RecipeDeleteButton({
             <DialogTrigger asChild>
                 <Button
                     variant="destructive"
-                    size="sm"
-                    className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
+                    size="icon"
+                    className="rounded-full bg-red-500/90 backdrop-blur-sm hover:bg-red-600 shadow-lg"
                 >
                     <Trash className="h-4 w-4" />
-                    <span className="hidden sm:inline sm:ml-1">Supprimer</span>
+                    <span className="sr-only">Supprimer la recette</span>
                 </Button>
             </DialogTrigger>
             <DialogContent>
