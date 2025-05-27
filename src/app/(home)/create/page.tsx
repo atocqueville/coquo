@@ -1,6 +1,6 @@
 import { getTags } from '@/lib/api/tags';
 import { CreateRecipeForm } from './components/create-recipe-form';
-import { PageContainer, PageTitle } from '@/components/page';
+import { PageContainer, PageTitle } from '@/components/page-wrapper';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,6 +1,6 @@
 import RecipeList from '@/app/(home)/components/recipe-list';
 import { getStarredRecipes } from '@/lib/api/recipe';
-import { PageContainer, PageTitle } from '@/components/page';
+import { PageContainer, PageTitle } from '@/components/page-wrapper';
 
 export const dynamic = 'force-dynamic';
 

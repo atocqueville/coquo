@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AccountWrapper from '@/app/(home)/settings/account/account-wrapper';
 import AdministrationWrapper from './administration/administration-wrapper';
 import CustomizationTab from './customization/customization';
-import { PageContainer, PageTitle } from '../../../components/page';
+import { PageContainer, PageTitle } from '../../../components/page-wrapper';
 
 export default function SettingsPage() {
     return (

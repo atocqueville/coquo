@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import { getDifficultyProps } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
 import RecipeImageCarousel from './recipe-image-carousel';
+import { PageMobileFooter } from '@/components/page-wrapper';
 
 const IngredientsList = ({
     ingredients,
@@ -171,7 +172,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                         </div>
 
                         {/* Sticky title and ingredients button */}
-                        <div className="sticky top-0 bg-white z-10 border-b">
+                        <div className="sticky w-screen md:w-auto top-0 bg-white z-10 border-b">
                             <div className="flex items-center justify-between px-6 py-3">
                                 <div className="flex-1 min-w-0">
                                     <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal">
@@ -259,6 +260,8 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
                         </div>
                     </div>
+
+                    <PageMobileFooter />
                 </div>
             </main>
         </div>

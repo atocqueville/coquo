@@ -5,7 +5,7 @@ import { getRecipes } from '@/lib/api/recipe';
 import { getAllUsers } from '@/lib/api/user';
 
 import RecipePagination from './components/recipe-pagination';
-import { PageContainer } from '@/components/page';
+import { PageContainer } from '@/components/page-wrapper';
 
 export const dynamic = 'force-dynamic';
 

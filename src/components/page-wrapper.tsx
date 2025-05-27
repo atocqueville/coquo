@@ -1,9 +1,5 @@
 import { Children } from 'react';
 
-type PageContainerProps = {
-    children: React.ReactNode;
-};
-
 export function PageTitle({ title }: { title: string }) {
     return (
         <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
@@ -16,6 +12,14 @@ export function PageTitle({ title }: { title: string }) {
     );
 }
 
+export function PageMobileFooter() {
+    return <footer className="h-16 md:h-0"></footer>;
+}
+
+type PageContainerProps = {
+    children: React.ReactNode;
+};
+
 export function PageContainer({ children }: PageContainerProps) {
     const childrenArray = Children.toArray(children);
     return (
@@ -24,7 +28,7 @@ export function PageContainer({ children }: PageContainerProps) {
             <section className="flex-1 container px-4 py-6">
                 {childrenArray[1]}
             </section>
-            <footer className="h-16 md:h-0"></footer>
+            <PageMobileFooter />
         </div>
     );
 }
