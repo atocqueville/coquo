@@ -18,7 +18,7 @@ export default function RecipeList({
     const hasRecipes = recipes.length > 0;
 
     return (
-        <section className="flex-1 container px-4 py-6">
+        <section className="flex-1 container">
             {hasRecipes ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {recipes.map((recipe) => (

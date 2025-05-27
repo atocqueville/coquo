@@ -50,11 +50,8 @@ export default function RecipeDeleteButton({
                     size="sm"
                     className="py-2 px-3 shadow-lg hover:shadow-md transition-all"
                 >
-                    <Trash className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Supprimer</span>
-                    <span className="sm:hidden">
-                        <Trash className="h-4 w-4" />
-                    </span>
+                    <Trash className="h-4 w-4" />
+                    <span className="hidden sm:inline sm:ml-1">Supprimer</span>
                 </Button>
             </DialogTrigger>
             <DialogContent>

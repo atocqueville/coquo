@@ -57,8 +57,8 @@ async function main() {
             recipes: {
                 create: getRandomRecipes(
                     [aubergineRotie, potimarron],
-                    3,
-                    8,
+                    10,
+                    15,
                     tags
                 ),
             },

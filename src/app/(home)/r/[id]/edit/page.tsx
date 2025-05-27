@@ -30,7 +30,7 @@ export default async function EditRecipePage({
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
                 <div className="container flex items-center justify-between h-16 px-4">
                     <h1 className="text-lg font-bold sm:text-2xl whitespace-nowrap mr-4">

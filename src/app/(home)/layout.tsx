@@ -11,11 +11,13 @@ export default function CookBookLayout({
     return (
         <SessionProvider>
             <SidebarProvider defaultOpen={false}>
-                <AppSidebar />
-                <main className="w-full md:h-full pb-16 md:pb-0">
-                    {children}
-                </main>
-                <MobileNavbar />
+                <div className="w-full flex h-screen">
+                    <AppSidebar />
+                    <div className="flex flex-col flex-1">
+                        <main className="flex-1">{children}</main>
+                        <MobileNavbar />
+                    </div>
+                </div>
             </SidebarProvider>
         </SessionProvider>
     );

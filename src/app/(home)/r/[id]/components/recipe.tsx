@@ -54,7 +54,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     const timeInfo = formatTime(recipe);
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex flex-col">
             <main className="flex-1 overflow-hidden">
                 <div className="flex flex-col md:flex-row h-screen">
                     {/* Recipe content */}

@@ -5,6 +5,7 @@ import { getRecipes } from '@/lib/api/recipe';
 import { getAllUsers } from '@/lib/api/user';
 
 import RecipePagination from './components/recipe-pagination';
+import { PageContainer } from '@/components/page';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +39,7 @@ export default async function CookBookPage(props: {
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <PageContainer>
             <TopBar tags={tagsDb} users={usersDb} />
             <RecipeList recipes={recipes}>
                 <RecipePagination
@@ -47,6 +48,6 @@ export default async function CookBookPage(props: {
                     searchParams={searchParams}
                 />
             </RecipeList>
-        </div>
+        </PageContainer>
     );
 }
