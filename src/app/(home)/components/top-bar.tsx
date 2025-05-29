@@ -1,13 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import type { Tag, User } from '@prisma/client';
 import { setCookie, destroyCookie } from 'nookies';
 import { AdvancedSearchButton } from './advanced-search-button';
+
+interface FilterState {
+    tags: string[];
+    user: string;
+    q: string;
+    page: string;
+}
 
 export default function TopBar({
     tags,
@@ -17,115 +24,72 @@ export default function TopBar({
     users: User[];
 }) {
     const router = useRouter();
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [selectedUser, setSelectedUser] = useState<string>('');
-    const [searchQuery, setSearchQuery] = useState('');
+    const searchParams = useSearchParams();
+
+    // Initialize state from URL params
+    const [selectedTags, setSelectedTags] = useState<string[]>(() => {
+        const urlTags = searchParams.get('tags');
+        return urlTags ? urlTags.split(',') : [];
+    });
+
+    const [selectedUser, setSelectedUser] = useState<string>(() => {
+        return searchParams.get('user') || '';
+    });
+
+    const [searchQuery, setSearchQuery] = useState<string>(() => {
+        return searchParams.get('q') || '';
+    });
 
     const userOptions = users.map((user) => ({
         value: user.id,
         label: user.name || user.email || 'Utilisateur anonyme',
     }));
 
-    /** SAVE FILTERS TO COOKIE AND REFRESH URL */
-    const saveFilters = (e?: React.FormEvent) => {
-        if (e) e.preventDefault();
-
-        setCookie(
-            null,
-            'recipeFilters',
-            JSON.stringify({
+    // Helper function to update URL and cookies
+    const updateFilters = useCallback(
+        (filters: Partial<FilterState>) => {
+            const currentFilters: FilterState = {
                 tags: selectedTags,
                 user: selectedUser,
                 q: searchQuery,
                 page: '1',
-            }),
-            {
+                ...filters,
+            };
+
+            // Save to cookie
+            setCookie(null, 'recipeFilters', JSON.stringify(currentFilters), {
                 maxAge: 30 * 24 * 60 * 60, // 30 days
                 path: '/',
+            });
+
+            // Build URL params
+            const params = new URLSearchParams();
+            if (currentFilters.tags.length > 0) {
+                params.set('tags', currentFilters.tags.join(','));
             }
-        );
-
-        router.push('/');
-    };
-
-    /** INITIAL LOAD TO MAKE FILTERS SYNC WITH URL */
-    useEffect(() => {
-        try {
-            // Get current URL params
-            const url = new URL(window.location.href);
-            const urlTagsParam = url.searchParams.get('tags');
-            const urlSearchParam = url.searchParams.get('q');
-            const urlTags = urlTagsParam ? urlTagsParam.split(',') : [];
-            const urlPageParam = url.searchParams.get('page');
-
-            // Determine which tags to use (URL has priority)
-            if (urlTags.length > 0 || urlSearchParam || urlPageParam) {
-                // URL has params, update cookies and state
-                setSelectedTags(urlTags);
-                if (urlSearchParam) setSearchQuery(urlSearchParam);
-
-                setCookie(
-                    null,
-                    'recipeFilters',
-                    JSON.stringify({
-                        tags: urlTags,
-                        q: urlSearchParam || '',
-                        user: selectedUser || '',
-                        page: urlPageParam || '1',
-                    }),
-                    {
-                        maxAge: 30 * 24 * 60 * 60, // 30 days
-                        path: '/',
-                    }
-                );
+            if (currentFilters.user) {
+                params.set('user', currentFilters.user);
             }
-        } catch (error) {
-            console.error('Error syncing filters:', error);
-        }
-    }, [router]);
+            if (currentFilters.q) {
+                params.set('q', currentFilters.q);
+            }
+            if (currentFilters.page !== '1') {
+                params.set('page', currentFilters.page);
+            }
 
-    /** TRIGGER SAVE FILTERS AND REFRESH URL */
-    useEffect(() => {
-        saveFilters();
-    }, [selectedTags, selectedUser]);
+            // Navigate with new params
+            const newUrl = params.toString() ? `/?${params.toString()}` : '/';
+            router.push(newUrl);
+        },
+        [selectedTags, selectedUser, searchQuery, router]
+    );
 
     // Debounced search handler
     const debouncedSearch = useCallback(
         debounce((value: string) => {
-            // Update URL and cookies with the new search query
-            const params = new URLSearchParams(window.location.search);
-
-            if (value) {
-                params.set('q', value);
-            } else {
-                params.delete('q');
-            }
-
-            // Preserve existing tag filters
-            if (selectedTags.length > 0 && !params.has('tags')) {
-                params.set('tags', selectedTags.join(','));
-            }
-
-            // Save to cookie
-            setCookie(
-                null,
-                'recipeFilters',
-                JSON.stringify({
-                    tags: selectedTags,
-                    q: value,
-                    user: selectedUser,
-                    page: '1',
-                }),
-                {
-                    maxAge: 30 * 24 * 60 * 60, // 30 days
-                    path: '/',
-                }
-            );
-
-            // Update URL
-            router.push(`/`);
+            updateFilters({ q: value, page: '1' });
         }, 500),
-        [selectedTags, selectedUser, router]
+        [updateFilters]
     );
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,20 +100,26 @@ export default function TopBar({
 
     const handleTagsChange = (values: string[]) => {
         setSelectedTags(values);
+        updateFilters({ tags: values, page: '1' });
     };
 
     const handleUserChange = (value: string) => {
         setSelectedUser(value);
+        updateFilters({ user: value, page: '1' });
     };
 
     const resetFilters = () => {
+        console.log('resetFilters');
+
+        // Clear cookie
         destroyCookie(null, 'recipeFilters');
 
-        // Reset state
+        // Reset state immediately
         setSelectedTags([]);
         setSelectedUser('');
         setSearchQuery('');
 
+        // Navigate to clean URL
         router.push('/');
     };
 

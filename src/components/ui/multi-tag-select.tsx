@@ -12,9 +12,7 @@ import {
 } from '@/components/ui/popover';
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
@@ -81,22 +79,6 @@ export const MultiTagSelect = React.forwardRef<
         const [selectedValues, setSelectedValues] =
             React.useState<string[]>(defaultValue);
         const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-
-        const handleInputKeyDown = (
-            event: React.KeyboardEvent<HTMLInputElement>
-        ) => {
-            if (event.key === 'Enter') {
-                setIsPopoverOpen(true);
-            } else if (
-                event.key === 'Backspace' &&
-                !event.currentTarget.value
-            ) {
-                const newSelectedValues = [...selectedValues];
-                newSelectedValues.pop();
-                setSelectedValues(newSelectedValues);
-                onValueChange(newSelectedValues);
-            }
-        };
 
         const toggleOption = (option: string) => {
             const newSelectedValues = selectedValues.includes(option)
@@ -178,17 +160,12 @@ export const MultiTagSelect = React.forwardRef<
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                    className="w-auto p-0"
+                    className="w-[var(--radix-popover-trigger-width)] p-0"
                     align="start"
                     onEscapeKeyDown={() => setIsPopoverOpen(false)}
                 >
                     <Command>
-                        <CommandInput
-                            placeholder="Search..."
-                            onKeyDown={handleInputKeyDown}
-                        />
                         <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
                             <CommandGroup>
                                 {options.map((option) => {
                                     const isSelected = selectedValues.includes(

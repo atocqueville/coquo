@@ -622,7 +622,7 @@ export function CreateRecipeForm({
                                                                     value[0]
                                                                 )
                                                             }
-                                                            className="py-4"
+                                                            className="pt-4"
                                                         />
                                                         <div className="flex justify-between text-xs text-muted-foreground">
                                                             <span>Facile</span>
@@ -743,7 +743,12 @@ export function CreateRecipeForm({
                                     onClick={addStep}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
-                                    Ajouter une étape
+                                    <span className="hidden md:block">
+                                        Ajouter une étape
+                                    </span>
+                                    <span className="block md:hidden">
+                                        Ajouter
+                                    </span>
                                 </Button>
                             </div>
 
@@ -824,8 +829,13 @@ export function CreateRecipeForm({
                                                             }
                                                         >
                                                             <Plus className="mr-2 h-3 w-3" />
-                                                            Ajouter une
-                                                            instruction
+                                                            <span className="hidden md:block">
+                                                                Ajouter une
+                                                                instruction
+                                                            </span>
+                                                            <span className="block md:hidden">
+                                                                Ajouter
+                                                            </span>
                                                         </Button>
                                                     </div>
 
@@ -850,12 +860,8 @@ export function CreateRecipeForm({
                                                                             <FormItem className="flex-1">
                                                                                 <FormControl>
                                                                                     <div className="flex items-start gap-2">
-                                                                                        <div className="mt-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-xs">
-                                                                                            {instructionIndex +
-                                                                                                1}
-                                                                                        </div>
                                                                                         <Textarea
-                                                                                            placeholder="Mélangez la farine, le sucre et la levure chimique dans un grand bol..."
+                                                                                            placeholder="Mélangez la farine et la levure dans un grand bol..."
                                                                                             className="min-h-20"
                                                                                             {...field}
                                                                                         />
