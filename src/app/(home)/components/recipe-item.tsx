@@ -23,20 +23,20 @@ export default async function RecipeItem({
             <Link
                 key={recipe.id}
                 href={`/r/${recipe.id}`}
-                className="group overflow-hidden rounded-lg border bg-card text-card-foreground shadow transition-all hover:shadow-md"
+                className="group overflow-hidden rounded-lg border bg-card text-card-foreground shadow transition-all hover:shadow-md flex sm:flex-col"
             >
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative w-[140px] h-[120px] sm:h-auto sm:w-full sm:aspect-[4/3] overflow-hidden flex-shrink-0">
                     {recipe.images && recipe.images.length > 0 ? (
                         <Image
                             src={`/api/image-proxy?imageId=${recipe.images[0].path}`}
                             alt="recipe top view"
                             fill
-                            sizes="(max-width: 640px) 50vw, 25vw"
+                            sizes="(max-width: 640px) 128px, 25vw"
                             className="object-cover transition-transform group-hover:scale-105"
                         />
                     ) : (
                         <div className="flex h-full w-full items-center justify-center bg-muted">
-                            <span className="text-muted-foreground">
+                            <span className="text-muted-foreground text-xs sm:text-sm">
                                 Pas d&apos;image
                             </span>
                         </div>
@@ -45,25 +45,25 @@ export default async function RecipeItem({
                         recipeId={recipe.id}
                         userStarredIds={starredRecipeIds ?? []}
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-12">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 pt-8 sm:p-4 sm:pt-12">
                         <div className="flex justify-between text-white">
-                            <span className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-2 py-0.5 text-xs font-medium">
+                            <span className="flex items-center gap-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 px-1.5 py-0.5 text-xs font-medium sm:px-2">
                                 <Clock className="h-3 w-3" />
                                 <span>{timeInfo.total}</span>
                             </span>
                             <span
-                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyProps(recipe.difficulty).color}`}
+                                className={`px-1.5 py-0.5 rounded-full text-xs font-medium sm:px-2 ${getDifficultyProps(recipe.difficulty).color}`}
                             >
                                 {getDifficultyProps(recipe.difficulty).label}
                             </span>
                         </div>
                     </div>
                 </div>
-                <div className="p-4">
-                    <h3 className="font-medium line-clamp-2 mb-2">
+                <div className="p-3 sm:p-4 flex-1 min-w-0">
+                    <h3 className="font-medium line-clamp-2 mb-2 text-sm sm:text-base">
                         {recipe.title}
                     </h3>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1 sm:gap-1.5">
                         {recipe.tags.map((tag) => (
                             <Badge key={tag.id} tag={tag} size="sm" />
                         ))}

@@ -1,7 +1,7 @@
 import { getTags } from '@/lib/api/tags';
 import { getRecipeById } from '@/lib/api/recipe';
-import { CreateRecipeForm } from '../../../create/components/create-recipe-form';
-
+import { CreateRecipeForm } from '@/app/(home)/create/components/create-recipe-form';
+import { PageContainer, PageTitle } from '@/components/page-wrapper';
 export const dynamic = 'force-dynamic';
 
 export default async function EditRecipePage({
@@ -30,21 +30,13 @@ export default async function EditRecipePage({
     };
 
     return (
-        <div className="flex flex-col">
-            <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
-                <div className="container flex items-center justify-between h-16 px-4">
-                    <h1 className="text-lg font-bold sm:text-2xl whitespace-nowrap mr-4">
-                        Modifier la recette
-                    </h1>
-                </div>
-            </header>
-            <section className="flex-1 container px-4 py-6">
-                <CreateRecipeForm
-                    tags={tags}
-                    initialData={initialData}
-                    recipeId={Number(id)}
-                />
-            </section>
-        </div>
+        <PageContainer>
+            <PageTitle title="Créer une nouvelle recette" />
+            <CreateRecipeForm
+                tags={tags}
+                initialData={initialData}
+                recipeId={Number(id)}
+            />
+        </PageContainer>
     );
 }

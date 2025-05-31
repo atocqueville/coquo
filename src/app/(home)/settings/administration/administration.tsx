@@ -116,71 +116,97 @@ export default function AdministrationTab({
                 </CardHeader>
                 <CardContent>
                     {unverifiedUsersOptimistic.length > 0 ? (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Nom</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>Date de demande</TableHead>
-                                    <TableHead>Statut</TableHead>
-                                    <TableHead>Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {unverifiedUsersOptimistic.map((user) => (
-                                    <TableRow key={user.id}>
-                                        <TableCell className="font-medium">
-                                            {user.name}
-                                        </TableCell>
-                                        <TableCell>{user.email}</TableCell>
-                                        <TableCell>
-                                            {new Date(
-                                                user.createdAt
-                                            ).toLocaleDateString('fr-FR')}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant="coquo">
-                                                En attente
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="h-8 w-8 p-0 text-green-500"
-                                                    onClick={() =>
-                                                        handleApproveUser(
-                                                            user.id
-                                                        )
-                                                    }
-                                                >
-                                                    <Check className="h-4 w-4" />
-                                                    <span className="sr-only">
-                                                        Approuver
-                                                    </span>
-                                                </Button>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="h-8 w-8 p-0 text-red-500"
-                                                    onClick={() =>
-                                                        handleRejectUser(
-                                                            user.id
-                                                        )
-                                                    }
-                                                >
-                                                    <X className="h-4 w-4" />
-                                                    <span className="sr-only">
-                                                        Rejeter
-                                                    </span>
-                                                </Button>
-                                            </div>
-                                        </TableCell>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Utilisateur</TableHead>
+                                        <TableHead className="hidden sm:table-cell">
+                                            Email
+                                        </TableHead>
+                                        <TableHead className="hidden md:table-cell">
+                                            Date
+                                        </TableHead>
+                                        <TableHead className="hidden sm:table-cell">
+                                            Statut
+                                        </TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {unverifiedUsersOptimistic.map((user) => (
+                                        <TableRow key={user.id}>
+                                            <TableCell className="font-medium">
+                                                <div>
+                                                    <div className="font-medium">
+                                                        {user.name}
+                                                    </div>
+                                                    <div className="text-sm text-muted-foreground sm:hidden">
+                                                        {user.email}
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground md:hidden">
+                                                        {new Date(
+                                                            user.createdAt
+                                                        ).toLocaleDateString(
+                                                            'fr-FR'
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                {user.email}
+                                            </TableCell>
+                                            <TableCell className="hidden md:table-cell">
+                                                {new Date(
+                                                    user.createdAt
+                                                ).toLocaleDateString('fr-FR')}
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                <Badge variant="coquo">
+                                                    En attente
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex gap-1 justify-end">
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="h-8 w-8 p-0 text-green-500"
+                                                        onClick={() =>
+                                                            handleApproveUser(
+                                                                user.id
+                                                            )
+                                                        }
+                                                    >
+                                                        <Check className="h-4 w-4" />
+                                                        <span className="sr-only">
+                                                            Approuver
+                                                        </span>
+                                                    </Button>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="h-8 w-8 p-0 text-red-500"
+                                                        onClick={() =>
+                                                            handleRejectUser(
+                                                                user.id
+                                                            )
+                                                        }
+                                                    >
+                                                        <X className="h-4 w-4" />
+                                                        <span className="sr-only">
+                                                            Rejeter
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     ) : (
                         <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
                             <p className="text-muted-foreground">
@@ -199,44 +225,75 @@ export default function AdministrationTab({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Nom</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Date de demande</TableHead>
-                                <TableHead>Statut</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {blockedUsersOptimistic.map((user) => (
-                                <TableRow key={user.id}>
-                                    <TableCell>{user.name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>
-                                        {new Date(
-                                            user.createdAt
-                                        ).toLocaleDateString('fr-FR')}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="default">Bloqué</Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                handleUnblockUser(user.id)
-                                            }
-                                        >
-                                            Débloquer
-                                        </Button>
-                                    </TableCell>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Utilisateur</TableHead>
+                                    <TableHead className="hidden sm:table-cell">
+                                        Email
+                                    </TableHead>
+                                    <TableHead className="hidden md:table-cell">
+                                        Date
+                                    </TableHead>
+                                    <TableHead className="hidden sm:table-cell">
+                                        Statut
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Actions
+                                    </TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {blockedUsersOptimistic.map((user) => (
+                                    <TableRow key={user.id}>
+                                        <TableCell>
+                                            <div>
+                                                <div className="font-medium">
+                                                    {user.name}
+                                                </div>
+                                                <div className="text-sm text-muted-foreground sm:hidden">
+                                                    {user.email}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground md:hidden">
+                                                    {new Date(
+                                                        user.createdAt
+                                                    ).toLocaleDateString(
+                                                        'fr-FR'
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            {user.email}
+                                        </TableCell>
+                                        <TableCell className="hidden md:table-cell">
+                                            {new Date(
+                                                user.createdAt
+                                            ).toLocaleDateString('fr-FR')}
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            <Badge variant="default">
+                                                Bloqué
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="text-xs"
+                                                onClick={() =>
+                                                    handleUnblockUser(user.id)
+                                                }
+                                            >
+                                                Débloquer
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
         </RoleGate>
