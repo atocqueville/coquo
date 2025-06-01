@@ -1,7 +1,8 @@
+# Replace YOUR_DOCKER_USERNAME with your actual Docker Hub username
 services:
   coquo:
     container_name: coquo-next
-    image: coquo
+    image: YOUR_DOCKER_USERNAME/coquo:latest
     ports:
       - 3030:3000
     volumes:

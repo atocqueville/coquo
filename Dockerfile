@@ -26,8 +26,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN yarn run build:prod
 
 # Build express app in file-storage
-RUN cd file-storage
+WORKDIR /app/file-storage
 RUN yarn --frozen-lockfile
+WORKDIR /app
 
 # Production image, copy all the files and run next
 FROM base AS runner
