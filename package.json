@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "dev": "npx pm2 start ecosystem.dev.config.js",
+        "dev:start": "npx pm2 start ecosystem.dev.config.js",
         "dev:stop": "npx pm2 stop ecosystem.dev.config.js",
         "dev:status": "npx pm2 status",
         "prisma:studio": "npx dotenv -e .env.local -- prisma studio",

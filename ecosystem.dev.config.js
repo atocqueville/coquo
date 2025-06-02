@@ -1,22 +1,24 @@
 module.exports = [
     {
-        name: 'nextjs-dev',
+        name: 'nextjs',
         script: 'next',
         args: 'dev',
         watch: false,
-        env: {
-            NODE_ENV: 'development',
-        },
     },
     {
-        name: 'file-storage-dev',
+        name: 'file-storage',
         script: 'npm',
         args: 'start --prefix file-storage',
         watch: ['file-storage'],
         ignore_watch: ['node_modules'],
         env: {
-            NODE_ENV: 'development',
             MEDIA_PATH: './config/media',
         },
+    },
+    {
+        name: 'prisma-studio',
+        script: 'yarn',
+        args: 'prisma:studio',
+        watch: false,
     },
 ];

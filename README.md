@@ -27,11 +27,11 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 
 ## Features to Come
 
+- 🌐 **Internationalization** - Support for multiple languages
 - 🖨️ **Print-friendly format** - Print your recipes with a clean layout
 - 🌙 **Dark mode** - Easy on the eyes during those late-night cooking sessions
 - 🔔 **Push notifications** - Stay updated with recipe reminders
 - 🔄 **Recipe import** - Import recipes from popular cooking websites with cheerio
-- 🌐 **Internationalization** - Support for multiple languages
 - 💬 **Comments** - Add notes and comments to each recipe
 - 🔍 **Fuzzy text search** - Find recipes quickly even with partial or misspelled terms
 
@@ -40,16 +40,6 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 <img src="public/screenshot.jpeg" alt="Coquo Screenshot"/>
 
 ## Usage
-
-- with docker-cli
-
-```bash
-docker run -d \
-  --name coquo \
-  -p 3030:3000 \
-  -v ./config:/config \
-  atocqueville/coquo:latest
-```
 
 - with docker compose (**recommended**)
 
@@ -69,17 +59,22 @@ services:
 ```
 ## Development
 
-To start the development server:
+Start the development server (using pm2):
 
 ```bash
-yarn install # Install every needed dependencies
+yarn install
 yarn prisma:reset # Remove your eventual existing database, creates an empty one and plays migrations
 
-yarn dev # Start the Next.js web app
-yarn start:fs # Start the file uploader proxy in another terminal
+yarn dev:start # Start the Coquo web app on port 3000 + Prisma Studio on port 5555
 ```
 
-You can then log in with the combo `alex@admin.io` / `azerty`
+Stop the development server:
+
+```bash
+yarn dev:stop
+```
+
+You can then log in with the combo `alex@admin.io` / `azerty` at http://localhost:3000
 
 ## Tech Stack
 

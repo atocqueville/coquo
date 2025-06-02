@@ -1,11 +1,4 @@
-import {
-    Carrot,
-    ChefHat,
-    ChevronLeft,
-    CookingPot,
-    Pencil,
-    Users,
-} from 'lucide-react';
+import { Carrot, ChefHat, CookingPot, Pencil, Users } from 'lucide-react';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -30,6 +23,7 @@ import { getDifficultyProps } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
 import RecipeImageCarousel from './recipe-image-carousel';
 import { PageMobileFooter } from '@/components/page-wrapper';
+import BackButton from './back-button';
 
 const IngredientsList = ({
     ingredients,
@@ -73,21 +67,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             )}
 
                             {/* Back button - fixed position for better visibility */}
-                            <div className="absolute top-4 left-4 z-20">
-                                <Button
-                                    variant="secondary"
-                                    size="icon"
-                                    className="rounded-full bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg"
-                                    asChild
-                                >
-                                    <Link href="/">
-                                        <ChevronLeft className="h-4 w-4" />
-                                        <span className="sr-only">
-                                            Retour à la liste des recettes
-                                        </span>
-                                    </Link>
-                                </Button>
-                            </div>
+                            <BackButton />
 
                             {isAuthor && (
                                 <div className="absolute top-4 left-16 z-20 flex gap-3">
