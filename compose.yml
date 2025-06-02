@@ -2,7 +2,7 @@
 services:
   coquo:
     container_name: coquo-next
-    image: YOUR_DOCKER_USERNAME/coquo:latest
+    image: atocqueville/coquo:latest
     ports:
       - 3030:3000
     volumes:

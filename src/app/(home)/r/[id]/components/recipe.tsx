@@ -65,10 +65,10 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             {recipe.images && recipe.images.length > 0 ? (
                                 <RecipeImageCarousel images={recipe.images} />
                             ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-muted">
-                                    <span className="text-muted-foreground text-lg">
-                                        Pas d&apos;image disponible
-                                    </span>
+                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 relative">
+                                    <div className="text-center">
+                                        <ChefHat className="h-16 w-16 text-orange-400 mx-auto" />
+                                    </div>
                                 </div>
                             )}
 
