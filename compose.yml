@@ -1,12 +1,12 @@
 # Replace YOUR_DOCKER_USERNAME with your actual Docker Hub username
 services:
-  coquo:
-    container_name: coquo-next
-    image: atocqueville/coquo:latest
-    ports:
-      - 3030:3000
-    volumes:
-      - ./config:/config
-    environment:
-      - AUTH_URL=http://localhost:3030/api/auth
-      - AUTH_SECRET="define_auth_secret"
+    coquo:
+        container_name: coquo-next
+        image: coquo
+        ports:
+            - 3030:3000
+        volumes:
+            - ./config:/config
+        environment:
+            - AUTH_URL=http://localhost:3030/api/auth
+            - AUTH_SECRET="define_auth_secret"

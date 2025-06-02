@@ -33,8 +33,6 @@ WORKDIR /app
 # Production image, copy all the files and run next
 FROM base AS runner
 
-RUN npm install pm2 -g
-
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -76,4 +74,4 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["pm2-runtime", "ecosystem.config.js"]
+CMD ["npx", "pm2-runtime", "ecosystem.config.js"]

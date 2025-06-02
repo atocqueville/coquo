@@ -81,14 +81,6 @@ yarn start:fs # Start the file uploader proxy in another terminal
 
 You can then log in with the combo `alex@admin.io` / `azerty`
 
-### Building and pushing the Docker image
-
-```bash
-yarn docker:build
-docker tag coquo atocqueville/coquo:latest
-docker push atocqueville/coquo
-```
-
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - React framework

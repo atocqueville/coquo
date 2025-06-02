@@ -47,7 +47,7 @@ export default function CustomizationTab() {
                             </h3>
                             <p className="text-sm text-muted-foreground max-w-sm">
                                 La gestion des tags personnalisés sera bientôt
-                                disponible. Restez à l'écoute pour cette
+                                disponible. Restez à l&apos;écoute pour cette
                                 fonctionnalité !
                             </p>
                         </div>

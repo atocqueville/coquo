@@ -1,12 +1,11 @@
-'use client';
-
+import Image from 'next/image';
 import {
     Sidebar,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar } from '@/components/ui/avatar';
 import { SidebarLinks } from '@/components/sidebar/sidebar-links';
 
 export function AppSidebar() {
@@ -17,9 +16,11 @@ export function AppSidebar() {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <Avatar className="h-8 w-8">
-                                <AvatarImage
+                                <Image
                                     src={'/blue-banana_192.png'}
                                     alt="coquo logo"
+                                    fill
+                                    sizes="(max-width: 640px) 128px, 25vw"
                                 />
                             </Avatar>
                         </SidebarMenuItem>
