@@ -1,4 +1,4 @@
-import { Clock, LifeBuoy, Mail } from 'lucide-react';
+import { Clock, LifeBuoy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,6 +11,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { getAdminEmail } from '@/lib/api/user';
 import { LogoutButton } from '@/components/auth-buttons';
+import { AutoVerificationChecker } from '@/components/auth/auto-verification-checker';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,22 +47,7 @@ export default async function ErrorPage() {
                             <strong> {adminEmail}</strong>.
                         </p>
 
-                        <div className="rounded-lg bg-muted p-4">
-                            <div className="flex items-start gap-4">
-                                <Mail className="h-5 w-5 mt-0.5 text-muted-foreground" />
-                                <div className="space-y-1">
-                                    <h4 className="font-medium">
-                                        Il a peut-être oublié de vérifier votre
-                                        compte..
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground">
-                                        Prenez votre courage à deux mains et
-                                        envoyez-lui un message pour lui rappeler
-                                        de vérifier votre compte.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <AutoVerificationChecker />
                     </div>
                 </CardContent>
 
