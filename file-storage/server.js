@@ -8,12 +8,8 @@ const sharp = require('sharp');
 
 const app = express();
 
-/**
- * The media path is different for docker and local development
- * This is a workaround to make it work in local
- * When in production, the MEDIA_PATH variable is set in the ecosystem.config.js file
- */
-const MEDIA_PATH = process.env.MEDIA_PATH || '../config/media';
+/** MEDIA_PATH is set in either the ecosystem.config.js or ecosystem.dev.config.js file */
+const MEDIA_PATH = process.env.MEDIA_PATH;
 const ABS_MEDIA_PATH = path.resolve(__dirname, MEDIA_PATH);
 
 const storage = multer.memoryStorage();

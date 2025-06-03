@@ -12,7 +12,7 @@ module.exports = [
         watch: ['file-storage'],
         ignore_watch: ['node_modules'],
         env: {
-            MEDIA_PATH: './config/media',
+            MEDIA_PATH: '../config/media',
         },
     },
     {
