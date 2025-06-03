@@ -10,11 +10,18 @@ export const metadata: Metadata = {
     description: 'Login to your account',
 };
 
+// Needed to access environment variables at runtime
+export const dynamic = 'force-dynamic';
+
+function isGoogleAuthConfigured() {
+    // Access environment variables dynamically to prevent build-time optimization
+    const clientId = process.env['GOOGLE_CLIENT_ID'];
+    const clientSecret = process.env['GOOGLE_CLIENT_SECRET'];
+    return Boolean(clientId && clientSecret);
+}
+
 export default function LoginPage() {
-    // Check if Google auth environment variables are set
-    const showSocialLogin = Boolean(
-        process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
-    );
+    const showSocialLogin = isGoogleAuthConfigured();
 
     return (
         <div className="lg:p-8">
