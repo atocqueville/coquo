@@ -42,8 +42,7 @@ export default function AdministrationTab({
             setUnverifiedUsersOptimistic(
                 unverifiedUsersOptimistic.filter((user) => user.id !== userId)
             );
-        } catch (error) {
-            console.error(error);
+        } catch {
             toast.error('Une erreur est survenue. Veuillez réessayer.');
         }
     };
@@ -70,8 +69,7 @@ export default function AdministrationTab({
                     userToBlock,
                 ]);
             }
-        } catch (error) {
-            console.error(error);
+        } catch {
             toast.error('Une erreur est survenue. Veuillez réessayer.');
         }
     };
@@ -98,8 +96,7 @@ export default function AdministrationTab({
                     userToUnblock,
                 ]);
             }
-        } catch (error) {
-            console.error(error);
+        } catch {
             toast.error('Une erreur est survenue. Veuillez réessayer.');
         }
     };

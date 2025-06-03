@@ -39,8 +39,7 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
         try {
             await updateUser(currentUser.id, { name });
             toast.success('Profil mis à jour avec succès');
-        } catch (err) {
-            console.error(err);
+        } catch {
             toast.error(
                 'Une erreur est survenue lors de la mise à jour du profil'
             );

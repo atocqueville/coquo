@@ -1,4 +1,4 @@
-import { AlertTriangle, LifeBuoy, Mail } from 'lucide-react';
+import { Clock, LifeBuoy, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { getAdminEmail } from '@/lib/api/user';
+import { LogoutButton } from '@/components/auth-buttons';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,13 +22,16 @@ export default async function ErrorPage() {
             <Card className="max-w-md w-full">
                 <CardHeader className="text-center pb-2">
                     <div className="flex justify-center mb-4">
-                        <div className="h-16 w-16 rounded-full bg-amber-100 flex items-center justify-center">
-                            <AlertTriangle className="h-8 w-8 text-amber-600" />
+                        <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
+                            <Clock className="h-8 w-8 text-blue-600" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl">Accès refusé</CardTitle>
+                    <CardTitle className="text-2xl">
+                        Validation en attente
+                    </CardTitle>
                     <CardDescription className="text-base">
-                        Votre adresse email n&apos;a pas encore été vérifiée
+                        Votre compte est en cours de validation par un
+                        administrateur
                     </CardDescription>
                 </CardHeader>
 
@@ -73,6 +77,7 @@ export default async function ErrorPage() {
                                 Contacter le support
                             </a>
                         </Button>
+                        <LogoutButton className="flex-1" />
                     </div>
 
                     <p className="text-xs text-center text-muted-foreground">

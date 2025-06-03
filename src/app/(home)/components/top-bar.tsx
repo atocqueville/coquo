@@ -109,8 +109,6 @@ export default function TopBar({
     };
 
     const resetFilters = () => {
-        console.log('resetFilters');
-
         // Clear cookie
         destroyCookie(null, 'recipeFilters');
 

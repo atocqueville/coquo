@@ -1,5 +1,6 @@
 'use client';
 
+import { toast } from 'sonner';
 import { Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,10 +33,9 @@ export default function RecipeDeleteButton({
             await deleteRecipe(Number(recipeId));
             setIsDialogOpen(false);
             router.push('/');
-        } catch (error) {
-            console.error('Failed to delete recipe:', error);
-            alert(
-                'Erreur lors de la suppression de la recette. Veuillez réessayer.'
+        } catch {
+            toast.error(
+                'Une erreur est survenue lors de la mise à jour du profil'
             );
         } finally {
             setIsDeleting(false);

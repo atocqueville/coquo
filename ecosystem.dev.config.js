@@ -17,8 +17,8 @@ module.exports = [
     },
     {
         name: 'prisma-studio',
-        script: 'yarn',
-        args: 'prisma:studio',
+        script: 'npx',
+        args: 'dotenv -e .env.local -- prisma studio',
         watch: false,
     },
 ];

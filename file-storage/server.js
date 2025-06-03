@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const { v4 } = require('uuid');
-const morgan = require('morgan');
 const multer = require('multer');
 const sharp = require('sharp');
 
@@ -22,12 +21,6 @@ const upload = multer({ storage });
 
 app.use(cors());
 
-app.use(
-    '/media',
-    morgan(
-        '[:date[iso]] :method :url :status :res[content-length] - :response-time ms'
-    )
-);
 app.use('/media', express.static(ABS_MEDIA_PATH));
 
 app.post('/file', upload.single('file'), async (req, res) => {

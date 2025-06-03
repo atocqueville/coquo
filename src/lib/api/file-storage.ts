@@ -30,12 +30,6 @@ export async function uploadImages(
 
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
-            const responseText = await response.text();
-            console.error(
-                'Expected JSON response but got:',
-                contentType,
-                responseText
-            );
             throw new Error(
                 'Server returned non-JSON response. Make sure the file storage server is running on port 3040.'
             );
