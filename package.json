@@ -48,7 +48,7 @@
         "next": "15.3.0",
         "next-auth": "^5.0.0-beta.28",
         "nookies": "^2.5.2",
-        "prisma": "5.22.0",
+        "prisma": "5.21.1",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-hook-form": "^7.56.3",
