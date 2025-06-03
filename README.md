@@ -55,8 +55,43 @@ services:
     environment:
       - AUTH_URL=**insert your production domain**/api/auth
       - AUTH_SECRET="insert a hash secret"
-
 ```
+
+### Add Google Sign In Provider
+
+To enable Google Sign In, you'll need to set up OAuth credentials in the Google Cloud Console:
+
+1. **Create a Google Cloud Project** (if you don't have one):
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+
+2. **Create OAuth 2.0 Credentials**:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth 2.0 Client IDs"
+   - Select "Web application" as the application type
+   - Add:
+     - Authorized Javascript origins: `https://yourdomain.com`
+     - Authorized redirect URIs: `https://yourdomain.com/api/auth/callback/google`
+
+3. **Configure Environment Variables**:
+```
+ services:
+  coquo:
+    container_name: coquo
+    image: atocqueville/coquo:latest
+    ports:
+      - 3030:3000
+    volumes:
+      - ./config:/config
+    environment:
+      - AUTH_URL=****
+      - AUTH_SECRET=****
+      - AUTH_GOOGLE_ID=your_google_client_id
+      - AUTH_GOOGLE_SECRET=your_google_client_secret
+```
+
+**Note**: Make sure your `AUTH_URL` environment variable matches your production domain for the OAuth callbacks to work correctly.
+
 ## Development
 
 Start the development server (using pm2):
