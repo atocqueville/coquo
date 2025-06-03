@@ -44,6 +44,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Install only PM2 and Prisma CLI globally (minimal footprint)
+RUN npm install -g pm2@5.4.2 prisma@5.21.1
+
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
