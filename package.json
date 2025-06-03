@@ -44,7 +44,7 @@
         "cmdk": "^1.1.1",
         "crypto-js": "^4.2.0",
         "dotenv-cli": "^7.3.0",
-        "lucide-react": "^0.503.0",
+        "lucide-react": "^0.511.0",
         "next": "15.3.0",
         "next-auth": "^5.0.0-beta.28",
         "nookies": "^2.5.2",
