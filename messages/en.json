@@ -2,6 +2,37 @@
     "HomePage": {
         "title": "My cookbook"
     },
+    "Difficulty": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "unknown": "Unknown"
+    },
+    "RecipePage": {
+        "actions": {
+            "editRecipe": "Edit recipe",
+            "deleteRecipe": "Delete recipe",
+            "backToList": "Back to recipe list"
+        },
+        "timeLabels": {
+            "preparation": "preparation",
+            "cooking": "cooking",
+            "people": "people"
+        },
+        "author": "Recipe added by",
+        "sections": {
+            "ingredients": "Ingredients",
+            "instructions": "Instructions"
+        },
+        "deleteDialog": {
+            "title": "Delete recipe",
+            "description": "Are you sure you want to delete this recipe? This action is irreversible and all recipe data will be permanently lost.",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "error": "An error occurred while deleting the recipe"
+        }
+    },
     "SettingsPage": {
         "title": "Settings",
         "tabs": {

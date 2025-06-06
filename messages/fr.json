@@ -2,6 +2,37 @@
     "HomePage": {
         "title": "Mes recettes"
     },
+    "Difficulty": {
+        "easy": "Facile",
+        "medium": "Moyen",
+        "hard": "Difficile",
+        "unknown": "Inconnu"
+    },
+    "RecipePage": {
+        "actions": {
+            "editRecipe": "Modifier la recette",
+            "deleteRecipe": "Supprimer la recette",
+            "backToList": "Retour à la liste des recettes"
+        },
+        "timeLabels": {
+            "preparation": "préparation",
+            "cooking": "cuisson",
+            "people": "personnes"
+        },
+        "author": "Recette ajoutée par",
+        "sections": {
+            "ingredients": "Ingrédients",
+            "instructions": "Instructions"
+        },
+        "deleteDialog": {
+            "title": "Supprimer la recette",
+            "description": "Êtes-vous sûr de vouloir supprimer cette recette ? Cette action est irréversible et toutes les données de la recette seront définitivement perdues.",
+            "cancel": "Annuler",
+            "delete": "Supprimer",
+            "deleting": "Suppression...",
+            "error": "Une erreur est survenue lors de la suppression de la recette"
+        }
+    },
     "SettingsPage": {
         "title": "Paramètres",
         "tabs": {
