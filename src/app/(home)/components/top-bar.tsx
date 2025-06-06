@@ -44,7 +44,7 @@ export default function TopBar({
 
     const userOptions = users.map((user) => ({
         value: user.id,
-        label: user.name || user.email || 'Utilisateur anonyme',
+        label: user.name || user.email || t('userFallback'),
     }));
 
     // Helper function to update URL and cookies
@@ -134,7 +134,7 @@ export default function TopBar({
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
-                            placeholder="Rechercher"
+                            placeholder={t('search.placeholder')}
                             className="pl-8"
                             value={searchQuery}
                             onChange={handleSearchChange}

@@ -47,7 +47,7 @@ const IngredientsList = ({
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     const session = await auth();
     const t = await getTranslations('RecipePage');
-    const difficultyT = await getTranslations('Difficulty');
+    const difficultyT = await getTranslations('common.Difficulty');
     const isAuthor = session?.user?.id === recipe.userId;
     const timeInfo = formatTime(recipe);
 

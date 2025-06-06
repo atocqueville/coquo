@@ -1,12 +1,128 @@
 {
     "HomePage": {
-        "title": "Mes recettes"
+        "title": "Mes recettes",
+        "search": {
+            "placeholder": "Rechercher"
+        },
+        "filters": {
+            "advancedSearch": "Recherche avancée",
+            "title": "Filtres",
+            "tagsLabel": "Tags",
+            "authorsLabel": "Auteurs",
+            "tagsPlaceholder": "Sélectionner des tags",
+            "authorsPlaceholder": "Auteurs",
+            "resetButton": "Réinitialiser"
+        },
+        "userFallback": "Utilisateur anonyme"
     },
-    "Difficulty": {
-        "easy": "Facile",
-        "medium": "Moyen",
-        "hard": "Difficile",
-        "unknown": "Inconnu"
+    "common": {
+        "FavoriteButton": {
+            "added": "Recette ajoutée aux favoris",
+            "removed": "Recette retirée des favoris",
+            "error": "Une erreur est survenue. Veuillez réessayer."
+        },
+        "Difficulty": {
+            "easy": "Facile",
+            "medium": "Moyen",
+            "hard": "Difficile",
+            "unknown": "Inconnu"
+        }
+    },
+    "FavoritePage": {
+        "title": "Mes recettes enregistrées",
+        "emptyState": {
+            "title": "Aucune recette trouvée",
+            "description": "Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici."
+        }
+    },
+    "RecipeList": {
+        "emptyState": {
+            "noRecipesFound": "Aucune recette trouvée",
+            "noResults": "Aucune recette ne correspond à vos critères de recherche. Essayez d'ajuster vos filtres ou de rechercher autre chose.",
+            "noFavorites": "Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici."
+        }
+    },
+    "CreateRecipePage": {
+        "title": "Créer une nouvelle recette",
+        "form": {
+            "pictures": {
+                "label": "Photos de la recette",
+                "imageCount": "({count} image{plural})",
+                "uploadText": "Télécharger des images",
+                "removeImage": "Supprimer l'image",
+                "moreImages": "+ {count} plus"
+            },
+            "title": {
+                "label": "Titre de la recette",
+                "placeholder": "Délicieux gâteau au chocolat"
+            },
+            "prepTime": {
+                "label": "Temps de préparation (min)"
+            },
+            "cookTime": {
+                "label": "Temps de cuisson (min)"
+            },
+            "servings": {
+                "label": "Portions"
+            },
+            "difficulty": {
+                "label": "Difficulté"
+            },
+            "tags": {
+                "label": "Tags"
+            },
+            "ingredients": {
+                "label": "Ingrédients",
+                "placeholder": "Ajoutez un ingrédient par ligne",
+                "description": "Listez tous les ingrédients avec leurs quantités et mesures.",
+                "tooltip": {
+                    "info": "Infos sur le format des ingrédients",
+                    "format1": "Saisissez chaque ingrédient sur une nouvelle ligne",
+                    "format2": "Format: \"2 tasses de farine\" ou \"1 c. à soupe d'huile d'olive\""
+                }
+            },
+            "steps": {
+                "label": "Étapes de la recette",
+                "addStep": "Ajouter une étape",
+                "addStepShort": "Ajouter",
+                "removeStep": "Supprimer l'étape",
+                "stepNumber": "Étape {number}",
+                "stepTitle": {
+                    "label": "Titre de l'étape",
+                    "placeholder": "Préparer la pâte"
+                },
+                "instructions": {
+                    "label": "Instructions",
+                    "addInstruction": "Ajouter une instruction",
+                    "addInstructionShort": "Ajouter",
+                    "removeInstruction": "Supprimer l'instruction",
+                    "placeholder": "Mélangez la farine et la levure dans un grand bol..."
+                }
+            },
+            "submit": {
+                "create": "Créer la recette",
+                "update": "Mettre à jour la recette",
+                "creating": "Création en cours...",
+                "updating": "Mise à jour en cours..."
+            }
+        },
+        "validation": {
+            "titleMin": "Le titre de la recette doit contenir au moins 2 caractères.",
+            "ingredientsRequired": "Ajoutez des ingrédients",
+            "stepTitleMin": "Le titre de l'étape doit contenir au moins 2 caractères.",
+            "instructionMin": "Une instruction doit contenir au moins 5 caractères.",
+            "instructionRequired": "Ajoutez au moins une instruction.",
+            "stepsRequired": "Ajoutez au moins une étape.",
+            "prepTimeMin": "Le temps de préparation doit être d'au moins 1 minute.",
+            "cookTimeMin": "Le temps de cuisson doit être de 0 ou plus minutes.",
+            "servingsMin": "La recette doit servir au moins 1 personne."
+        },
+        "notifications": {
+            "createSuccess": "Recette créée avec succès",
+            "updateSuccess": "Recette mise à jour avec succès",
+            "createError": "Une erreur est survenue lors de la création de la recette",
+            "updateError": "Une erreur est survenue lors de la mise à jour de la recette"
+        }
     },
     "RecipePage": {
         "actions": {

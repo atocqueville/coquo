@@ -1,12 +1,9 @@
-interface DifficultyLabels {
+export interface DifficultyLabels {
     easy: string;
     medium: string;
     hard: string;
     unknown: string;
 }
-
-// Export the type for use in components
-export type { DifficultyLabels };
 
 // Helper function to create difficulty labels from translations
 export const createDifficultyLabels = (

@@ -3,7 +3,7 @@
 import type React from 'react';
 import Image from 'next/image';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
     Clock,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -47,6 +48,7 @@ import { createRecipe, updateRecipe } from '@/lib/api/recipe';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import type { CreateRecipeSchema } from '@/schemas';
+import { createDifficultyLabels } from '@/utils/difficulty';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -63,50 +65,48 @@ const FileSchema = z
         }
     );
 
-const formSchema = z.object({
-    title: z.string().min(2, {
-        message: 'Le titre de la recette doit contenir au moins 2 caractères.',
-    }),
-    pictures: z.array(FileSchema).optional(),
-    ingredients: z.string().min(1, {
-        message: 'Ajoutez des ingrédients',
-    }),
-    steps: z
-        .array(
-            z.object({
-                title: z.string().min(2, {
-                    message:
-                        "Le titre de l'étape doit contenir au moins 2 caractères.",
-                }),
-                instructions: z
-                    .array(
-                        z.string().min(5, {
-                            message:
-                                'Une instruction doit contenir au moins 5 caractères.',
-                        })
-                    )
-                    .min(1, {
-                        message: 'Ajoutez au moins une instruction.',
-                    }),
-            })
-        )
-        .min(1, {
-            message: 'Ajoutez au moins une étape.',
+// Function to create schema with localized messages
+const createFormSchema = (t: (key: string) => string) =>
+    z.object({
+        title: z.string().min(2, {
+            message: t('validation.titleMin'),
         }),
-    difficulty: z.coerce.number().min(1).max(3),
-    prepTime: z.coerce.number().min(1, {
-        message: "Le temps de préparation doit être d'au moins 1 minute.",
-    }),
-    cookTime: z.coerce.number().min(0, {
-        message: 'Le temps de cuisson doit être de 0 ou plus minutes.',
-    }),
-    servings: z.coerce.number().min(1, {
-        message: 'La recette doit servir au moins 1 personne.',
-    }),
-    tags: z.array(z.string()).optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+        pictures: z.array(FileSchema).optional(),
+        ingredients: z.string().min(1, {
+            message: t('validation.ingredientsRequired'),
+        }),
+        steps: z
+            .array(
+                z.object({
+                    title: z.string().min(2, {
+                        message: t('validation.stepTitleMin'),
+                    }),
+                    instructions: z
+                        .array(
+                            z.string().min(5, {
+                                message: t('validation.instructionMin'),
+                            })
+                        )
+                        .min(1, {
+                            message: t('validation.instructionRequired'),
+                        }),
+                })
+            )
+            .min(1, {
+                message: t('validation.stepsRequired'),
+            }),
+        difficulty: z.coerce.number().min(1).max(3),
+        prepTime: z.coerce.number().min(1, {
+            message: t('validation.prepTimeMin'),
+        }),
+        cookTime: z.coerce.number().min(0, {
+            message: t('validation.cookTimeMin'),
+        }),
+        servings: z.coerce.number().min(1, {
+            message: t('validation.servingsMin'),
+        }),
+        tags: z.array(z.string()).optional(),
+    });
 
 type CreateRecipeFormProps = {
     tags: Tag[];
@@ -132,6 +132,14 @@ export function CreateRecipeForm({
     initialData,
     recipeId,
 }: CreateRecipeFormProps) {
+    const t = useTranslations('CreateRecipePage');
+    const difficultyT = useTranslations('common.Difficulty');
+    const difficultyLabels = createDifficultyLabels(difficultyT);
+
+    // Create schema with localized validation messages
+    const formSchema = useMemo(() => createFormSchema(t), [t]);
+    type FormValues = z.infer<typeof formSchema>;
+
     // Format image URL to use the image proxy for existing images
     const formatImageUrl = (imagePath: string | undefined) => {
         if (!imagePath) return null;
@@ -286,19 +294,19 @@ export function CreateRecipeForm({
             if (recipeId) {
                 // Update existing recipe
                 await updateRecipe(recipeId, recipe);
-                toast.success('Recette mise à jour avec succès');
+                toast.success(t('notifications.updateSuccess'));
                 router.push(`/r/${recipeId}`);
             } else {
                 // Create new recipe
                 await createRecipe(recipe);
-                toast.success('Recette créée avec succès');
+                toast.success(t('notifications.createSuccess'));
                 router.push('/');
             }
         } catch {
             toast.error(
                 recipeId
-                    ? 'Une erreur est survenue lors de la mise à jour de la recette'
-                    : 'Une erreur est survenue lors de la création de la recette'
+                    ? t('notifications.updateError')
+                    : t('notifications.createError')
             );
         } finally {
             setIsSubmitting(false);
@@ -322,16 +330,20 @@ export function CreateRecipeForm({
                                     render={() => (
                                         <FormItem className="flex-1">
                                             <FormLabel>
-                                                Photos de la recette
+                                                {t('form.pictures.label')}
                                                 {imagePreviews.length > 0 && (
                                                     <span className="ml-2 text-sm text-muted-foreground">
-                                                        ({imagePreviews.length}{' '}
-                                                        image
-                                                        {imagePreviews.length >
-                                                        1
-                                                            ? 's'
-                                                            : ''}
-                                                        )
+                                                        {t(
+                                                            'form.pictures.imageCount',
+                                                            {
+                                                                count: imagePreviews.length,
+                                                                plural:
+                                                                    imagePreviews.length >
+                                                                    1
+                                                                        ? 's'
+                                                                        : '',
+                                                            }
+                                                        )}
                                                     </span>
                                                 )}
                                             </FormLabel>
@@ -459,8 +471,9 @@ export function CreateRecipeForm({
                                                                                 >
                                                                                     <Trash2 className="h-4 w-4" />
                                                                                     <span className="sr-only">
-                                                                                        Supprimer
-                                                                                        l&apos;image
+                                                                                        {t(
+                                                                                            'form.pictures.removeImage'
+                                                                                        )}
                                                                                     </span>
                                                                                 </Button>
                                                                             </div>
@@ -470,10 +483,14 @@ export function CreateRecipeForm({
                                                             {imagePreviews.length >
                                                                 6 && (
                                                                 <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                                                                    +
-                                                                    {imagePreviews.length -
-                                                                        6}{' '}
-                                                                    plus
+                                                                    {t(
+                                                                        'form.pictures.moreImages',
+                                                                        {
+                                                                            count:
+                                                                                imagePreviews.length -
+                                                                                6,
+                                                                        }
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>
@@ -481,8 +498,9 @@ export function CreateRecipeForm({
                                                         <div className="flex h-full w-full flex-col items-center justify-center">
                                                             <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
                                                             <p className="text-sm text-muted-foreground">
-                                                                Télécharger des
-                                                                images
+                                                                {t(
+                                                                    'form.pictures.uploadText'
+                                                                )}
                                                             </p>
                                                         </div>
                                                     )}
@@ -513,11 +531,13 @@ export function CreateRecipeForm({
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Titre de la recette
+                                                {t('form.title.label')}
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Délicieux gâteau au chocolat"
+                                                    placeholder={t(
+                                                        'form.title.placeholder'
+                                                    )}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -534,7 +554,7 @@ export function CreateRecipeForm({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Temps de préparation (min)
+                                                    {t('form.prepTime.label')}
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
@@ -557,7 +577,7 @@ export function CreateRecipeForm({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Temps de cuisson (min)
+                                                    {t('form.cookTime.label')}
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
@@ -582,7 +602,9 @@ export function CreateRecipeForm({
                                         name="servings"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Portions</FormLabel>
+                                                <FormLabel>
+                                                    {t('form.servings.label')}
+                                                </FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center">
                                                         <Users className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -604,7 +626,7 @@ export function CreateRecipeForm({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Difficulté
+                                                    {t('form.difficulty.label')}
                                                 </FormLabel>
                                                 <FormControl>
                                                     <div className="space-y-4">
@@ -625,10 +647,20 @@ export function CreateRecipeForm({
                                                             className="pt-4"
                                                         />
                                                         <div className="flex justify-between text-xs text-muted-foreground">
-                                                            <span>Facile</span>
-                                                            <span>Moyen</span>
                                                             <span>
-                                                                Difficile
+                                                                {
+                                                                    difficultyLabels.easy
+                                                                }
+                                                            </span>
+                                                            <span>
+                                                                {
+                                                                    difficultyLabels.medium
+                                                                }
+                                                            </span>
+                                                            <span>
+                                                                {
+                                                                    difficultyLabels.hard
+                                                                }
                                                             </span>
                                                         </div>
                                                     </div>
@@ -648,7 +680,7 @@ export function CreateRecipeForm({
                         <div className="space-y-4">
                             <div>
                                 <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    Tags
+                                    {t('form.tags.label')}
                                 </div>
                                 <div className="mt-2 flex flex-wrap gap-2">
                                     {tags.map((tag) => (
@@ -675,7 +707,9 @@ export function CreateRecipeForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex items-center justify-between">
-                                            <FormLabel>Ingrédients</FormLabel>
+                                            <FormLabel>
+                                                {t('form.ingredients.label')}
+                                            </FormLabel>
                                             <TooltipProvider>
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
@@ -686,25 +720,22 @@ export function CreateRecipeForm({
                                                         >
                                                             <Info className="h-4 w-4" />
                                                             <span className="sr-only">
-                                                                Infos sur le
-                                                                format des
-                                                                ingrédients
+                                                                {t(
+                                                                    'form.ingredients.tooltip.info'
+                                                                )}
                                                             </span>
                                                         </Button>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
                                                         <p>
-                                                            Saisissez chaque
-                                                            ingrédient sur une
-                                                            nouvelle ligne
+                                                            {t(
+                                                                'form.ingredients.tooltip.format1'
+                                                            )}
                                                         </p>
                                                         <p>
-                                                            Format: &quot;2
-                                                            tasses de
-                                                            farine&quot; ou
-                                                            &quot;1 c. à soupe
-                                                            d&apos;huile
-                                                            d&apos;olive&quot;
+                                                            {t(
+                                                                'form.ingredients.tooltip.format2'
+                                                            )}
                                                         </p>
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -712,14 +743,15 @@ export function CreateRecipeForm({
                                         </div>
                                         <FormControl>
                                             <Textarea
-                                                placeholder="Ajoutez un ingrédient par ligne"
+                                                placeholder={t(
+                                                    'form.ingredients.placeholder'
+                                                )}
                                                 className="min-h-32 font-mono text-sm"
                                                 {...field}
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            Listez tous les ingrédients avec
-                                            leurs quantités et mesures.
+                                            {t('form.ingredients.description')}
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -734,7 +766,7 @@ export function CreateRecipeForm({
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    Étapes de la recette
+                                    {t('form.steps.label')}
                                 </div>
                                 <Button
                                     type="button"
@@ -744,10 +776,10 @@ export function CreateRecipeForm({
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     <span className="hidden md:block">
-                                        Ajouter une étape
+                                        {t('form.steps.addStep')}
                                     </span>
                                     <span className="block md:hidden">
-                                        Ajouter
+                                        {t('form.steps.addStepShort')}
                                     </span>
                                 </Button>
                             </div>
@@ -776,8 +808,9 @@ export function CreateRecipeForm({
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Supprimer
-                                                            l&apos;étape
+                                                            {t(
+                                                                'form.steps.removeStep'
+                                                            )}
                                                         </span>
                                                     </Button>
                                                 )}
@@ -788,7 +821,13 @@ export function CreateRecipeForm({
                                                     {stepIndex + 1}
                                                 </div>
                                                 <h3 className="text-sm font-medium">
-                                                    Étape {stepIndex + 1}
+                                                    {t(
+                                                        'form.steps.stepNumber',
+                                                        {
+                                                            number:
+                                                                stepIndex + 1,
+                                                        }
+                                                    )}
                                                 </h3>
                                             </div>
 
@@ -799,12 +838,15 @@ export function CreateRecipeForm({
                                                     render={({ field }) => (
                                                         <FormItem>
                                                             <FormLabel>
-                                                                Titre de
-                                                                l&apos;étape
+                                                                {t(
+                                                                    'form.steps.stepTitle.label'
+                                                                )}
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <Input
-                                                                    placeholder="Préparer la pâte"
+                                                                    placeholder={t(
+                                                                        'form.steps.stepTitle.placeholder'
+                                                                    )}
                                                                     {...field}
                                                                 />
                                                             </FormControl>
@@ -816,7 +858,9 @@ export function CreateRecipeForm({
                                                 <div className="space-y-2">
                                                     <div className="flex items-center justify-between">
                                                         <div className="text-sm font-medium">
-                                                            Instructions
+                                                            {t(
+                                                                'form.steps.instructions.label'
+                                                            )}
                                                         </div>
                                                         <Button
                                                             type="button"
@@ -830,11 +874,14 @@ export function CreateRecipeForm({
                                                         >
                                                             <Plus className="mr-2 h-3 w-3" />
                                                             <span className="hidden md:block">
-                                                                Ajouter une
-                                                                instruction
+                                                                {t(
+                                                                    'form.steps.instructions.addInstruction'
+                                                                )}
                                                             </span>
                                                             <span className="block md:hidden">
-                                                                Ajouter
+                                                                {t(
+                                                                    'form.steps.instructions.addInstructionShort'
+                                                                )}
                                                             </span>
                                                         </Button>
                                                     </div>
@@ -861,7 +908,9 @@ export function CreateRecipeForm({
                                                                                 <FormControl>
                                                                                     <div className="flex items-start gap-2">
                                                                                         <Textarea
-                                                                                            placeholder="Mélangez la farine et la levure dans un grand bol..."
+                                                                                            placeholder={t(
+                                                                                                'form.steps.instructions.placeholder'
+                                                                                            )}
                                                                                             className="min-h-20"
                                                                                             {...field}
                                                                                         />
@@ -887,8 +936,9 @@ export function CreateRecipeForm({
                                                                         >
                                                                             <Trash2 className="h-4 w-4" />
                                                                             <span className="sr-only">
-                                                                                Supprimer
-                                                                                l&apos;instruction
+                                                                                {t(
+                                                                                    'form.steps.instructions.removeInstruction'
+                                                                                )}
                                                                             </span>
                                                                         </Button>
                                                                     )}
@@ -916,14 +966,14 @@ export function CreateRecipeForm({
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 {recipeId
-                                    ? 'Mise à jour en cours...'
-                                    : 'Création en cours...'}
+                                    ? t('form.submit.updating')
+                                    : t('form.submit.creating')}
                             </>
                         ) : (
                             <>
                                 {recipeId
-                                    ? 'Mettre à jour la recette'
-                                    : 'Créer la recette'}
+                                    ? t('form.submit.update')
+                                    : t('form.submit.create')}
                             </>
                         )}
                     </Button>
