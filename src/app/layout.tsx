@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
 import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/sonner';
+import { getLocale } from 'next-intl/server';
 import './globals.css';
 
 const geistSans = localFont({
@@ -19,18 +21,22 @@ export const metadata: Metadata = {
     description: 'Cook. Create. Collect.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const locale = await getLocale();
+
     return (
-        <html lang="fr">
+        <html lang={locale}>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                {children}
-                <Toaster richColors />
+                <NextIntlClientProvider>
+                    {children}
+                    <Toaster richColors />
+                </NextIntlClientProvider>
             </body>
         </html>
     );

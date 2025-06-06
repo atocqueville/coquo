@@ -16,6 +16,7 @@ model User {
   password       String?
   role           String    @default("USER")
   image          String?
+  locale         String?
   accounts       Account[]
   recipes        Recipe[]
   starredRecipes Recipe[]  @relation("Favorites")

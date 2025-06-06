@@ -1,0 +1,107 @@
+{
+    "HomePage": {
+        "title": "My cookbook"
+    },
+    "SettingsPage": {
+        "title": "Settings",
+        "tabs": {
+            "account": "Account",
+            "customization": "Customization",
+            "administration": "Administration"
+        },
+        "AccountTab": {
+            "profile": {
+                "title": "Profile",
+                "description": "Manage your personal information and preferences.",
+                "nameLabel": "Name",
+                "saveButton": "Save changes"
+            },
+            "language": {
+                "title": "Language preferences",
+                "description": "Choose your preferred language for the interface. If you select \"Automatic\", your browser's language will be used.",
+                "languageLabel": "Language",
+                "selectPlaceholder": "Select a language",
+                "options": {
+                    "auto": "Automatic (browser)",
+                    "fr": "Français",
+                    "en": "English"
+                },
+                "saveButton": "Save changes"
+            },
+            "session": {
+                "title": "Session",
+                "description": "Manage your current session.",
+                "loggedInAs": "Logged in as",
+                "memberSince": "Member since",
+                "signOutButton": "Sign out",
+                "signOutDialog": {
+                    "title": "Confirm sign out",
+                    "description": "Are you sure you want to sign out? You will need to sign in again to access your account.",
+                    "cancel": "Cancel",
+                    "confirm": "Sign out"
+                }
+            },
+            "notifications": {
+                "profileUpdated": "Profile updated successfully",
+                "profileUpdateError": "An error occurred while updating the profile"
+            }
+        },
+        "AdministrationTab": {
+            "accountValidation": {
+                "title": "Account validation",
+                "description": "Approve or reject pending registration requests."
+            },
+            "blockedAccounts": {
+                "title": "Blocked accounts",
+                "description": "List of blocked accounts."
+            },
+            "table": {
+                "headers": {
+                    "user": "User",
+                    "email": "Email",
+                    "date": "Date",
+                    "status": "Status",
+                    "actions": "Actions"
+                },
+                "status": {
+                    "pending": "Pending",
+                    "blocked": "Blocked"
+                },
+                "actions": {
+                    "approve": "Approve",
+                    "reject": "Reject",
+                    "unblock": "Unblock"
+                }
+            },
+            "empty": {
+                "noPendingRequests": "No pending requests"
+            },
+            "notifications": {
+                "accountValidated": "Account validated successfully",
+                "accountRejected": "Account rejected successfully",
+                "accountUnblocked": "Account unblocked successfully",
+                "error": "An error occurred. Please try again."
+            }
+        },
+        "CustomizationTab": {
+            "title": "Tag management",
+            "description": "Create and manage custom tags for your recipes.",
+            "comingSoon": {
+                "title": "🚧 Coming soon",
+                "description": "Custom tag management will be available soon. Stay tuned for this feature!"
+            },
+            "form": {
+                "tagNameLabel": "Tag name",
+                "tagNamePlaceholder": "Ex: italian, asian, etc.",
+                "colorLabel": "Color",
+                "previewLabel": "Preview",
+                "createButton": "Create tag",
+                "defaultTagName": "New tag"
+            },
+            "customTags": {
+                "title": "Custom tags",
+                "empty": "No custom tags"
+            }
+        }
+    }
+}

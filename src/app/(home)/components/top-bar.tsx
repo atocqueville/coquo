@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -23,6 +24,7 @@ export default function TopBar({
     tags: Tag[];
     users: User[];
 }) {
+    const t = useTranslations('HomePage');
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -125,7 +127,7 @@ export default function TopBar({
         <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
             <div className="container flex items-center justify-between h-16 px-4">
                 <h1 className="text-lg font-bold sm:text-2xl whitespace-nowrap mr-4">
-                    Mes recettes
+                    {t('title')}
                 </h1>
                 <div className="flex items-center gap-4">
                     <div className="relative w-full max-w-sm">

@@ -9,6 +9,7 @@ declare module 'next-auth' {
         user: {
             role?: 'ADMIN' | 'USER';
             emailVerified?: Date | null;
+            locale?: string | null;
         } & DefaultSession['user'];
     }
 }
@@ -39,6 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.name = token.name;
                 session.user.email = token.email as string;
                 session.user.emailVerified = token.emailVerified as Date | null;
+                session.user.locale = token.locale as string | null;
             }
 
             return session;
@@ -53,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.email = existingUser.email;
             token.role = existingUser.role;
             token.emailVerified = existingUser.emailVerified;
+            token.locale = existingUser.locale;
             return token;
         },
     },

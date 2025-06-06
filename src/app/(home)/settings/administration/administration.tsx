@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -31,6 +32,8 @@ export default function AdministrationTab({
     unverifiedUsers: User[];
     blockedUsers: User[];
 }) {
+    const t = useTranslations('SettingsPage.AdministrationTab');
+    const currentLocale = useLocale();
     const [unverifiedUsersOptimistic, setUnverifiedUsersOptimistic] =
         useState(unverifiedUsers);
     const [blockedUsersOptimistic, setBlockedUsersOptimistic] =
@@ -38,19 +41,19 @@ export default function AdministrationTab({
     const handleApproveUser = (userId: string) => {
         try {
             verifyUser(userId);
-            toast.success('Compte validé avec succès');
+            toast.success(t('notifications.accountValidated'));
             setUnverifiedUsersOptimistic(
                 unverifiedUsersOptimistic.filter((user) => user.id !== userId)
             );
         } catch {
-            toast.error('Une erreur est survenue. Veuillez réessayer.');
+            toast.error(t('notifications.error'));
         }
     };
 
     const handleRejectUser = (userId: string) => {
         try {
             blockUser(userId);
-            toast.success('Compte rejeté avec succès');
+            toast.success(t('notifications.accountRejected'));
 
             // Find the user before removing from unverified list
             const userToBlock = unverifiedUsersOptimistic.find(
@@ -70,14 +73,14 @@ export default function AdministrationTab({
                 ]);
             }
         } catch {
-            toast.error('Une erreur est survenue. Veuillez réessayer.');
+            toast.error(t('notifications.error'));
         }
     };
 
     const handleUnblockUser = (userId: string) => {
         try {
             unblockUser(userId);
-            toast.success('Compte débloqué avec succès');
+            toast.success(t('notifications.accountUnblocked'));
 
             // Find the user before removing from blocked list
             const userToUnblock = blockedUsersOptimistic.find(
@@ -97,7 +100,7 @@ export default function AdministrationTab({
                 ]);
             }
         } catch {
-            toast.error('Une erreur est survenue. Veuillez réessayer.');
+            toast.error(t('notifications.error'));
         }
     };
 
@@ -105,10 +108,9 @@ export default function AdministrationTab({
         <RoleGate allowedRole="ADMIN">
             <Card>
                 <CardHeader>
-                    <CardTitle>Validation des comptes</CardTitle>
+                    <CardTitle>{t('accountValidation.title')}</CardTitle>
                     <CardDescription>
-                        Approuvez ou rejetez les demandes d&apos;inscription en
-                        attente.
+                        {t('accountValidation.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -117,18 +119,20 @@ export default function AdministrationTab({
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Utilisateur</TableHead>
+                                        <TableHead>
+                                            {t('table.headers.user')}
+                                        </TableHead>
                                         <TableHead className="hidden sm:table-cell">
-                                            Email
+                                            {t('table.headers.email')}
                                         </TableHead>
                                         <TableHead className="hidden md:table-cell">
-                                            Date
+                                            {t('table.headers.date')}
                                         </TableHead>
                                         <TableHead className="hidden sm:table-cell">
-                                            Statut
+                                            {t('table.headers.status')}
                                         </TableHead>
                                         <TableHead className="text-right">
-                                            Actions
+                                            {t('table.headers.actions')}
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -147,7 +151,7 @@ export default function AdministrationTab({
                                                         {new Date(
                                                             user.createdAt
                                                         ).toLocaleDateString(
-                                                            'fr-FR'
+                                                            currentLocale
                                                         )}
                                                     </div>
                                                 </div>
@@ -158,11 +162,13 @@ export default function AdministrationTab({
                                             <TableCell className="hidden md:table-cell">
                                                 {new Date(
                                                     user.createdAt
-                                                ).toLocaleDateString('fr-FR')}
+                                                ).toLocaleDateString(
+                                                    currentLocale
+                                                )}
                                             </TableCell>
                                             <TableCell className="hidden sm:table-cell">
                                                 <Badge variant="coquo">
-                                                    En attente
+                                                    {t('table.status.pending')}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-right">
@@ -179,7 +185,9 @@ export default function AdministrationTab({
                                                     >
                                                         <Check className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Approuver
+                                                            {t(
+                                                                'table.actions.approve'
+                                                            )}
                                                         </span>
                                                     </Button>
                                                     <Button
@@ -194,7 +202,9 @@ export default function AdministrationTab({
                                                     >
                                                         <X className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Rejeter
+                                                            {t(
+                                                                'table.actions.reject'
+                                                            )}
                                                         </span>
                                                     </Button>
                                                 </div>
@@ -207,7 +217,7 @@ export default function AdministrationTab({
                     ) : (
                         <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
                             <p className="text-muted-foreground">
-                                Aucune demande en attente
+                                {t('empty.noPendingRequests')}
                             </p>
                         </div>
                     )}
@@ -216,9 +226,9 @@ export default function AdministrationTab({
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Comptes bloqués</CardTitle>
+                    <CardTitle>{t('blockedAccounts.title')}</CardTitle>
                     <CardDescription>
-                        Liste des comptes bloqués.
+                        {t('blockedAccounts.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -226,18 +236,20 @@ export default function AdministrationTab({
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Utilisateur</TableHead>
+                                    <TableHead>
+                                        {t('table.headers.user')}
+                                    </TableHead>
                                     <TableHead className="hidden sm:table-cell">
-                                        Email
+                                        {t('table.headers.email')}
                                     </TableHead>
                                     <TableHead className="hidden md:table-cell">
-                                        Date
+                                        {t('table.headers.date')}
                                     </TableHead>
                                     <TableHead className="hidden sm:table-cell">
-                                        Statut
+                                        {t('table.headers.status')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        Actions
+                                        {t('table.headers.actions')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -256,7 +268,7 @@ export default function AdministrationTab({
                                                     {new Date(
                                                         user.createdAt
                                                     ).toLocaleDateString(
-                                                        'fr-FR'
+                                                        currentLocale
                                                     )}
                                                 </div>
                                             </div>
@@ -267,11 +279,11 @@ export default function AdministrationTab({
                                         <TableCell className="hidden md:table-cell">
                                             {new Date(
                                                 user.createdAt
-                                            ).toLocaleDateString('fr-FR')}
+                                            ).toLocaleDateString(currentLocale)}
                                         </TableCell>
                                         <TableCell className="hidden sm:table-cell">
                                             <Badge variant="default">
-                                                Bloqué
+                                                {t('table.status.blocked')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
@@ -283,7 +295,7 @@ export default function AdministrationTab({
                                                     handleUnblockUser(user.id)
                                                 }
                                             >
-                                                Débloquer
+                                                {t('table.actions.unblock')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>

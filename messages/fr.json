@@ -1,0 +1,107 @@
+{
+    "HomePage": {
+        "title": "Mes recettes"
+    },
+    "SettingsPage": {
+        "title": "Paramètres",
+        "tabs": {
+            "account": "Compte",
+            "customization": "Personnalisation",
+            "administration": "Administration"
+        },
+        "AccountTab": {
+            "profile": {
+                "title": "Profil",
+                "description": "Gérez vos informations personnelles et vos préférences.",
+                "nameLabel": "Nom",
+                "saveButton": "Enregistrer les modifications"
+            },
+            "language": {
+                "title": "Préférences linguistiques",
+                "description": "Choisissez votre langue préférée pour l'interface. Si vous sélectionnez \"Automatique\", la langue de votre navigateur sera utilisée.",
+                "languageLabel": "Langue",
+                "selectPlaceholder": "Sélectionner une langue",
+                "options": {
+                    "auto": "Automatique (navigateur)",
+                    "fr": "Français",
+                    "en": "English"
+                },
+                "saveButton": "Enregistrer les modifications"
+            },
+            "session": {
+                "title": "Session",
+                "description": "Gérez votre session actuelle.",
+                "loggedInAs": "Connecté en tant que",
+                "memberSince": "Membre depuis le",
+                "signOutButton": "Déconnexion",
+                "signOutDialog": {
+                    "title": "Confirmer la déconnexion",
+                    "description": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+                    "cancel": "Annuler",
+                    "confirm": "Déconnexion"
+                }
+            },
+            "notifications": {
+                "profileUpdated": "Profil mis à jour avec succès",
+                "profileUpdateError": "Une erreur est survenue lors de la mise à jour du profil"
+            }
+        },
+        "AdministrationTab": {
+            "accountValidation": {
+                "title": "Validation des comptes",
+                "description": "Approuvez ou rejetez les demandes d'inscription en attente."
+            },
+            "blockedAccounts": {
+                "title": "Comptes bloqués",
+                "description": "Liste des comptes bloqués."
+            },
+            "table": {
+                "headers": {
+                    "user": "Utilisateur",
+                    "email": "Email",
+                    "date": "Date",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "status": {
+                    "pending": "En attente",
+                    "blocked": "Bloqué"
+                },
+                "actions": {
+                    "approve": "Approuver",
+                    "reject": "Rejeter",
+                    "unblock": "Débloquer"
+                }
+            },
+            "empty": {
+                "noPendingRequests": "Aucune demande en attente"
+            },
+            "notifications": {
+                "accountValidated": "Compte validé avec succès",
+                "accountRejected": "Compte rejeté avec succès",
+                "accountUnblocked": "Compte débloqué avec succès",
+                "error": "Une erreur est survenue. Veuillez réessayer."
+            }
+        },
+        "CustomizationTab": {
+            "title": "Gestion des tags",
+            "description": "Créez et gérez des tags personnalisés pour vos recettes.",
+            "comingSoon": {
+                "title": "🚧 Bientôt disponible",
+                "description": "La gestion des tags personnalisés sera bientôt disponible. Restez à l'écoute pour cette fonctionnalité !"
+            },
+            "form": {
+                "tagNameLabel": "Nom du tag",
+                "tagNamePlaceholder": "Ex: italien, asiatique, etc.",
+                "colorLabel": "Couleur",
+                "previewLabel": "Aperçu",
+                "createButton": "Créer le tag",
+                "defaultTagName": "Nouveau tag"
+            },
+            "customTags": {
+                "title": "Tags personnalisés",
+                "empty": "Aucun tag personnalisé"
+            }
+        }
+    }
+}
