@@ -51,6 +51,26 @@
             "goToPreviousPage": "Aller à la page précédente",
             "goToNextPage": "Aller à la page suivante",
             "morePages": "Plus de pages"
+        },
+        "MobileNavbar": {
+            "moreOptions": "Plus d'options",
+            "more": "Plus"
+        },
+        "ErrorMessage": {
+            "permissionDenied": "Vous n'avez pas la permission de voir ce contenu."
+        },
+        "AutoVerificationChecker": {
+            "accountVerified": "Votre compte a été vérifié avec succès !",
+            "accountNotVerified": "Votre compte n'est pas encore vérifié.",
+            "verificationError": "Erreur lors de la vérification du statut de votre compte",
+            "checkingInProgress": "Vérification en cours...",
+            "pendingValidation": "Compte en attente de validation",
+            "automaticCheck": "La page vérifie automatiquement le statut de votre compte. Actualisez la page si votre compte a été validé."
+        },
+        "ApiError": {
+            "userExists": "L'utilisateur existe déjà",
+            "noAdminFound": "Aucun administrateur trouvé",
+            "incorrectPassword": "Le mot de passe actuel est incorrect"
         }
     },
     "FavoritePage": {

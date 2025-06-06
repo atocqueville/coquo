@@ -51,6 +51,26 @@
             "goToPreviousPage": "Go to previous page",
             "goToNextPage": "Go to next page",
             "morePages": "More pages"
+        },
+        "MobileNavbar": {
+            "moreOptions": "More options",
+            "more": "More"
+        },
+        "ErrorMessage": {
+            "permissionDenied": "You do not have permission to view this content."
+        },
+        "AutoVerificationChecker": {
+            "accountVerified": "Your account has been verified successfully!",
+            "accountNotVerified": "Your account is not yet verified.",
+            "verificationError": "Error checking your account verification status",
+            "checkingInProgress": "Verification in progress...",
+            "pendingValidation": "Account pending validation",
+            "automaticCheck": "The page automatically checks your account status. Refresh the page if your account has been validated."
+        },
+        "ApiError": {
+            "userExists": "User already exists",
+            "noAdminFound": "No Admin found",
+            "incorrectPassword": "Current password is incorrect"
         }
     },
     "FavoritePage": {

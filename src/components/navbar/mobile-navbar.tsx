@@ -5,6 +5,7 @@ import type React from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { MoreHorizontal } from 'lucide-react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const isMobile = useIsMobile();
+    const t = useTranslations('common.MobileNavbar');
 
     // If not mobile, don't render the navbar
     if (!isMobile) return null;
@@ -73,12 +75,12 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                     <SheetTrigger asChild>
                         <button
                             className="flex h-full w-full flex-col items-center justify-center text-sidebar-foreground"
-                            aria-label="Plus d'options"
+                            aria-label={t('moreOptions')}
                         >
                             <div className="flex h-6 w-6 items-center justify-center">
                                 <MoreHorizontal className="h-5 w-5" />
                             </div>
-                            <span className="sr-only">Plus</span>
+                            <span className="sr-only">{t('more')}</span>
                         </button>
                     </SheetTrigger>
                     <SheetContent
@@ -87,7 +89,7 @@ export function MobileNavbar({ className }: MobileNavbarProps) {
                     >
                         <SheetHeader className="text-left">
                             <VisuallyHidden asChild>
-                                <SheetTitle>Plus d&apos;options</SheetTitle>
+                                <SheetTitle>{t('moreOptions')}</SheetTitle>
                             </VisuallyHidden>
                         </SheetHeader>
                         <div className="grid grid-cols-4 gap-4 py-4">
