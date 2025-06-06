@@ -26,6 +26,31 @@
             "medium": "Moyen",
             "hard": "Difficile",
             "unknown": "Inconnu"
+        },
+        "SystemTags": {
+            "vegetarian": "Végétarien",
+            "meat": "Viande",
+            "fish": "Poisson",
+            "gluten-free": "Sans gluten",
+            "quick": "Rapide",
+            "summer": "Été",
+            "winter": "Hiver",
+            "autumn": "Automne",
+            "spring": "Printemps",
+            "dessert": "Dessert",
+            "starter": "Entrée",
+            "main": "Plat",
+            "spicy": "Épicé"
+        },
+        "MultiTagSelect": {
+            "placeholder": "Sélectionner des options"
+        },
+        "Pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "goToPreviousPage": "Aller à la page précédente",
+            "goToNextPage": "Aller à la page suivante",
+            "morePages": "Plus de pages"
         }
     },
     "FavoritePage": {

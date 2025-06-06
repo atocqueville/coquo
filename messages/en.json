@@ -26,6 +26,31 @@
             "medium": "Medium",
             "hard": "Hard",
             "unknown": "Unknown"
+        },
+        "SystemTags": {
+            "vegetarian": "Vegetarian",
+            "meat": "Meat",
+            "fish": "Fish",
+            "gluten-free": "Gluten-free",
+            "quick": "Quick",
+            "summer": "Summer",
+            "winter": "Winter",
+            "autumn": "Autumn",
+            "spring": "Spring",
+            "dessert": "Dessert",
+            "starter": "Starter",
+            "main": "Main",
+            "spicy": "Spicy"
+        },
+        "MultiTagSelect": {
+            "placeholder": "Select options"
+        },
+        "Pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "goToPreviousPage": "Go to previous page",
+            "goToNextPage": "Go to next page",
+            "morePages": "More pages"
         }
     },
     "FavoritePage": {

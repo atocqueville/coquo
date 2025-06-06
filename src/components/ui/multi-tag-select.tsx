@@ -4,7 +4,7 @@ import { CheckIcon, ChevronDown, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Badge, getTagLabel } from '@/components/ui/badge';
+import { Badge, createSystemTagTranslator } from '@/components/ui/badge';
 import {
     Popover,
     PopoverContent,
@@ -17,6 +17,7 @@ import {
     CommandList,
 } from '@/components/ui/command';
 import type { Tag } from '@prisma/client';
+import { useTranslations } from 'next-intl';
 /**
  * Props for MultiTagSelect component
  */
@@ -41,12 +42,6 @@ interface MultiTagSelectProps
     defaultValue?: string[];
 
     /**
-     * Placeholder text to be displayed when no values are selected.
-     * Optional, defaults to "Select options".
-     */
-    placeholder?: string;
-
-    /**
      * The modality of the popover. When set to true, interaction with outside elements
      * will be disabled and only popover content will be visible to screen readers.
      * Optional, defaults to false.
@@ -69,16 +64,21 @@ export const MultiTagSelect = React.forwardRef<
             options,
             onValueChange,
             defaultValue = [],
-            placeholder = 'Select options',
             modalPopover = false,
             className,
             ...props
         },
         ref
     ) => {
+        const t = useTranslations('common.SystemTags');
+        const tMultiSelect = useTranslations('common.MultiTagSelect');
+        const getTagLabel = createSystemTagTranslator(t);
+
         const [selectedValues, setSelectedValues] =
             React.useState<string[]>(defaultValue);
         const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+
+        const defaultPlaceholder = tMultiSelect('placeholder');
 
         const toggleOption = (option: string) => {
             const newSelectedValues = selectedValues.includes(option)
@@ -152,7 +152,7 @@ export const MultiTagSelect = React.forwardRef<
                         ) : (
                             <div className="flex items-center justify-between w-full mx-auto">
                                 <span className="text-sm text-muted-foreground mx-3">
-                                    {placeholder}
+                                    {defaultPlaceholder}
                                 </span>
                                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
                             </div>

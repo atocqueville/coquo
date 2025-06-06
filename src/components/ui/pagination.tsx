@@ -7,6 +7,7 @@ import {
     DotsHorizontalIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
     <nav
@@ -66,48 +67,60 @@ PaginationLink.displayName = 'PaginationLink';
 const PaginationPrevious = ({
     className,
     ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-    <PaginationLink
-        aria-label="Aller à la page précédente"
-        size="default"
-        className={cn('gap-1 pl-2.5', className)}
-        {...props}
-    >
-        <ChevronLeftIcon className="h-4 w-4" />
-        <span>Précédent</span>
-    </PaginationLink>
-);
+}: React.ComponentProps<typeof PaginationLink>) => {
+    const t = useTranslations('common.Pagination');
+    return (
+        <PaginationLink
+            aria-label={t('goToPreviousPage')}
+            size="default"
+            className={cn('gap-1 pl-2.5', className)}
+            {...props}
+        >
+            <ChevronLeftIcon className="h-4 w-4" />
+            <span>{t('previous')}</span>
+        </PaginationLink>
+    );
+};
 PaginationPrevious.displayName = 'PaginationPrevious';
 
 const PaginationNext = ({
     className,
     ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-    <PaginationLink
-        aria-label="Aller à la page suivante"
-        size="default"
-        className={cn('gap-1 pr-2.5', className)}
-        {...props}
-    >
-        <span>Suivant</span>
-        <ChevronRightIcon className="h-4 w-4" />
-    </PaginationLink>
-);
+}: React.ComponentProps<typeof PaginationLink>) => {
+    const t = useTranslations('common.Pagination');
+    return (
+        <PaginationLink
+            aria-label={t('goToNextPage')}
+            size="default"
+            className={cn('gap-1 pr-2.5', className)}
+            {...props}
+        >
+            <span>{t('next')}</span>
+            <ChevronRightIcon className="h-4 w-4" />
+        </PaginationLink>
+    );
+};
 PaginationNext.displayName = 'PaginationNext';
 
 const PaginationEllipsis = ({
     className,
     ...props
-}: React.ComponentProps<'span'>) => (
-    <span
-        aria-hidden
-        className={cn('flex h-9 w-9 items-center justify-center', className)}
-        {...props}
-    >
-        <DotsHorizontalIcon className="h-4 w-4" />
-        <span className="sr-only">Plus de pages</span>
-    </span>
-);
+}: React.ComponentProps<'span'>) => {
+    const t = useTranslations('common.Pagination');
+    return (
+        <span
+            aria-hidden
+            className={cn(
+                'flex h-9 w-9 items-center justify-center',
+                className
+            )}
+            {...props}
+        >
+            <DotsHorizontalIcon className="h-4 w-4" />
+            <span className="sr-only">{t('morePages')}</span>
+        </span>
+    );
+};
 PaginationEllipsis.displayName = 'PaginationEllipsis';
 
 export {

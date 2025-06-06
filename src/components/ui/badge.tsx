@@ -4,30 +4,36 @@ import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import tinycolor from 'tinycolor2';
 import type { Tag } from '@prisma/client';
+import { useTranslations } from 'next-intl';
 
-const i18nBadgeLabel = {
-    vegetarian: 'Végétarien',
-    meat: 'Viande',
-    fish: 'Poisson',
-    'gluten-free': 'Sans gluten',
-    quick: 'Rapide',
-    summer: 'Été',
-    winter: 'Hiver',
-    autumn: 'Automne',
-    spring: 'Printemps',
-    dessert: 'Dessert',
-    starter: 'Entrée',
-    main: 'Plat',
-    spicy: 'Épicé',
-};
+export const createSystemTagTranslator = (t: (key: string) => string) => {
+    const systemTagLabels = {
+        vegetarian: t('vegetarian'),
+        meat: t('meat'),
+        fish: t('fish'),
+        'gluten-free': t('gluten-free'),
+        quick: t('quick'),
+        summer: t('summer'),
+        winter: t('winter'),
+        autumn: t('autumn'),
+        spring: t('spring'),
+        dessert: t('dessert'),
+        starter: t('starter'),
+        main: t('main'),
+        spicy: t('spicy'),
+    };
 
-export const getTagLabel = (tag: Tag) => {
-    // Only translate tags of type 'system'
-    if (tag.type === 'system') {
-        return i18nBadgeLabel[tag.name as keyof typeof i18nBadgeLabel];
-    }
-    // For user tags or system tags without translation, return the name as is
-    return tag.name;
+    return (tag: Tag) => {
+        // Only translate tags of type 'system'
+        if (tag.type === 'system') {
+            return (
+                systemTagLabels[tag.name as keyof typeof systemTagLabels] ||
+                tag.name
+            );
+        }
+        // For user tags or system tags without translation, return the name as is
+        return tag.name;
+    };
 };
 
 const base =
@@ -70,6 +76,9 @@ function Badge({
     tag,
     ...props
 }: BadgeProps) {
+    const t = useTranslations('common.SystemTags');
+    const getTagLabel = createSystemTagTranslator(t);
+
     let style = {};
     let displayText = children;
 

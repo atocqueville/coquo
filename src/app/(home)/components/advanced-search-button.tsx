@@ -79,7 +79,6 @@ export function AdvancedSearchButton({
                             }))}
                             onValueChange={onTagsChange}
                             defaultValue={selectedTags}
-                            placeholder={t('tagsPlaceholder')}
                         />
                     </div>
 
