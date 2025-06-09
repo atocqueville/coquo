@@ -15,7 +15,7 @@ const CrossableCheckbox = React.forwardRef<
         <Checkbox
             ref={ref}
             className={cn(
-                'peer h-4 w-4 shrink-0 rounded-none border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#2383e2] data-[state=checked]:border-[#2383e2] data-[state=checked]:text-primary-foreground mt-1.5',
+                'peer h-4 w-4 shrink-0 rounded-none border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#2383e2] data-[state=checked]:border-[#2383e2] data-[state=checked]:text-primary-foreground mt-1.5 print:hidden',
                 className
             )}
             {...props}
@@ -29,7 +29,8 @@ const CrossableCheckbox = React.forwardRef<
                     peer-data-[state=checked]:opacity-70
                     peer-data-[state=checked]:text-[#37352fa5]
                     peer-disabled:cursor-not-allowed
-                    peer-disabled:opacity-70`,
+                    peer-disabled:opacity-70
+                    print:cursor-default print:pl-0 print:before:content-['•'] print:before:mr-2 print:text-black`,
                 classNameLabel
             )}
         >

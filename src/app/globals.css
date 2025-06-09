@@ -6,6 +6,43 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Print styles - remove document margins */
+@media print {
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Force recipe image to correct size in print */
+  .recipe-print-image {
+    width: 100% !important;
+    height: 300px !important;
+    max-height: 300px !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Ensure other images print well */
+  img:not(.recipe-print-image) {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+  
+  /* Prevent page breaks in the middle of content blocks */
+  .print\\:break-inside-avoid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
