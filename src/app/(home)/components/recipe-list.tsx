@@ -1,12 +1,9 @@
 import RecipeItem from './recipe-item';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
-const EMPTY_MESSAGE = `Aucune recette ne correspond à vos critères de recherche. Essayez d'ajuster vos filtres ou de rechercher autre chose.`;
-
-const EMPTY_MESSAGE_FAVORITE = `Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici.`;
-
-export default function RecipeList({
+export default async function RecipeList({
     recipes,
     children,
     isFavorite,
@@ -15,6 +12,7 @@ export default function RecipeList({
     children?: React.ReactNode;
     isFavorite?: boolean;
 }) {
+    const t = await getTranslations('RecipeList.emptyState');
     const hasRecipes = recipes.length > 0;
 
     return (
@@ -36,10 +34,10 @@ export default function RecipeList({
                         />
                     </div>
                     <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                        Aucune recette trouvée
+                        {t('noRecipesFound')}
                     </h3>
                     <p className="text-muted-foreground max-w-md mb-6">
-                        {isFavorite ? EMPTY_MESSAGE_FAVORITE : EMPTY_MESSAGE}
+                        {isFavorite ? t('noFavorites') : t('noResults')}
                     </p>
                 </div>
             )}

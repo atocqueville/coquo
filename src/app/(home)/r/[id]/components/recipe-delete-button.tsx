@@ -2,6 +2,7 @@
 
 import { toast } from 'sonner';
 import { Trash } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -23,6 +24,7 @@ interface RecipeDeleteButtonProps {
 export default function RecipeDeleteButton({
     recipeId,
 }: RecipeDeleteButtonProps) {
+    const t = useTranslations('RecipePage.deleteDialog');
     const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -34,9 +36,7 @@ export default function RecipeDeleteButton({
             setIsDialogOpen(false);
             router.push('/');
         } catch {
-            toast.error(
-                'Une erreur est survenue lors de la mise à jour du profil'
-            );
+            toast.error(t('error'));
         } finally {
             setIsDeleting(false);
         }
@@ -51,17 +51,13 @@ export default function RecipeDeleteButton({
                     className="rounded-full bg-red-500/90 backdrop-blur-sm hover:bg-red-600 shadow-lg"
                 >
                     <Trash className="h-4 w-4" />
-                    <span className="sr-only">Supprimer la recette</span>
+                    <span className="sr-only">{t('title')}</span>
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Supprimer la recette</DialogTitle>
-                    <DialogDescription>
-                        Êtes-vous sûr de vouloir supprimer cette recette ? Cette
-                        action est irréversible et toutes les données de la
-                        recette seront définitivement perdues.
-                    </DialogDescription>
+                    <DialogTitle>{t('title')}</DialogTitle>
+                    <DialogDescription>{t('description')}</DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <Button
@@ -69,14 +65,14 @@ export default function RecipeDeleteButton({
                         onClick={() => setIsDialogOpen(false)}
                         disabled={isDeleting}
                     >
-                        Annuler
+                        {t('cancel')}
                     </Button>
                     <Button
                         variant="destructive"
                         onClick={handleDelete}
                         disabled={isDeleting}
                     >
-                        {isDeleting ? 'Suppression...' : 'Supprimer'}
+                        {isDeleting ? t('deleting') : t('delete')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

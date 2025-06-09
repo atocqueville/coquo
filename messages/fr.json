@@ -1,0 +1,299 @@
+{
+    "HomePage": {
+        "title": "Mes recettes",
+        "search": {
+            "placeholder": "Rechercher"
+        },
+        "filters": {
+            "advancedSearch": "Recherche avancée",
+            "title": "Filtres",
+            "tagsLabel": "Tags",
+            "authorsLabel": "Auteurs",
+            "tagsPlaceholder": "Sélectionner des tags",
+            "authorsPlaceholder": "Auteurs",
+            "resetButton": "Réinitialiser"
+        },
+        "userFallback": "Utilisateur anonyme"
+    },
+    "common": {
+        "FavoriteButton": {
+            "added": "Recette ajoutée aux favoris",
+            "removed": "Recette retirée des favoris",
+            "error": "Une erreur est survenue. Veuillez réessayer."
+        },
+        "Difficulty": {
+            "easy": "Facile",
+            "medium": "Moyen",
+            "hard": "Difficile",
+            "unknown": "Inconnu"
+        },
+        "SystemTags": {
+            "vegetarian": "Végétarien",
+            "meat": "Viande",
+            "fish": "Poisson",
+            "gluten-free": "Sans gluten",
+            "quick": "Rapide",
+            "summer": "Été",
+            "winter": "Hiver",
+            "autumn": "Automne",
+            "spring": "Printemps",
+            "dessert": "Dessert",
+            "starter": "Entrée",
+            "main": "Plat",
+            "spicy": "Épicé"
+        },
+        "MultiTagSelect": {
+            "placeholder": "Sélectionner des options"
+        },
+        "Pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "goToPreviousPage": "Aller à la page précédente",
+            "goToNextPage": "Aller à la page suivante",
+            "morePages": "Plus de pages"
+        },
+        "MobileNavbar": {
+            "moreOptions": "Plus d'options",
+            "more": "Plus"
+        },
+        "ErrorMessage": {
+            "permissionDenied": "Vous n'avez pas la permission de voir ce contenu."
+        },
+        "AutoVerificationChecker": {
+            "accountVerified": "Votre compte a été vérifié avec succès !",
+            "accountNotVerified": "Votre compte n'est pas encore vérifié.",
+            "verificationError": "Erreur lors de la vérification du statut de votre compte",
+            "checkingInProgress": "Vérification en cours...",
+            "pendingValidation": "Compte en attente de validation",
+            "automaticCheck": "La page vérifie automatiquement le statut de votre compte. Actualisez la page si votre compte a été validé."
+        },
+        "ApiError": {
+            "userExists": "L'utilisateur existe déjà",
+            "noAdminFound": "Aucun administrateur trouvé",
+            "incorrectPassword": "Le mot de passe actuel est incorrect"
+        }
+    },
+    "FavoritePage": {
+        "title": "Mes recettes enregistrées",
+        "emptyState": {
+            "title": "Aucune recette trouvée",
+            "description": "Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici."
+        }
+    },
+    "RecipeList": {
+        "emptyState": {
+            "noRecipesFound": "Aucune recette trouvée",
+            "noResults": "Aucune recette ne correspond à vos critères de recherche. Essayez d'ajuster vos filtres ou de rechercher autre chose.",
+            "noFavorites": "Vous n'avez pas de recettes enregistrées. Ajoutez des recettes à vos favoris pour les retrouver ici."
+        }
+    },
+    "CreateRecipePage": {
+        "title": "Créer une nouvelle recette",
+        "form": {
+            "pictures": {
+                "label": "Photos de la recette",
+                "imageCount": "({count} image{plural})",
+                "uploadText": "Télécharger des images",
+                "removeImage": "Supprimer l'image",
+                "moreImages": "+ {count} plus"
+            },
+            "title": {
+                "label": "Titre de la recette",
+                "placeholder": "Délicieux gâteau au chocolat"
+            },
+            "prepTime": {
+                "label": "Temps de préparation (min)"
+            },
+            "cookTime": {
+                "label": "Temps de cuisson (min)"
+            },
+            "servings": {
+                "label": "Portions"
+            },
+            "difficulty": {
+                "label": "Difficulté"
+            },
+            "tags": {
+                "label": "Tags"
+            },
+            "ingredients": {
+                "label": "Ingrédients",
+                "placeholder": "Ajoutez un ingrédient par ligne",
+                "description": "Listez tous les ingrédients avec leurs quantités et mesures.",
+                "tooltip": {
+                    "info": "Infos sur le format des ingrédients",
+                    "format1": "Saisissez chaque ingrédient sur une nouvelle ligne",
+                    "format2": "Format: \"2 tasses de farine\" ou \"1 c. à soupe d'huile d'olive\""
+                }
+            },
+            "steps": {
+                "label": "Étapes de la recette",
+                "addStep": "Ajouter une étape",
+                "addStepShort": "Ajouter",
+                "removeStep": "Supprimer l'étape",
+                "stepNumber": "Étape {number}",
+                "stepTitle": {
+                    "label": "Titre de l'étape",
+                    "placeholder": "Préparer la pâte"
+                },
+                "instructions": {
+                    "label": "Instructions",
+                    "addInstruction": "Ajouter une instruction",
+                    "addInstructionShort": "Ajouter",
+                    "removeInstruction": "Supprimer l'instruction",
+                    "placeholder": "Mélangez la farine et la levure dans un grand bol..."
+                }
+            },
+            "submit": {
+                "create": "Créer la recette",
+                "update": "Mettre à jour la recette",
+                "creating": "Création en cours...",
+                "updating": "Mise à jour en cours..."
+            }
+        },
+        "validation": {
+            "titleMin": "Le titre de la recette doit contenir au moins 2 caractères.",
+            "ingredientsRequired": "Ajoutez des ingrédients",
+            "stepTitleMin": "Le titre de l'étape doit contenir au moins 2 caractères.",
+            "instructionMin": "Une instruction doit contenir au moins 5 caractères.",
+            "instructionRequired": "Ajoutez au moins une instruction.",
+            "stepsRequired": "Ajoutez au moins une étape.",
+            "prepTimeMin": "Le temps de préparation doit être d'au moins 1 minute.",
+            "cookTimeMin": "Le temps de cuisson doit être de 0 ou plus minutes.",
+            "servingsMin": "La recette doit servir au moins 1 personne."
+        },
+        "notifications": {
+            "createSuccess": "Recette créée avec succès",
+            "updateSuccess": "Recette mise à jour avec succès",
+            "createError": "Une erreur est survenue lors de la création de la recette",
+            "updateError": "Une erreur est survenue lors de la mise à jour de la recette"
+        }
+    },
+    "RecipePage": {
+        "actions": {
+            "editRecipe": "Modifier la recette",
+            "deleteRecipe": "Supprimer la recette",
+            "backToList": "Retour à la liste des recettes"
+        },
+        "timeLabels": {
+            "preparation": "préparation",
+            "cooking": "cuisson",
+            "people": "personnes"
+        },
+        "author": "Recette ajoutée par",
+        "sections": {
+            "ingredients": "Ingrédients",
+            "instructions": "Instructions"
+        },
+        "deleteDialog": {
+            "title": "Supprimer la recette",
+            "description": "Êtes-vous sûr de vouloir supprimer cette recette ? Cette action est irréversible et toutes les données de la recette seront définitivement perdues.",
+            "cancel": "Annuler",
+            "delete": "Supprimer",
+            "deleting": "Suppression...",
+            "error": "Une erreur est survenue lors de la suppression de la recette"
+        }
+    },
+    "SettingsPage": {
+        "title": "Paramètres",
+        "tabs": {
+            "account": "Compte",
+            "customization": "Personnalisation",
+            "administration": "Administration"
+        },
+        "AccountTab": {
+            "profile": {
+                "title": "Profil",
+                "description": "Gérez vos informations personnelles et vos préférences.",
+                "nameLabel": "Nom",
+                "saveButton": "Enregistrer les modifications"
+            },
+            "language": {
+                "title": "Préférences linguistiques",
+                "description": "Choisissez votre langue préférée pour l'interface. Si vous sélectionnez \"Automatique\", la langue de votre navigateur sera utilisée.",
+                "languageLabel": "Langue",
+                "selectPlaceholder": "Sélectionner une langue",
+                "options": {
+                    "auto": "Automatique (navigateur)",
+                    "fr": "Français",
+                    "en": "English"
+                },
+                "saveButton": "Enregistrer les modifications"
+            },
+            "session": {
+                "title": "Session",
+                "description": "Gérez votre session actuelle.",
+                "loggedInAs": "Connecté en tant que",
+                "memberSince": "Membre depuis le",
+                "signOutButton": "Déconnexion",
+                "signOutDialog": {
+                    "title": "Confirmer la déconnexion",
+                    "description": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+                    "cancel": "Annuler",
+                    "confirm": "Déconnexion"
+                }
+            },
+            "notifications": {
+                "profileUpdated": "Profil mis à jour avec succès",
+                "profileUpdateError": "Une erreur est survenue lors de la mise à jour du profil"
+            }
+        },
+        "AdministrationTab": {
+            "accountValidation": {
+                "title": "Validation des comptes",
+                "description": "Approuvez ou rejetez les demandes d'inscription en attente."
+            },
+            "blockedAccounts": {
+                "title": "Comptes bloqués",
+                "description": "Liste des comptes bloqués."
+            },
+            "table": {
+                "headers": {
+                    "user": "Utilisateur",
+                    "email": "Email",
+                    "date": "Date",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "status": {
+                    "pending": "En attente",
+                    "blocked": "Bloqué"
+                },
+                "actions": {
+                    "approve": "Approuver",
+                    "reject": "Rejeter",
+                    "unblock": "Débloquer"
+                }
+            },
+            "empty": {
+                "noPendingRequests": "Aucune demande en attente"
+            },
+            "notifications": {
+                "accountValidated": "Compte validé avec succès",
+                "accountRejected": "Compte rejeté avec succès",
+                "accountUnblocked": "Compte débloqué avec succès",
+                "error": "Une erreur est survenue. Veuillez réessayer."
+            }
+        },
+        "CustomizationTab": {
+            "title": "Gestion des tags",
+            "description": "Créez et gérez des tags personnalisés pour vos recettes.",
+            "comingSoon": {
+                "title": "🚧 Bientôt disponible",
+                "description": "La gestion des tags personnalisés sera bientôt disponible. Restez à l'écoute pour cette fonctionnalité !"
+            },
+            "form": {
+                "tagNameLabel": "Nom du tag",
+                "tagNamePlaceholder": "Ex: italien, asiatique, etc.",
+                "colorLabel": "Couleur",
+                "previewLabel": "Aperçu",
+                "createButton": "Créer le tag",
+                "defaultTagName": "Nouveau tag"
+            },
+            "customTags": {
+                "title": "Tags personnalisés",
+                "empty": "Aucun tag personnalisé"
+            }
+        }
+    }
+}

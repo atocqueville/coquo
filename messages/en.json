@@ -1,0 +1,299 @@
+{
+    "HomePage": {
+        "title": "My cookbook",
+        "search": {
+            "placeholder": "Search"
+        },
+        "filters": {
+            "advancedSearch": "Advanced search",
+            "title": "Filters",
+            "tagsLabel": "Tags",
+            "authorsLabel": "Authors",
+            "tagsPlaceholder": "Select tags",
+            "authorsPlaceholder": "Authors",
+            "resetButton": "Reset"
+        },
+        "userFallback": "Anonymous user"
+    },
+    "common": {
+        "FavoriteButton": {
+            "added": "Recipe added to favorites",
+            "removed": "Recipe removed from favorites",
+            "error": "An error occurred. Please try again."
+        },
+        "Difficulty": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "unknown": "Unknown"
+        },
+        "SystemTags": {
+            "vegetarian": "Vegetarian",
+            "meat": "Meat",
+            "fish": "Fish",
+            "gluten-free": "Gluten-free",
+            "quick": "Quick",
+            "summer": "Summer",
+            "winter": "Winter",
+            "autumn": "Autumn",
+            "spring": "Spring",
+            "dessert": "Dessert",
+            "starter": "Starter",
+            "main": "Main",
+            "spicy": "Spicy"
+        },
+        "MultiTagSelect": {
+            "placeholder": "Select options"
+        },
+        "Pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "goToPreviousPage": "Go to previous page",
+            "goToNextPage": "Go to next page",
+            "morePages": "More pages"
+        },
+        "MobileNavbar": {
+            "moreOptions": "More options",
+            "more": "More"
+        },
+        "ErrorMessage": {
+            "permissionDenied": "You do not have permission to view this content."
+        },
+        "AutoVerificationChecker": {
+            "accountVerified": "Your account has been verified successfully!",
+            "accountNotVerified": "Your account is not yet verified.",
+            "verificationError": "Error checking your account verification status",
+            "checkingInProgress": "Verification in progress...",
+            "pendingValidation": "Account pending validation",
+            "automaticCheck": "The page automatically checks your account status. Refresh the page if your account has been validated."
+        },
+        "ApiError": {
+            "userExists": "User already exists",
+            "noAdminFound": "No Admin found",
+            "incorrectPassword": "Current password is incorrect"
+        }
+    },
+    "FavoritePage": {
+        "title": "My saved recipes",
+        "emptyState": {
+            "title": "No recipes found",
+            "description": "You have no saved recipes. Add recipes to your favorites to find them here."
+        }
+    },
+    "RecipeList": {
+        "emptyState": {
+            "noRecipesFound": "No recipes found",
+            "noResults": "No recipes match your search criteria. Try adjusting your filters or searching for something else.",
+            "noFavorites": "You have no saved recipes. Add recipes to your favorites to find them here."
+        }
+    },
+    "CreateRecipePage": {
+        "title": "Create a new recipe",
+        "form": {
+            "pictures": {
+                "label": "Recipe photos",
+                "imageCount": "({count} image{plural})",
+                "uploadText": "Upload images",
+                "removeImage": "Remove image",
+                "moreImages": "+ {count} more"
+            },
+            "title": {
+                "label": "Recipe title",
+                "placeholder": "Delicious chocolate cake"
+            },
+            "prepTime": {
+                "label": "Preparation time (min)"
+            },
+            "cookTime": {
+                "label": "Cooking time (min)"
+            },
+            "servings": {
+                "label": "Servings"
+            },
+            "difficulty": {
+                "label": "Difficulty"
+            },
+            "tags": {
+                "label": "Tags"
+            },
+            "ingredients": {
+                "label": "Ingredients",
+                "placeholder": "Add one ingredient per line",
+                "description": "List all ingredients with their quantities and measurements.",
+                "tooltip": {
+                    "info": "Info about ingredient format",
+                    "format1": "Enter each ingredient on a new line",
+                    "format2": "Format: \"2 cups of flour\" or \"1 tbsp olive oil\""
+                }
+            },
+            "steps": {
+                "label": "Recipe steps",
+                "addStep": "Add step",
+                "addStepShort": "Add",
+                "removeStep": "Remove step",
+                "stepNumber": "Step {number}",
+                "stepTitle": {
+                    "label": "Step title",
+                    "placeholder": "Prepare the dough"
+                },
+                "instructions": {
+                    "label": "Instructions",
+                    "addInstruction": "Add instruction",
+                    "addInstructionShort": "Add",
+                    "removeInstruction": "Remove instruction",
+                    "placeholder": "Mix flour and baking powder in a large bowl..."
+                }
+            },
+            "submit": {
+                "create": "Create recipe",
+                "update": "Update recipe",
+                "creating": "Creating...",
+                "updating": "Updating..."
+            }
+        },
+        "validation": {
+            "titleMin": "Recipe title must contain at least 2 characters.",
+            "ingredientsRequired": "Add ingredients",
+            "stepTitleMin": "Step title must contain at least 2 characters.",
+            "instructionMin": "An instruction must contain at least 5 characters.",
+            "instructionRequired": "Add at least one instruction.",
+            "stepsRequired": "Add at least one step.",
+            "prepTimeMin": "Preparation time must be at least 1 minute.",
+            "cookTimeMin": "Cooking time must be 0 or more minutes.",
+            "servingsMin": "The recipe must serve at least 1 person."
+        },
+        "notifications": {
+            "createSuccess": "Recipe created successfully",
+            "updateSuccess": "Recipe updated successfully",
+            "createError": "An error occurred while creating the recipe",
+            "updateError": "An error occurred while updating the recipe"
+        }
+    },
+    "RecipePage": {
+        "actions": {
+            "editRecipe": "Edit recipe",
+            "deleteRecipe": "Delete recipe",
+            "backToList": "Back to recipe list"
+        },
+        "timeLabels": {
+            "preparation": "preparation",
+            "cooking": "cooking",
+            "people": "people"
+        },
+        "author": "Recipe added by",
+        "sections": {
+            "ingredients": "Ingredients",
+            "instructions": "Instructions"
+        },
+        "deleteDialog": {
+            "title": "Delete recipe",
+            "description": "Are you sure you want to delete this recipe? This action is irreversible and all recipe data will be permanently lost.",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "error": "An error occurred while deleting the recipe"
+        }
+    },
+    "SettingsPage": {
+        "title": "Settings",
+        "tabs": {
+            "account": "Account",
+            "customization": "Customization",
+            "administration": "Administration"
+        },
+        "AccountTab": {
+            "profile": {
+                "title": "Profile",
+                "description": "Manage your personal information and preferences.",
+                "nameLabel": "Name",
+                "saveButton": "Save changes"
+            },
+            "language": {
+                "title": "Language preferences",
+                "description": "Choose your preferred language for the interface. If you select \"Automatic\", your browser's language will be used.",
+                "languageLabel": "Language",
+                "selectPlaceholder": "Select a language",
+                "options": {
+                    "auto": "Automatic (browser)",
+                    "fr": "Français",
+                    "en": "English"
+                },
+                "saveButton": "Save changes"
+            },
+            "session": {
+                "title": "Session",
+                "description": "Manage your current session.",
+                "loggedInAs": "Logged in as",
+                "memberSince": "Member since",
+                "signOutButton": "Sign out",
+                "signOutDialog": {
+                    "title": "Confirm sign out",
+                    "description": "Are you sure you want to sign out? You will need to sign in again to access your account.",
+                    "cancel": "Cancel",
+                    "confirm": "Sign out"
+                }
+            },
+            "notifications": {
+                "profileUpdated": "Profile updated successfully",
+                "profileUpdateError": "An error occurred while updating the profile"
+            }
+        },
+        "AdministrationTab": {
+            "accountValidation": {
+                "title": "Account validation",
+                "description": "Approve or reject pending registration requests."
+            },
+            "blockedAccounts": {
+                "title": "Blocked accounts",
+                "description": "List of blocked accounts."
+            },
+            "table": {
+                "headers": {
+                    "user": "User",
+                    "email": "Email",
+                    "date": "Date",
+                    "status": "Status",
+                    "actions": "Actions"
+                },
+                "status": {
+                    "pending": "Pending",
+                    "blocked": "Blocked"
+                },
+                "actions": {
+                    "approve": "Approve",
+                    "reject": "Reject",
+                    "unblock": "Unblock"
+                }
+            },
+            "empty": {
+                "noPendingRequests": "No pending requests"
+            },
+            "notifications": {
+                "accountValidated": "Account validated successfully",
+                "accountRejected": "Account rejected successfully",
+                "accountUnblocked": "Account unblocked successfully",
+                "error": "An error occurred. Please try again."
+            }
+        },
+        "CustomizationTab": {
+            "title": "Tag management",
+            "description": "Create and manage custom tags for your recipes.",
+            "comingSoon": {
+                "title": "🚧 Coming soon",
+                "description": "Custom tag management will be available soon. Stay tuned for this feature!"
+            },
+            "form": {
+                "tagNameLabel": "Tag name",
+                "tagNamePlaceholder": "Ex: italian, asian, etc.",
+                "colorLabel": "Color",
+                "previewLabel": "Preview",
+                "createButton": "Create tag",
+                "defaultTagName": "New tag"
+            },
+            "customTags": {
+                "title": "Custom tags",
+                "empty": "No custom tags"
+            }
+        }
+    }
+}

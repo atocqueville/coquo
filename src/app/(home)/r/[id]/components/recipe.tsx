@@ -17,9 +17,10 @@ import { CrossableStep } from '@/components/ui/crossable-step';
 import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
 import RecipeDeleteButton from './recipe-delete-button';
+import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
-import { getDifficultyProps } from '@/utils/difficulty';
+import { getDifficultyProps, createDifficultyLabels } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
 import RecipeImageCarousel from './recipe-image-carousel';
 import { PageMobileFooter } from '@/components/page-wrapper';
@@ -45,8 +46,12 @@ const IngredientsList = ({
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     const session = await auth();
+    const t = await getTranslations('RecipePage');
+    const difficultyT = await getTranslations('common.Difficulty');
     const isAuthor = session?.user?.id === recipe.userId;
     const timeInfo = formatTime(recipe);
+
+    const difficultyLabels = createDifficultyLabels(difficultyT);
 
     return (
         <div className="flex flex-col">
@@ -80,7 +85,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         <Link href={`/r/${recipe.id}/edit`}>
                                             <Pencil className="h-4 w-4" />
                                             <span className="sr-only">
-                                                Modifier la recette
+                                                {t('actions.editRecipe')}
                                             </span>
                                         </Link>
                                     </Button>
@@ -102,7 +107,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         <ChefHat className="mr-1 h-4 w-4" />
                                         <span>{timeInfo.prep}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
-                                            préparation
+                                            {t('timeLabels.preparation')}
                                         </span>
                                     </div>
 
@@ -110,17 +115,18 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         <CookingPot className="mr-1 h-4 w-4" />
                                         <span>{timeInfo.cook}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
-                                            cuisson
+                                            {t('timeLabels.cooking')}
                                         </span>
                                     </div>
 
                                     <div
-                                        className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium shadow-sm ${getDifficultyProps(recipe.difficulty).color}`}
+                                        className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium shadow-sm ${getDifficultyProps(recipe.difficulty, difficultyLabels).color}`}
                                     >
                                         <span>
                                             {
                                                 getDifficultyProps(
-                                                    recipe.difficulty
+                                                    recipe.difficulty,
+                                                    difficultyLabels
                                                 ).label
                                             }
                                         </span>
@@ -130,7 +136,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                         <Users className="mr-1 h-4 w-4" />
                                         <span>{recipe.servings}</span>
                                         <span className="text-muted-foreground ml-1 hidden sm:inline">
-                                            personnes
+                                            {t('timeLabels.people')}
                                         </span>
                                     </div>
                                 </div>
@@ -146,7 +152,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                         <div className="px-6">
                             {recipe.author.email && (
                                 <p className="text-sm text-muted-foreground mt-1">
-                                    Recette ajoutée par {recipe.author.name}
+                                    {t('author')} {recipe.author.name}
                                 </p>
                             )}
                         </div>
@@ -171,7 +177,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                             >
                                                 <Carrot className="h-4 w-4" />
                                                 <span className="xs:hidden">
-                                                    Ingrédients
+                                                    {t('sections.ingredients')}
                                                 </span>
                                             </Button>
                                         </DrawerTrigger>
@@ -180,7 +186,9 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                             <DrawerContent className="flex flex-col rounded-t-[10px] mt-24 h-[80%] lg:h-[320px] fixed bottom-0 left-0 right-0 outline-none">
                                                 <VisuallyHidden>
                                                     <DrawerTitle>
-                                                        Ingrédients
+                                                        {t(
+                                                            'sections.ingredients'
+                                                        )}
                                                     </DrawerTitle>
                                                 </VisuallyHidden>
                                                 <div className="p-4 bg-white rounded-t-[10px] flex-1 overflow-y-auto">
@@ -202,7 +210,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
 
                         <div className="p-6 pb-12">
                             <h2 className="text-2xl font-semibold">
-                                Instructions
+                                {t('sections.instructions')}
                             </h2>
                             <div className="mt-4 space-y-8">
                                 {recipe.steps.map((step) => (
@@ -226,7 +234,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             <div className="flex flex-col h-full">
                                 <div className="sticky top-0 bg-white z-10">
                                     <h1 className="pt-6 pb-4 px-6 text-2xl font-bold">
-                                        Ingrédients
+                                        {t('sections.ingredients')}
                                     </h1>
                                     <Separator className="" />
                                 </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Heart } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { toggleFavorite } from '@/lib/api/recipe';
 
 export default function FavoriteButton({
@@ -12,6 +13,7 @@ export default function FavoriteButton({
     recipeId: number;
     userStarredIds: number[];
 }) {
+    const t = useTranslations('common.FavoriteButton');
     const [isFavorite, setIsFavorite] = useState(
         userStarredIds.includes(recipeId)
     );
@@ -25,15 +27,11 @@ export default function FavoriteButton({
 
         toggleFavorite(recipeId)
             .then(() => {
-                toast.success(
-                    previous
-                        ? 'Recette retirée des favoris'
-                        : 'Recette ajoutée aux favoris'
-                );
+                toast.success(previous ? t('removed') : t('added'));
             })
             .catch(() => {
                 setIsFavorite(previous);
-                toast.error('Une erreur est survenue. Veuillez réessayer.');
+                toast.error(t('error'));
             });
     };
 

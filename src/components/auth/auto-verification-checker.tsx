@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 export function AutoVerificationChecker() {
     const { data: session, update } = useSession();
     const router = useRouter();
     const [isChecking, setIsChecking] = useState(true);
+    const t = useTranslations('common.AutoVerificationChecker');
 
     useEffect(() => {
         // Auto-check verification status
@@ -23,17 +25,15 @@ export function AutoVerificationChecker() {
                     updatedSession?.user?.role === 'ADMIN';
 
                 if (isVerified) {
-                    toast.success('Votre compte a été vérifié avec succès !');
+                    toast.success(t('accountVerified'));
                     router.push('/');
                     return; // Don't set isChecking to false if redirecting
                 } else {
-                    toast.info("Votre compte n'est pas encore vérifié.");
+                    toast.info(t('accountNotVerified'));
                 }
             } catch (error) {
                 console.error('Verification check failed:', error);
-                toast.error(
-                    'Erreur lors de la vérification du statut de votre compte'
-                );
+                toast.error(t('verificationError'));
             }
             setIsChecking(false);
         };
@@ -48,12 +48,11 @@ export function AutoVerificationChecker() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
                 {isChecking ? (
-                    <strong>Vérification en cours...</strong>
+                    <strong>{t('checkingInProgress')}</strong>
                 ) : (
-                    <strong>Compte en attente de validation</strong>
+                    <strong>{t('pendingValidation')}</strong>
                 )}{' '}
-                La page vérifie automatiquement le statut de votre compte.
-                Actualisez la page si votre compte a été validé.
+                {t('automaticCheck')}
             </p>
         </div>
     );

@@ -3,7 +3,8 @@
 import type React from 'react';
 
 import { useState } from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Languages } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +16,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 import {
     Dialog,
@@ -31,46 +39,58 @@ import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';
 
 export default function AccountTab({ currentUser }: { currentUser: User }) {
+    const t = useTranslations('SettingsPage.AccountTab');
+    const currentLocale = useLocale();
     const [name, setName] = useState(currentUser.name);
+    const [locale, setLocale] = useState(currentUser.locale || 'auto');
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
-    const handleProfileUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleProfileUpdate = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
         try {
-            await updateUser(currentUser.id, { name });
-            toast.success('Profil mis à jour avec succès');
+            await updateUser(currentUser.id, {
+                name,
+                locale: locale === 'auto' ? null : locale,
+            });
+            toast.success(t('notifications.profileUpdated'));
+            // Force reload to apply new locale
+            window.location.reload();
         } catch {
-            toast.error(
-                'Une erreur est survenue lors de la mise à jour du profil'
-            );
+            toast.error(t('notifications.profileUpdateError'));
         }
     };
+
+    const localeOptions = [
+        { value: 'auto', label: t('language.options.auto') },
+        { value: 'fr', label: t('language.options.fr') },
+        { value: 'en', label: t('language.options.en') },
+    ];
 
     return (
         <>
             <Card>
                 <CardHeader>
-                    <CardTitle>Profil</CardTitle>
+                    <CardTitle>{t('profile.title')}</CardTitle>
                     <CardDescription>
-                        Gérez vos informations personnelles et vos préférences.
+                        {t('profile.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleProfileUpdate} className="space-y-4">
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Nom</Label>
-                                <Input
-                                    id="name"
-                                    value={name ?? ''}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                            </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="name">
+                                {t('profile.nameLabel')}
+                            </Label>
+                            <Input
+                                id="name"
+                                value={name ?? ''}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
                         </div>
                         <div className="flex justify-end">
                             <Button type="submit" variant="coquo">
-                                Enregistrer les modifications
+                                {t('profile.saveButton')}
                             </Button>
                         </div>
                     </form>
@@ -79,22 +99,71 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Session</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                        <Languages className="h-5 w-5" />
+                        {t('language.title')}
+                    </CardTitle>
                     <CardDescription>
-                        Gérez votre session actuelle.
+                        {t('language.description')}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="locale-setting">
+                                {t('language.languageLabel')}
+                            </Label>
+                            <Select value={locale} onValueChange={setLocale}>
+                                <SelectTrigger id="locale-setting">
+                                    <SelectValue
+                                        placeholder={t(
+                                            'language.selectPlaceholder'
+                                        )}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {localeOptions.map((option) => (
+                                        <SelectItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex justify-end">
+                            <Button
+                                onClick={handleProfileUpdate}
+                                variant="coquo"
+                                type="button"
+                            >
+                                {t('language.saveButton')}
+                            </Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t('session.title')}</CardTitle>
+                    <CardDescription>
+                        {t('session.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-medium">
-                                Connecté en tant que {currentUser.name}
+                                {t('session.loggedInAs')} {currentUser.name}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                                Membre depuis le{' '}
+                                {t('session.memberSince')}{' '}
                                 {new Date(
                                     currentUser.createdAt
-                                ).toLocaleDateString('fr-FR')}
+                                ).toLocaleDateString(currentLocale)}
                             </p>
                         </div>
                         <Dialog
@@ -104,18 +173,16 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
                             <DialogTrigger asChild>
                                 <Button variant="destructive">
                                     <LogOut className="mr-2 h-4 w-4" />
-                                    Déconnexion
+                                    {t('session.signOutButton')}
                                 </Button>
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>
-                                        Confirmer la déconnexion
+                                        {t('session.signOutDialog.title')}
                                     </DialogTitle>
                                     <DialogDescription>
-                                        Êtes-vous sûr de vouloir vous
-                                        déconnecter ? Vous devrez vous
-                                        reconnecter pour accéder à votre compte.
+                                        {t('session.signOutDialog.description')}
                                     </DialogDescription>
                                 </DialogHeader>
                                 <DialogFooter>
@@ -125,13 +192,13 @@ export default function AccountTab({ currentUser }: { currentUser: User }) {
                                             setShowSignOutDialog(false)
                                         }
                                     >
-                                        Annuler
+                                        {t('session.signOutDialog.cancel')}
                                     </Button>
                                     <Button
                                         variant="destructive"
                                         onClick={() => signOut()}
                                     >
-                                        Déconnexion
+                                        {t('session.signOutDialog.confirm')}
                                     </Button>
                                 </DialogFooter>
                             </DialogContent>

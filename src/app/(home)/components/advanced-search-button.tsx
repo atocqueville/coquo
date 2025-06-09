@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Filter } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
     Popover,
     PopoverContent,
@@ -38,6 +39,7 @@ export function AdvancedSearchButton({
     onUserChange,
     onResetFilters,
 }: AdvancedSearchButtonProps) {
+    const t = useTranslations('HomePage.filters');
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const hasActiveFilters = selectedTags.length > 0 || selectedUser !== '';
@@ -52,7 +54,9 @@ export function AdvancedSearchButton({
                     }
                     className="h-9 w-9 sm:px-4 sm:py-2 sm:w-auto relative"
                 >
-                    <span className="hidden sm:block">Recherche avancée</span>
+                    <span className="hidden sm:block">
+                        {t('advancedSearch')}
+                    </span>
                     <Filter className={hasActiveFilters ? 'text-white' : ''} />
                     {hasActiveFilters && (
                         <span className="absolute -top-1 -right-1 w-4 h-4 bg-[hsl(206,85%,65%)] text-[10px] rounded-full flex items-center justify-center text-[hsl(210,90%,15%)] font-semibold">
@@ -63,10 +67,10 @@ export function AdvancedSearchButton({
             </PopoverTrigger>
             <PopoverContent className="w-80 p-4" align="end">
                 <div className="space-y-4">
-                    <h3 className="font-medium text-base">Filtres</h3>
+                    <h3 className="font-medium text-base">{t('title')}</h3>
 
                     <div className="space-y-2">
-                        <Label htmlFor="tags-filter">Tags</Label>
+                        <Label htmlFor="tags-filter">{t('tagsLabel')}</Label>
                         <MultiTagSelect
                             id="tags-filter"
                             options={tags.map((tag) => ({
@@ -75,18 +79,19 @@ export function AdvancedSearchButton({
                             }))}
                             onValueChange={onTagsChange}
                             defaultValue={selectedTags}
-                            placeholder="Sélectionner des tags"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="tags-filter">Auteurs</Label>
+                        <Label htmlFor="tags-filter">{t('authorsLabel')}</Label>
                         <Select
                             value={selectedUser}
                             onValueChange={onUserChange}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Auteurs" />
+                                <SelectValue
+                                    placeholder={t('authorsPlaceholder')}
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 {userOptions.map((user) => (
@@ -112,7 +117,7 @@ export function AdvancedSearchButton({
                             }}
                             className="mr-2"
                         >
-                            Réinitialiser
+                            {t('resetButton')}
                         </Button>
                     </div>
                 </div>

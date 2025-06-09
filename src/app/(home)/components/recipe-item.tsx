@@ -6,8 +6,9 @@ import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import { currentUser } from '@/lib/auth';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
 import FavoriteButton from './favorite-button';
-import { getDifficultyProps } from '@/utils/difficulty';
+import { getDifficultyProps, createDifficultyLabels } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
+import { getTranslations } from 'next-intl/server';
 
 export default async function RecipeItem({
     recipe,
@@ -17,6 +18,8 @@ export default async function RecipeItem({
     const user = await currentUser();
     const starredRecipeIds = await getUserStarredRecipeIds(user?.id as string);
     const timeInfo = formatTime(recipe);
+    const difficultyT = await getTranslations('common.Difficulty');
+    const difficultyLabels = createDifficultyLabels(difficultyT);
 
     return (
         <>
@@ -42,11 +45,12 @@ export default async function RecipeItem({
                                         <span>{timeInfo.total}</span>
                                     </span>
                                     <span
-                                        className={`px-1.5 py-0.5 rounded-full text-xs font-medium sm:px-2 ${getDifficultyProps(recipe.difficulty).color}`}
+                                        className={`px-1.5 py-0.5 rounded-full text-xs font-medium sm:px-2 ${getDifficultyProps(recipe.difficulty, difficultyLabels).color}`}
                                     >
                                         {
                                             getDifficultyProps(
-                                                recipe.difficulty
+                                                recipe.difficulty,
+                                                difficultyLabels
                                             ).label
                                         }
                                     </span>
@@ -67,11 +71,12 @@ export default async function RecipeItem({
                                         <span>{timeInfo.total}</span>
                                     </span>
                                     <span
-                                        className={`px-1.5 py-0.5 rounded-full text-xs font-medium sm:px-2 shadow-sm ${getDifficultyProps(recipe.difficulty).color}`}
+                                        className={`px-1.5 py-0.5 rounded-full text-xs font-medium sm:px-2 shadow-sm ${getDifficultyProps(recipe.difficulty, difficultyLabels).color}`}
                                     >
                                         {
                                             getDifficultyProps(
-                                                recipe.difficulty
+                                                recipe.difficulty,
+                                                difficultyLabels
                                             ).label
                                         }
                                     </span>
