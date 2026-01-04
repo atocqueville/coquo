@@ -33,7 +33,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { signOut } from 'next-auth/react';
+import { signOut } from '@/lib/auth-client';
 import type { User } from '@prisma/client';
 import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';

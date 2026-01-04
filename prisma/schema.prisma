@@ -17,51 +17,86 @@ model User {
   role           String    @default("USER")
   image          String?
   locale         String?
-  accounts       Account[]
-  recipes        Recipe[]
-  starredRecipes Recipe[]  @relation("Favorites")
   isBlocked      Boolean   @default(false)
   createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  recipes        Recipe[]
+  accounts       Account[]
+  sessions       Session[]
+  starredRecipes Recipe[]  @relation("Favorites")
+
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@index([userId])
+  @@map("session")
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@index([userId])
+  @@map("account")
+}
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  @@unique([provider, providerAccountId])
+  @@index([identifier])
+  @@map("verification")
 }
 
 model Recipe {
   id          Int           @id @default(autoincrement())
   title       String
   ingredients String
-  steps       RecipeStep[]
-  images      RecipeImage[]
   difficulty  Int
   prepTime    Int
   cookTime    Int
   servings    Int
-  tags        Tag[]         @relation("RecipeTags")
   userId      String
-  author      User          @relation(fields: [userId], references: [id])
-  starredBy   User[]        @relation("Favorites")
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
+  author      User          @relation(fields: [userId], references: [id])
+  images      RecipeImage[]
+  steps       RecipeStep[]
+  starredBy   User[]        @relation("Favorites")
+  tags        Tag[]         @relation("RecipeTags")
 }
 
 model Tag {
@@ -74,16 +109,16 @@ model Tag {
 
 model RecipeStep {
   id           Int    @id @default(autoincrement())
-  Recipe       Recipe @relation(fields: [recipeId], references: [id])
   recipeId     Int
   title        String
   instructions String
+  Recipe       Recipe @relation(fields: [recipeId], references: [id])
 }
 
 model RecipeImage {
   id       Int    @id @default(autoincrement())
   path     String
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId Int
   order    Int    @default(0)
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }

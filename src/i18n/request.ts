@@ -1,6 +1,6 @@
 import { getRequestConfig } from 'next-intl/server';
 import { headers } from 'next/headers';
-import { auth } from '@/auth';
+import { getSession } from '@/lib/auth';
 import { getUserById } from '@/lib/api/user';
 
 // Supported locales
@@ -25,7 +25,7 @@ export default getRequestConfig(async () => {
         }
 
         // Try to get user's preferred locale from session
-        const session = await auth();
+        const session = await getSession();
         if (session?.user?.id) {
             const user = await getUserById(session.user.id);
             if (user?.locale && locales.includes(user.locale)) {

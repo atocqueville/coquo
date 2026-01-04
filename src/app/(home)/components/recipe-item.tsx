@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Clock, ChefHat } from 'lucide-react';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
-import { currentUser } from '@/lib/auth';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
 import FavoriteButton from './favorite-button';
 import { getDifficultyProps, createDifficultyLabels } from '@/utils/difficulty';
@@ -15,8 +14,8 @@ export default async function RecipeItem({
 }: {
     recipe: RecipeWithTagsAndAuthor;
 }) {
-    const user = await currentUser();
-    const starredRecipeIds = await getUserStarredRecipeIds(user?.id as string);
+    // const user = await currentUser();
+    const starredRecipeIds = await getUserStarredRecipeIds('12' as string); // TODO: Replace with user.id
     const timeInfo = formatTime(recipe);
     const difficultyT = await getTranslations('common.Difficulty');
     const difficultyLabels = createDifficultyLabels(difficultyT);

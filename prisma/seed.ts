@@ -1,5 +1,7 @@
 import { PrismaClient, type Prisma, type Tag } from '@prisma/client';
 import { aubergineRotie, potimarron } from './mocks/recipes';
+import { randomUUID } from 'crypto';
+
 const prisma = new PrismaClient();
 
 /**
@@ -44,16 +46,21 @@ function getRandomRecipes(
 async function main() {
     const tags = await prisma.tag.findMany();
 
-    await prisma.user.upsert({
-        where: { email: 'alex@prisma.io' },
+    const adminEmail = 'alex@admin.io';
+    // Password: "azerty" - Hash généré avec @noble/hashes/scrypt (compatible Better-Auth)
+    const adminPassword =
+        '43a996f1a728e49e81d4aced41729916:831ba8ee7c36031c0d9edcbd1d63596decb984c9f947b50e2419ace0e20a7db9d5c1d6ae2addde1d4066b67ff0a2027b062ee5263b95f1f73ce25b5ae05f9461';
+
+    // Create or update admin user
+    const adminUser = await prisma.user.upsert({
+        where: { email: adminEmail },
         update: {},
         create: {
             role: 'ADMIN',
-            email: 'alex@admin.io',
+            email: adminEmail,
             emailVerified: new Date(),
             name: 'Alex',
-            password:
-                '$2a$06$PIMy52YusNVHXV.2UJfjquWu.LhgEWobLhxv5xn3JhS48oWz9fYSS',
+            // Password is now stored in Account table for Better-Auth
             recipes: {
                 create: getRandomRecipes(
                     [aubergineRotie, potimarron],
@@ -67,6 +74,27 @@ async function main() {
             },
         },
     });
+
+    // Create credential account for Better-Auth (if not exists)
+    const existingAccount = await prisma.account.findFirst({
+        where: {
+            userId: adminUser.id,
+            providerId: 'credential',
+        },
+    });
+
+    if (!existingAccount) {
+        await prisma.account.create({
+            data: {
+                id: randomUUID(),
+                accountId: adminEmail,
+                providerId: 'credential',
+                userId: adminUser.id,
+                password: adminPassword,
+            },
+        });
+        console.log(`Created credential account for ${adminEmail}`);
+    }
 }
 
 main()

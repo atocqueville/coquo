@@ -1,7 +1,5 @@
-import NextAuth from 'next-auth';
-import { getToken } from 'next-auth/jwt';
-
-import authConfig from '@/auth.config';
+import { NextRequest, NextResponse } from 'next/server';
+import { getSessionCookie } from 'better-auth/cookies';
 import {
     DEFAULT_LOGIN_REDIRECT,
     apiAuthPrefix,
@@ -9,53 +7,39 @@ import {
     publicRoutes,
 } from '@/routes';
 
-const { auth } = NextAuth(authConfig);
+export async function proxy(request: NextRequest) {
+    const { nextUrl } = request;
 
-export default auth(async (req) => {
-    const { nextUrl } = req;
-    const isLoggedIn = !!req.auth;
-
-    // For more reliable email verification check, get the token directly
-    // This is necessary because middleware doesn't always have access to the full session user
-    let isEmailVerified = !!req.auth?.user?.emailVerified;
-
-    // If we couldn't get it from the session user, try getting it from the token
-    if (isLoggedIn && !isEmailVerified) {
-        const token = await getToken({
-            req,
-            secret: process.env.AUTH_SECRET,
-            secureCookie: nextUrl.protocol === 'https:',
-        });
-        isEmailVerified = !!token?.emailVerified || token?.role === 'ADMIN';
-    }
+    // Get session cookie (Edge-compatible, no DB call)
+    // Note: This only checks if a cookie exists, not if it's valid
+    // Full validation (emailVerified, role) happens in Server Components
+    const sessionCookie = getSessionCookie(request);
+    const isLoggedIn = !!sessionCookie;
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
     const isHomePage = nextUrl.pathname === '/';
 
+    // Allow API auth routes to pass through
     if (isApiAuthRoute) {
-        return;
+        return NextResponse.next();
     }
 
+    // Redirect logged-in users away from auth routes
     if (isAuthRoute) {
         if (isLoggedIn) {
-            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+            return NextResponse.redirect(
+                new URL(DEFAULT_LOGIN_REDIRECT, nextUrl)
+            );
         }
-
-        return;
-    }
-
-    // If user is logged in but email is not verified, redirect to error page
-    if (isLoggedIn && !isEmailVerified && !isPublicRoute) {
-        return Response.redirect(new URL('/auth/error', nextUrl));
+        return NextResponse.next();
     }
 
     // If authenticated and navigating to homepage, add filters from cookie to searchParams
     if (isLoggedIn && isHomePage && !nextUrl.search) {
         try {
-            // Access cookies directly from the request
-            const cookieHeader = req.cookies.get('recipeFilters')?.value;
+            const cookieHeader = request.cookies.get('recipeFilters')?.value;
             if (cookieHeader) {
                 const recipeFilters = JSON.parse(cookieHeader);
                 const tags = recipeFilters.tags;
@@ -66,7 +50,7 @@ export default auth(async (req) => {
                     url.searchParams.set('tags', tags.join(','));
                     url.searchParams.set('q', q);
                     url.searchParams.set('user', user);
-                    return Response.redirect(url);
+                    return NextResponse.redirect(url);
                 }
             }
         } catch (error) {
@@ -74,6 +58,7 @@ export default auth(async (req) => {
         }
     }
 
+    // Redirect unauthenticated users to login
     if (!isLoggedIn && !isPublicRoute) {
         let callbackUrl = nextUrl.pathname;
         if (nextUrl.search) {
@@ -81,15 +66,15 @@ export default auth(async (req) => {
         }
 
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-        return Response.redirect(
+        return NextResponse.redirect(
             new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
         );
     }
 
-    return;
-});
+    return NextResponse.next();
+}
 
-// Optionally, don't invoke Middleware on some paths
+// Optionally, don't invoke proxy on some paths
 export const config = {
     matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
