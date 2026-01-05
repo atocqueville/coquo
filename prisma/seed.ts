@@ -1,8 +1,13 @@
-import { PrismaClient, type Prisma, type Tag } from '@/generated/prisma/client';
+import { type Prisma, type Tag } from '../prisma/generated/prisma/client';
 import { aubergineRotie, potimarron } from './mocks/recipes';
 import { randomUUID } from 'crypto';
+import { PrismaClient } from '../prisma/generated/prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaBetterSqlite3({
+    url: process.env.DATABASE_URL,
+});
+const prisma = new PrismaClient({ adapter });
 
 /**
  * Returns a random number of tags (between min and max inclusive)

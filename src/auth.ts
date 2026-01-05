@@ -2,14 +2,13 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin } from 'better-auth/plugins';
 import prisma from '@/lib/prisma';
-import { getAuthSecret } from '@/lib/auth-secret';
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: 'sqlite',
     }),
     plugins: [admin()],
-    secret: getAuthSecret(),
+    secret: 'dev-secret-do-not-use-in-production',
     trustedOrigins: async (request) => {
         const origin = request?.headers.get('origin');
         return origin ? [origin] : [];

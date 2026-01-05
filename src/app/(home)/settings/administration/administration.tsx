@@ -32,7 +32,6 @@ export default function AdministrationTab({
     pendingUsers: User[];
     blockedUsers: User[];
 }) {
-    console.log('p', pendingUsers);
     const t = useTranslations('SettingsPage.AdministrationTab');
     const currentLocale = useLocale();
     const [pendingUsersOptimistic, setPendingUsersOptimistic] =

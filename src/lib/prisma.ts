@@ -5,7 +5,7 @@ import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 export type * from '../../prisma/generated/prisma/browser';
 
 const adapter = new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL || 'file:./dev.db',
+    url: process.env.DATABASE_URL,
 });
 
 // PrismaClient is attached to the `global` object in development to prevent

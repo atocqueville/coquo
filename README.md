@@ -101,7 +101,7 @@ Start the development server (using pm2):
 yarn install
 yarn prisma:reset # Removes your eventual existing database, creates an empty one and runs migrations
 
-yarn dev:start # Starts the Coquo web app on port 3000 + Prisma Studio on port 5555
+yarn dev:start # Starts the Coquo web app on port 3000 + Prisma Studio on port 51212
 ```
 
 Stop the development server:
