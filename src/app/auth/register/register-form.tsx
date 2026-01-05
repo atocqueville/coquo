@@ -32,7 +32,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
         setIsLoading(true);
 
         try {
-            // Better-Auth: signUp crée l'utilisateur ET le connecte automatiquement
             await signUp.email({
                 email: data.email,
                 password: data.password,
