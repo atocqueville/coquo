@@ -6,5 +6,3 @@ services:
             - 3030:3000
         volumes:
             - ./config:/config
-        environment:
-            - AUTH_SECRET="define_auth_secret"

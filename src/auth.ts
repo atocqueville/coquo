@@ -2,20 +2,20 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin } from 'better-auth/plugins';
 import prisma from '@/lib/prisma';
+import { getAuthSecret } from '@/lib/auth-secret';
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: 'sqlite',
     }),
     plugins: [admin()],
-    // 🔐 Secret auto-généré et persisté dans /config/auth-secret.txt
-    //    secret: getAuthSecret(),
+    secret: getAuthSecret(),
     user: {
         additionalFields: {
             role: {
                 type: 'string',
                 defaultValue: 'user',
-                input: false, // Non modifiable par l'utilisateur
+                input: false,
             },
             locale: {
                 type: 'string',
