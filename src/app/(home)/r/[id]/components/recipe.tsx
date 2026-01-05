@@ -54,17 +54,20 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
     const difficultyLabels = createDifficultyLabels(difficultyT);
 
     return (
-        <div className="flex flex-col">
-            <main className="flex-1 overflow-hidden">
-                <div className="flex flex-col md:flex-row h-screen">
+        <div className="flex flex-col print:m-0 print:p-0">
+            <main className="flex-1 overflow-hidden print:overflow-visible">
+                <div className="flex flex-col md:flex-row h-screen print:h-auto print:flex-col">
                     {/* Recipe content */}
-                    <div className="flex-1 overflow-y-auto" id="recipe-content">
+                    <div
+                        className="flex-1 overflow-y-auto print:overflow-visible"
+                        id="recipe-content"
+                    >
                         {/* Recipe hero image(s) */}
-                        <div className="relative h-[300px] sm:h-[400px]">
+                        <div className="relative h-[300px] sm:h-[400px] print:block print:h-auto print:mb-4">
                             {recipe.images && recipe.images.length > 0 ? (
                                 <RecipeImageCarousel images={recipe.images} />
                             ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 relative">
+                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 relative print:h-[200px]">
                                     <div className="text-center">
                                         <ChefHat className="h-16 w-16 text-orange-400 mx-auto" />
                                     </div>
@@ -72,10 +75,12 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             )}
 
                             {/* Back button - fixed position for better visibility */}
-                            <BackButton />
+                            <div className="print:hidden">
+                                <BackButton />
+                            </div>
 
                             {isAuthor && (
-                                <div className="absolute top-4 left-16 z-20 flex gap-3">
+                                <div className="absolute top-4 left-16 z-20 flex gap-3 print:hidden">
                                     <Button
                                         variant="secondary"
                                         size="icon"
@@ -95,12 +100,12 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                                 </div>
                             )}
 
-                            <div className="absolute top-4 right-4 z-20">
+                            <div className="absolute top-4 right-4 z-20 print:hidden">
                                 <DynamicWakeLockWrapper />
                             </div>
 
                             {/* Cooking info and tags overlaying the image */}
-                            <div className="absolute bottom-0 left-0 right-0 z-10 p-4">
+                            <div className="absolute bottom-0 left-0 right-0 z-10 p-4 print:hidden">
                                 {/* Cooking time */}
                                 <div className="flex flex-wrap gap-2 sm:gap-3 mt-2">
                                     <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm">
@@ -143,31 +148,65 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
                         </div>
 
-                        {/* Remove the old tags section since they're now in the overlay */}
-                        <div className="bg-white pt-3">
-                            {/* Intentionally empty - spacing between image and title */}
-                        </div>
-
                         {/* Author */}
-                        <div className="px-6">
+                        <div className="px-6 print:px-0">
                             {recipe.author.email && (
-                                <p className="text-sm text-muted-foreground mt-1">
+                                <p className="text-sm text-muted-foreground mt-1 print:text-black">
                                     {t('author')} {recipe.author.name}
                                 </p>
                             )}
                         </div>
 
+                        {/* Print-only cooking info */}
+                        <div className="hidden print:block print:mb-6 print:px-0 print:break-inside-avoid">
+                            <div className="flex flex-wrap gap-2 sm:gap-3">
+                                <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm print:bg-gray-100 print:text-black print:border-gray-300">
+                                    <ChefHat className="mr-1 h-4 w-4" />
+                                    <span>{timeInfo.prep}</span>
+                                    <span className="text-muted-foreground ml-1 print:text-gray-600">
+                                        {t('timeLabels.preparation')}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm print:bg-gray-100 print:text-black print:border-gray-300">
+                                    <CookingPot className="mr-1 h-4 w-4" />
+                                    <span>{timeInfo.cook}</span>
+                                    <span className="text-muted-foreground ml-1 print:text-gray-600">
+                                        {t('timeLabels.cooking')}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1 rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-sm font-medium shadow-sm print:bg-gray-100 print:text-black print:border-gray-300">
+                                    <Users className="mr-1 h-4 w-4" />
+                                    <span>{recipe.servings}</span>
+                                    <span className="text-muted-foreground ml-1 print:text-gray-600">
+                                        {t('timeLabels.people')}
+                                    </span>
+                                </div>
+                                <div
+                                    className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium shadow-sm print:bg-gray-100 print:text-black print:border print:border-gray-300 ${getDifficultyProps(recipe.difficulty, difficultyLabels).color}`}
+                                >
+                                    <span>
+                                        {
+                                            getDifficultyProps(
+                                                recipe.difficulty,
+                                                difficultyLabels
+                                            ).label
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Sticky title and ingredients button */}
-                        <div className="sticky w-screen md:w-auto top-0 bg-white z-10 border-b">
-                            <div className="flex items-center justify-between px-6 py-3">
+                        <div className="sticky w-screen md:w-auto top-0 bg-white z-10 border-b print:static print:border-none print:bg-transparent">
+                            <div className="flex items-center justify-between px-6 py-3 print:px-0 print:py-2">
                                 <div className="flex-1 min-w-0">
-                                    <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal">
+                                    <h1 className="text-xl sm:text-2xl font-bold truncate md:whitespace-normal print:text-3xl print:whitespace-normal print:truncate-none">
                                         {recipe.title}
                                     </h1>
                                 </div>
 
-                                {/* Ingredients sheet trigger for mobile */}
-                                <div className="md:hidden">
+                                {/* Ingredients sheet trigger for mobile - hide in print */}
+                                <div className="md:hidden print:hidden">
                                     <Drawer>
                                         <DrawerTrigger asChild>
                                             <Button
@@ -208,11 +247,22 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                             </div>
                         </div>
 
-                        <div className="p-6 pb-12">
-                            <h2 className="text-2xl font-semibold">
+                        {/* Print-only ingredients section - shown before instructions */}
+                        <div className="hidden print:block print:mb-8 print:px-0 print:break-inside-avoid">
+                            <h2 className="text-2xl font-semibold mb-4 print:text-black">
+                                {t('sections.ingredients')}
+                            </h2>
+                            <IngredientsList
+                                ingredients={recipe.ingredients}
+                                className="print:space-y-2"
+                            />
+                        </div>
+
+                        <div className="p-6 pb-12 print:px-0 print:pb-0">
+                            <h2 className="text-2xl font-semibold print:text-black">
                                 {t('sections.instructions')}
                             </h2>
-                            <div className="mt-4 space-y-8">
+                            <div className="mt-4 space-y-8 print:space-y-4">
                                 {recipe.steps.map((step) => (
                                     <CrossableStep
                                         key={step.id}
@@ -225,9 +275,9 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                         </div>
                     </div>
 
-                    {/* Sticky ingredients panel - desktop only */}
+                    {/* Sticky ingredients panel - desktop only, hide in print */}
                     <div
-                        className="hidden md:block md:w-80 md:border-l h-screen overflow-y-auto"
+                        className="hidden md:block md:w-80 md:border-l h-screen overflow-y-auto print:hidden"
                         id="ingredients-panel"
                     >
                         <div className="h-full">
@@ -249,7 +299,9 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
                         </div>
                     </div>
 
-                    <PageMobileFooter />
+                    <div className="print:hidden">
+                        <PageMobileFooter />
+                    </div>
                 </div>
             </main>
         </div>

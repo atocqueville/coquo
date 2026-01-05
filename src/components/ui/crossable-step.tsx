@@ -45,25 +45,26 @@ export function CrossableStep({
     };
 
     return (
-        <div className={className}>
+        <div className={`${className} print:break-inside-avoid`}>
             <CrossableCheckbox
                 id={`step-${id}`}
                 checked={checked}
-                classNameLabel="font-bold"
+                classNameLabel="font-bold print:text-xl print:mb-2"
                 onCheckedChange={handleStepCheck}
             >
                 {title}
             </CrossableCheckbox>
-            <ol className="mt-4 space-y-4">
+            <ol className="mt-4 space-y-4 print:mt-2 print:space-y-2 print:list-decimal print:list-inside print:pl-4">
                 {instructions.map((instruction, idx) => (
-                    <li key={idx}>
-                        <div className="flex gap-4">
+                    <li key={idx} className="print:list-item">
+                        <div className="flex gap-4 print:block">
                             <CrossableCheckbox
                                 id={`instruction-${id}-${idx}`}
                                 checked={instructionStates[idx]}
                                 onCheckedChange={(checked) =>
                                     handleInstructionCheck(idx, checked)
                                 }
+                                classNameLabel="print:text-base print:font-normal"
                             >
                                 {instruction}
                             </CrossableCheckbox>
