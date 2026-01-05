@@ -1,9 +1,13 @@
-import { config } from 'dotenv';
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
 
-// Load .env.local first, then .env as fallback
-config({ path: '.env.local' });
-config({ path: '.env' });
+// Load dotenv only in development (not available in production Docker image)
+try {
+    const { config } = await import('dotenv');
+    config({ path: '.env.local' });
+    config({ path: '.env' });
+} catch {
+    // dotenv not available, use process.env directly (production)
+}
 
 export default defineConfig({
     schema: 'prisma/schema.prisma',
@@ -12,6 +16,6 @@ export default defineConfig({
         seed: 'tsx prisma/seed.ts',
     },
     datasource: {
-        url: env('DATABASE_URL'),
+        url: process.env.DATABASE_URL,
     },
 });

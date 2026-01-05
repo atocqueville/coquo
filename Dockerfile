@@ -23,7 +23,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Generate Prisma client in node_modules, and generate .next directory with build
 # It needs the local env var DATABASE_URL, to go deep only one level (NO IDEA WHY)
-RUN yarn run build:prod
+RUN DATABASE_URL="dummy.db" yarn run build:prod
 
 # Build express app in file-storage
 WORKDIR /app/file-storage
@@ -44,8 +44,15 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Install only PM2 and Prisma CLI globally (minimal footprint)
-RUN npm install -g pm2@5.4.2 prisma@6.19.1
+# Copy package.json to extract prisma version
+COPY --from=builder /app/package.json ./package.json
+
+# Install PM2 globally and Prisma locally (for prisma/config module access)
+# Versions are extracted from package.json to avoid duplicating version info
+RUN PM2_VERSION=$(node -p "require('./package.json').devDependencies.pm2.replace('^', '')") && \
+    PRISMA_VERSION=$(node -p "require('./package.json').dependencies.prisma.replace('^', '')") && \
+    npm install -g pm2@$PM2_VERSION && \
+    npm install prisma@$PRISMA_VERSION
 
 COPY --from=builder /app/public ./public
 
@@ -60,6 +67,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Prisma config (needed for prisma migrate deploy)
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
 # Express File-Storage
 COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage

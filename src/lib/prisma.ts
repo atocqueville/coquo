@@ -1,11 +1,11 @@
 import { PrismaClient } from '../../prisma/generated/prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaLibSql } from '@prisma/adapter-libsql';
 
 // Re-export types for client components (browser-safe)
 export type * from '../../prisma/generated/prisma/browser';
 
-const adapter = new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL,
+const adapter = new PrismaLibSql({
+    url: process.env.DATABASE_URL ?? '',
 });
 
 // PrismaClient is attached to the `global` object in development to prevent
