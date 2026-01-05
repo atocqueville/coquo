@@ -1,9 +1,9 @@
 import AdministrationTab from './administration';
-import { getBlockedUsers, getPendingUsers } from '@/lib/api/user';
+import { getBannedUsers, getPendingUsers } from '@/lib/api/user';
 
 export default async function AdministrationWrapper() {
-    const blockedUsersDb = await getBlockedUsers();
-    const blockedUsersIds = blockedUsersDb.map((user) => user.id);
+    const bannedUsers = await getBannedUsers();
+    const blockedUsersIds = bannedUsers.map((user) => user.id);
 
     const pendingUsersDb = await getPendingUsers();
     const pendingUsers = pendingUsersDb.filter(
@@ -13,7 +13,7 @@ export default async function AdministrationWrapper() {
     return (
         <AdministrationTab
             pendingUsers={pendingUsers}
-            blockedUsers={blockedUsersDb}
+            blockedUsers={bannedUsers}
         />
     );
 }

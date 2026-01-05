@@ -46,7 +46,7 @@ function getRandomRecipes(
 async function main() {
     const tags = await prisma.tag.findMany();
 
-    const adminEmail = 'alex@admin.io';
+    const adminEmail = 'admin@coquo.io';
     const adminPassword =
         '43a996f1a728e49e81d4aced41729916:831ba8ee7c36031c0d9edcbd1d63596decb984c9f947b50e2419ace0e20a7db9d5c1d6ae2addde1d4066b67ff0a2027b062ee5263b95f1f73ce25b5ae05f9461';
 
@@ -59,7 +59,7 @@ async function main() {
             email: adminEmail,
             emailVerified: true,
             approved: true,
-            name: 'Alex',
+            name: 'Admin',
             recipes: {
                 create: getRandomRecipes(
                     [aubergineRotie, potimarron],

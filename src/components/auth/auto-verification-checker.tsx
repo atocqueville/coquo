@@ -33,13 +33,12 @@ export function AutoVerificationChecker() {
         }
     }, [session?.user?.id, hasChecked]);
 
-    // Check verification after refetch completes
+    // Check approval status after refetch completes
     useEffect(() => {
         if (hasChecked && session && !isPending) {
-            const isVerified =
-                !!session.user?.emailVerified || session.user?.role === 'admin';
+            const isApproved = !!session.user?.approved;
 
-            if (isVerified) {
+            if (isApproved) {
                 toast.success(t('accountVerified'));
                 router.push('/');
             } else {

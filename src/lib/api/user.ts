@@ -64,57 +64,40 @@ export async function getAllRecipeAuthors() {
 }
 
 export async function getPendingUsers() {
-    const query = await auth.api.listUsers({
-        query: {
-            filterField: 'approved',
-            filterValue: 'false',
-            filterOperator: 'eq',
-        },
-        headers: await headers(),
+    return prisma.user.findMany({
+        where: { approved: false },
     });
-    return query.users;
 }
 
-export async function getBlockedUsers() {
-    const query = await auth.api.listUsers({
-        query: {
-            filterField: 'isBlocked',
-            filterValue: 'true',
-            filterOperator: 'eq',
-        },
-        headers: await headers(),
+export async function getBannedUsers() {
+    return prisma.user.findMany({
+        where: { banned: true },
     });
-    return query.users;
 }
 
-export async function approveUser(id: string): Promise<void> {
+export async function approveUser(userId: string): Promise<void> {
     await auth.api.adminUpdateUser({
         body: {
-            userId: id,
+            userId,
             data: { approved: true },
         },
         headers: await headers(),
     });
 }
 
-// TODO Use banUser instead
-export async function blockUser(id: string): Promise<void> {
-    await auth.api.adminUpdateUser({
+export async function banUser(userId: string): Promise<void> {
+    await auth.api.banUser({
         body: {
-            userId: id,
-            data: { isBlocked: true },
+            userId,
+            banReason: 'Banned by admin',
         },
         headers: await headers(),
     });
 }
 
-// TODO Use unbanUser instead
-export async function unblockUser(id: string): Promise<void> {
-    await auth.api.adminUpdateUser({
-        body: {
-            userId: id,
-            data: { isBlocked: false },
-        },
+export async function unbanUser(userId: string): Promise<void> {
+    await auth.api.unbanUser({
+        body: { userId },
         headers: await headers(),
     });
 }

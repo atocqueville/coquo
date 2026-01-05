@@ -18,7 +18,6 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  isBlocked      Boolean   @default(false)
   recipes        Recipe[]
   accounts       Account[]
   sessions       Session[]

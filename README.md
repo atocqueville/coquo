@@ -20,8 +20,8 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 ## Features
 
 - 📱 **Progressive Web App** - Install on any device and access your recipes offline
-- 🏷️ **Tag organization** - Create and assign tags to keep your recipes organized
 - 🔒 **Self-hosted** - Keep your recipe data private and under your control
+- 🏷️ **Tag organization** - Create and assign tags to keep your recipes organized
 - ⏰ **Keep screen awake** - Prevent your device from sleeping while cooking
 - 🔐 **Whitelist management** - Grant or revoke user access to your recipe collection
 - 🌐 **Internationalization** - Support for multiple languages (EN, FR)
@@ -83,23 +83,25 @@ To enable Google Sign In, you'll need to set up OAuth credentials in the Google 
     volumes:
       - ./config:/config
     environment:
-      - AUTH_URL=****
-      - AUTH_SECRET=****
-      - AUTH_GOOGLE_ID=your_google_client_id
-      - AUTH_GOOGLE_SECRET=your_google_client_secret
+      - BETTER_AUTH_SECRET=**** (optional)
+      - AUTH_GOOGLE_ID=your_google_client_id (optional)
+      - AUTH_GOOGLE_SECRET=your_google_client_secret (optional)
 ```
 
-**Note**: Make sure your `AUTH_URL` environment variable matches your production domain for the OAuth callbacks to work correctly.
-
 ## Development
+
+Create a .env.local file with
+```
+DATABASE_URL="file:../config/db/db.sqlite3"
+```
 
 Start the development server (using pm2):
 
 ```bash
 yarn install
-yarn prisma:reset # Remove your eventual existing database, creates an empty one and plays migrations
+yarn prisma:reset # Removes your eventual existing database, creates an empty one and runs migrations
 
-yarn dev:start # Start the Coquo web app on port 3000 + Prisma Studio on port 5555
+yarn dev:start # Starts the Coquo web app on port 3000 + Prisma Studio on port 5555
 ```
 
 Stop the development server:
@@ -108,13 +110,13 @@ Stop the development server:
 yarn dev:stop
 ```
 
-You can then log in with the combo `alex@admin.io` / `azerty` at http://localhost:3000
+You can then log in with the combo `admin@coquo.io` / `azerty` at http://localhost:3000
 
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - React framework
 - [Prisma](https://www.prisma.io/) - Database ORM and toolkit
-- [Auth.js](https://authjs.dev/) - Authentication library
+- [Better-auth](https://www.better-auth.com/) - Authentication library
 - [Docker](https://www.docker.com/) - Containerization
 
 ## Contributing

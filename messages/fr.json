@@ -243,9 +243,9 @@
                 "title": "Validation des comptes",
                 "description": "Approuvez ou rejetez les demandes d'inscription en attente."
             },
-            "blockedAccounts": {
-                "title": "Comptes bloqués",
-                "description": "Liste des comptes bloqués."
+            "bannedAccounts": {
+                "title": "Comptes bannis",
+                "description": "Liste des comptes bannis."
             },
             "table": {
                 "headers": {
@@ -257,12 +257,12 @@
                 },
                 "status": {
                     "pending": "En attente",
-                    "blocked": "Bloqué"
+                    "banned": "Banni"
                 },
                 "actions": {
                     "approve": "Approuver",
-                    "reject": "Rejeter",
-                    "unblock": "Débloquer"
+                    "ban": "Bannir",
+                    "unban": "Débannir"
                 }
             },
             "empty": {
@@ -270,8 +270,8 @@
             },
             "notifications": {
                 "accountValidated": "Compte validé avec succès",
-                "accountRejected": "Compte rejeté avec succès",
-                "accountUnblocked": "Compte débloqué avec succès",
+                "accountBanned": "Compte banni avec succès",
+                "accountUnbanned": "Compte débanni avec succès",
                 "error": "Une erreur est survenue. Veuillez réessayer."
             }
         },

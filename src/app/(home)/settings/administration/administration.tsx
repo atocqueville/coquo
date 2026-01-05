@@ -21,17 +21,18 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { RoleGate } from '@/components/auth/role-gate';
-import { approveUser, blockUser, unblockUser } from '@/lib/api/user';
+import { approveUser, banUser, unbanUser } from '@/lib/api/user';
 import { toast } from 'sonner';
-import type { UserWithRole } from 'better-auth/plugins';
+import type { User } from '@prisma/client';
 
 export default function AdministrationTab({
     pendingUsers,
     blockedUsers,
 }: {
-    pendingUsers: UserWithRole[];
-    blockedUsers: UserWithRole[];
+    pendingUsers: User[];
+    blockedUsers: User[];
 }) {
+    console.log('p', pendingUsers);
     const t = useTranslations('SettingsPage.AdministrationTab');
     const currentLocale = useLocale();
     const [pendingUsersOptimistic, setPendingUsersOptimistic] =
@@ -50,10 +51,10 @@ export default function AdministrationTab({
         }
     };
 
-    const handleRejectUser = (userId: string) => {
+    const handleBanUser = (userId: string) => {
         try {
-            blockUser(userId);
-            toast.success(t('notifications.accountRejected'));
+            banUser(userId);
+            toast.success(t('notifications.accountBanned'));
 
             // Find the user before removing from pending list
             const userToBlock = pendingUsersOptimistic.find(
@@ -77,10 +78,10 @@ export default function AdministrationTab({
         }
     };
 
-    const handleUnblockUser = (userId: string) => {
+    const handleUnbanUser = (userId: string) => {
         try {
-            unblockUser(userId);
-            toast.success(t('notifications.accountUnblocked'));
+            unbanUser(userId);
+            toast.success(t('notifications.accountUnbanned'));
 
             // Find the user before removing from blocked list
             const userToUnblock = blockedUsersOptimistic.find(
@@ -195,7 +196,7 @@ export default function AdministrationTab({
                                                         size="sm"
                                                         className="h-8 w-8 p-0 text-red-500"
                                                         onClick={() =>
-                                                            handleRejectUser(
+                                                            handleBanUser(
                                                                 user.id
                                                             )
                                                         }
@@ -203,7 +204,7 @@ export default function AdministrationTab({
                                                         <X className="h-4 w-4" />
                                                         <span className="sr-only">
                                                             {t(
-                                                                'table.actions.reject'
+                                                                'table.actions.ban'
                                                             )}
                                                         </span>
                                                     </Button>
@@ -226,9 +227,9 @@ export default function AdministrationTab({
 
             <Card>
                 <CardHeader>
-                    <CardTitle>{t('blockedAccounts.title')}</CardTitle>
+                    <CardTitle>{t('bannedAccounts.title')}</CardTitle>
                     <CardDescription>
-                        {t('blockedAccounts.description')}
+                        {t('bannedAccounts.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -283,7 +284,7 @@ export default function AdministrationTab({
                                         </TableCell>
                                         <TableCell className="hidden sm:table-cell">
                                             <Badge variant="default">
-                                                {t('table.status.blocked')}
+                                                {t('table.status.banned')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
@@ -292,10 +293,10 @@ export default function AdministrationTab({
                                                 size="sm"
                                                 className="text-xs"
                                                 onClick={() =>
-                                                    handleUnblockUser(user.id)
+                                                    handleUnbanUser(user.id)
                                                 }
                                             >
-                                                {t('table.actions.unblock')}
+                                                {t('table.actions.unban')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>
