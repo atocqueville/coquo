@@ -1,17 +1,11 @@
 'use server';
 
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
-import { compare, genSalt, hash } from 'bcryptjs';
+import { auth } from '@/auth';
 import { userAuthSchema } from '@/schemas';
 import { z } from 'zod';
-
-const SALT_ROUNDS = 6;
-
-const hashPassword = async (password: string) => {
-    const salt = await genSalt(SALT_ROUNDS);
-    return await hash(password, salt);
-};
+import { headers } from 'next/headers';
 
 export const getUserByEmail = async (email: string) => {
     try {
@@ -31,35 +25,9 @@ export const getUserById = async (id: string) => {
     }
 };
 
-export async function createUser(
-    registerFormData: z.infer<typeof userAuthSchema>
-): Promise<User> {
-    const existingUser = await getUserByEmail(registerFormData.email);
-
-    if (existingUser) {
-        throw new Error('User already exists');
-    }
-
-    const usersCount = await prisma.user.count();
-
-    const hashedPassword = await hashPassword(registerFormData.password);
-
-    const isFirstUser = usersCount === 0;
-
-    const formData: Prisma.UserCreateInput = {
-        email: registerFormData.email,
-        password: hashedPassword,
-        name: registerFormData.name,
-        role: isFirstUser ? 'ADMIN' : 'USER',
-        emailVerified: isFirstUser ? new Date() : null,
-    };
-
-    return await prisma.user.create({ data: formData });
-}
-
 export async function getAdminEmail() {
     const user = await prisma.user.findFirst({
-        where: { role: 'ADMIN' },
+        where: { role: 'admin' },
     });
 
     if (!user) {
@@ -76,45 +44,17 @@ export async function updateUser(id: string, data: Prisma.UserUpdateInput) {
     });
 
     if (!user) {
-        throw new Error('No Admin found');
+        throw new Error('User not found');
     }
 
     return user.email;
-}
-
-export async function updatePassword(
-    id: string,
-    {
-        currentPassword,
-        newPassword,
-    }: {
-        currentPassword: string;
-        newPassword: string;
-    }
-) {
-    const user = await prisma.user.findUnique({
-        where: { id },
-    });
-    const isPasswordCorrect = await compare(
-        currentPassword,
-        user?.password || ''
-    );
-
-    if (!isPasswordCorrect) {
-        throw new Error('Le mot de passe actuel est incorrect');
-    }
-
-    const hashedPassword = await hashPassword(newPassword);
-    return await prisma.user.update({
-        where: { id },
-        data: { password: hashedPassword },
-    });
 }
 
 export async function getAllUsers() {
     return prisma.user.findMany();
 }
 
+// TODO: USE ADMIN API
 export async function getUnverifiedUsers() {
     const users = await prisma.user.findMany({
         where: { emailVerified: null },
@@ -122,6 +62,7 @@ export async function getUnverifiedUsers() {
     return users;
 }
 
+// TODO: USE ADMIN API
 export async function verifyUser(id: string) {
     await prisma.user.update({
         where: { id },
@@ -129,6 +70,7 @@ export async function verifyUser(id: string) {
     });
 }
 
+// TODO: USE ADMIN API
 export async function getBlockedUsers() {
     const users = await prisma.user.findMany({
         where: { isBlocked: true },
@@ -136,6 +78,7 @@ export async function getBlockedUsers() {
     return users;
 }
 
+// TODO: USE ADMIN API
 export async function blockUser(id: string) {
     await prisma.user.update({
         where: { id },
@@ -143,6 +86,7 @@ export async function blockUser(id: string) {
     });
 }
 
+// TODO: USE ADMIN API
 export async function unblockUser(id: string) {
     await prisma.user.update({
         where: { id },

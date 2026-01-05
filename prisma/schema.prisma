@@ -13,8 +13,6 @@ model User {
   name           String?
   email          String?   @unique
   emailVerified  DateTime?
-  password       String?
-  role           String    @default("USER")
   image          String?
   locale         String?
   isBlocked      Boolean   @default(false)
@@ -28,6 +26,7 @@ model User {
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
+  role       String?   @default("user")
 
   @@map("user")
 }

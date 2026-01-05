@@ -105,7 +105,7 @@ export default function AdministrationTab({
     };
 
     return (
-        <RoleGate allowedRole="ADMIN">
+        <RoleGate allowedRole="admin">
             <Card>
                 <CardHeader>
                     <CardTitle>{t('accountValidation.title')}</CardTitle>

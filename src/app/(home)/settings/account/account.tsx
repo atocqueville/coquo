@@ -34,11 +34,15 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { signOut } from '@/lib/auth-client';
-import type { User } from '@prisma/client';
+import type { Session } from '@/auth';
 import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';
 
-export default function AccountTab({ currentUser }: { currentUser: User }) {
+export default function AccountTab({
+    currentUser,
+}: {
+    currentUser: Session['user'];
+}) {
     const t = useTranslations('SettingsPage.AccountTab');
     const currentLocale = useLocale();
     const [name, setName] = useState(currentUser.name);

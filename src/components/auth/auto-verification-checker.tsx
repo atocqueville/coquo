@@ -37,7 +37,7 @@ export function AutoVerificationChecker() {
     useEffect(() => {
         if (hasChecked && session && !isPending) {
             const isVerified =
-                !!session.user?.emailVerified || session.user?.role === 'ADMIN';
+                !!session.user?.emailVerified || session.user?.role === 'admin';
 
             if (isVerified) {
                 toast.success(t('accountVerified'));

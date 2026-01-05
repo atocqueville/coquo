@@ -6,7 +6,7 @@ import { ErrorCard } from '@/components/error-card';
 
 interface RoleGateProps {
     children: React.ReactNode;
-    allowedRole: 'USER' | 'ADMIN';
+    allowedRole: 'user' | 'admin';
 }
 
 export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
