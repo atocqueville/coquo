@@ -3,8 +3,6 @@
 import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
-import { userAuthSchema } from '@/schemas';
-import { z } from 'zod';
 import { headers } from 'next/headers';
 
 export const getUserByEmail = async (email: string) => {
@@ -50,47 +48,74 @@ export async function updateUser(id: string, data: Prisma.UserUpdateInput) {
     return user.email;
 }
 
-export async function getAllUsers() {
-    return prisma.user.findMany();
-}
-
-// TODO: USE ADMIN API
-export async function getUnverifiedUsers() {
-    const users = await prisma.user.findMany({
-        where: { emailVerified: null },
-    });
-    return users;
-}
-
-// TODO: USE ADMIN API
-export async function verifyUser(id: string) {
-    await prisma.user.update({
-        where: { id },
-        data: { emailVerified: new Date() },
+export async function getAllRecipeAuthors() {
+    return prisma.user.findMany({
+        where: {
+            recipes: {
+                some: {},
+            },
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+        },
     });
 }
 
-// TODO: USE ADMIN API
+export async function getPendingUsers() {
+    const query = await auth.api.listUsers({
+        query: {
+            filterField: 'approved',
+            filterValue: 'false',
+            filterOperator: 'eq',
+        },
+        headers: await headers(),
+    });
+    return query.users;
+}
+
 export async function getBlockedUsers() {
-    const users = await prisma.user.findMany({
-        where: { isBlocked: true },
+    const query = await auth.api.listUsers({
+        query: {
+            filterField: 'isBlocked',
+            filterValue: 'true',
+            filterOperator: 'eq',
+        },
+        headers: await headers(),
     });
-    return users;
+    return query.users;
 }
 
-// TODO: USE ADMIN API
-export async function blockUser(id: string) {
-    await prisma.user.update({
-        where: { id },
-        data: { isBlocked: true },
+export async function approveUser(id: string): Promise<void> {
+    await auth.api.adminUpdateUser({
+        body: {
+            userId: id,
+            data: { approved: true },
+        },
+        headers: await headers(),
     });
 }
 
-// TODO: USE ADMIN API
-export async function unblockUser(id: string) {
-    await prisma.user.update({
-        where: { id },
-        data: { isBlocked: false },
+// TODO Use banUser instead
+export async function blockUser(id: string): Promise<void> {
+    await auth.api.adminUpdateUser({
+        body: {
+            userId: id,
+            data: { isBlocked: true },
+        },
+        headers: await headers(),
+    });
+}
+
+// TODO Use unbanUser instead
+export async function unblockUser(id: string): Promise<void> {
+    await auth.api.adminUpdateUser({
+        body: {
+            userId: id,
+            data: { isBlocked: false },
+        },
+        headers: await headers(),
     });
 }
 

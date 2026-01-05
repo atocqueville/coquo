@@ -2,7 +2,7 @@ import TopBar from './components/top-bar';
 import RecipeList from './components/recipe-list';
 import { getTags } from '@/lib/api/tags';
 import { getRecipes } from '@/lib/api/recipe';
-import { getAllUsers } from '@/lib/api/user';
+import { getAllRecipeAuthors } from '@/lib/api/user';
 
 import RecipePagination from './components/recipe-pagination';
 import { PageContainer } from '@/components/page-wrapper';
@@ -26,7 +26,7 @@ export default async function CookBookPage(props: {
 
     /** Get filter options tags */
     const tagsDb = await getTags();
-    const usersDb = await getAllUsers();
+    const authors = await getAllRecipeAuthors();
 
     /** Build pagination URL with current filters */
     const buildPageUrl = (pageNumber: number) => {
@@ -40,7 +40,7 @@ export default async function CookBookPage(props: {
 
     return (
         <PageContainer>
-            <TopBar tags={tagsDb} users={usersDb} />
+            <TopBar tags={tagsDb} authors={authors} />
             <RecipeList recipes={recipes}>
                 <RecipePagination
                     currentPage={currentPage}

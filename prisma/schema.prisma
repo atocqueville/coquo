@@ -9,20 +9,22 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  locale         String?
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean
+  image         String?
+  locale        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
   isBlocked      Boolean   @default(false)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
   recipes        Recipe[]
   accounts       Account[]
   sessions       Session[]
   starredRecipes Recipe[]  @relation("Favorites")
 
+  approved   Boolean   @default(false)
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?

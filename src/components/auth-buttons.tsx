@@ -3,13 +3,14 @@
 import { signOut } from '@/lib/auth-client';
 import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface LogoutButtonProps {
     className?: string;
 }
 
 export const LogoutButton = ({ className }: LogoutButtonProps) => {
+    const router = useRouter();
     return (
         <Button
             variant="outline"
@@ -18,7 +19,7 @@ export const LogoutButton = ({ className }: LogoutButtonProps) => {
                 signOut({
                     fetchOptions: {
                         onSuccess: () => {
-                            router.push('/'); // redirect to login page
+                            router.push('/');
                         },
                     },
                 })

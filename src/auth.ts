@@ -10,6 +10,10 @@ export const auth = betterAuth({
     }),
     plugins: [admin()],
     secret: getAuthSecret(),
+    trustedOrigins: async (request) => {
+        const origin = request?.headers.get('origin');
+        return origin ? [origin] : [];
+    },
     user: {
         additionalFields: {
             role: {
@@ -20,6 +24,11 @@ export const auth = betterAuth({
             locale: {
                 type: 'string',
                 required: false,
+            },
+            approved: {
+                type: 'boolean',
+                defaultValue: false,
+                input: false,
             },
         },
     },
@@ -40,7 +49,7 @@ export const auth = betterAuth({
                     if (usersCount === 1) {
                         await prisma.user.update({
                             where: { id: user.id },
-                            data: { role: 'admin', emailVerified: new Date() },
+                            data: { role: 'admin', approved: true },
                         });
                     }
                 },

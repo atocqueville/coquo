@@ -37,6 +37,7 @@ import { signOut } from '@/lib/auth-client';
 import type { Session } from '@/auth';
 import { updateUser } from '@/lib/api/user';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function AccountTab({
     currentUser,
@@ -45,6 +46,7 @@ export default function AccountTab({
 }) {
     const t = useTranslations('SettingsPage.AccountTab');
     const currentLocale = useLocale();
+    const router = useRouter();
     const [name, setName] = useState(currentUser.name);
     const [locale, setLocale] = useState(currentUser.locale || 'auto');
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
@@ -200,7 +202,15 @@ export default function AccountTab({
                                     </Button>
                                     <Button
                                         variant="destructive"
-                                        onClick={() => signOut()}
+                                        onClick={() =>
+                                            signOut({
+                                                fetchOptions: {
+                                                    onSuccess: () => {
+                                                        router.push('/');
+                                                    },
+                                                },
+                                            })
+                                        }
                                     >
                                         {t('session.signOutDialog.confirm')}
                                     </Button>

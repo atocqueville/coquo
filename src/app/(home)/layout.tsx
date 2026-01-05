@@ -11,13 +11,9 @@ export default async function CookBookLayout({
 }>) {
     const session = await getSession();
 
-    // If user is logged in but email is not verified (and not admin), redirect to error page
-    if (session?.user) {
-        const isEmailVerified =
-            !!session.user.emailVerified || session.user.role === 'admin';
-        if (!isEmailVerified) {
-            redirect('/auth/error');
-        }
+    // If user is logged in but not approved by admin, redirect to error page
+    if (session?.user && !session.user.approved) {
+        redirect('/auth/error');
     }
 
     return (

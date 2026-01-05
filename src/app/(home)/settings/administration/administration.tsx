@@ -21,29 +21,29 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { RoleGate } from '@/components/auth/role-gate';
-import type { User } from '@prisma/client';
-import { verifyUser, blockUser, unblockUser } from '@/lib/api/user';
+import { approveUser, blockUser, unblockUser } from '@/lib/api/user';
 import { toast } from 'sonner';
+import type { UserWithRole } from 'better-auth/plugins';
 
 export default function AdministrationTab({
-    unverifiedUsers,
+    pendingUsers,
     blockedUsers,
 }: {
-    unverifiedUsers: User[];
-    blockedUsers: User[];
+    pendingUsers: UserWithRole[];
+    blockedUsers: UserWithRole[];
 }) {
     const t = useTranslations('SettingsPage.AdministrationTab');
     const currentLocale = useLocale();
-    const [unverifiedUsersOptimistic, setUnverifiedUsersOptimistic] =
-        useState(unverifiedUsers);
+    const [pendingUsersOptimistic, setPendingUsersOptimistic] =
+        useState(pendingUsers);
     const [blockedUsersOptimistic, setBlockedUsersOptimistic] =
         useState(blockedUsers);
     const handleApproveUser = (userId: string) => {
         try {
-            verifyUser(userId);
+            approveUser(userId);
             toast.success(t('notifications.accountValidated'));
-            setUnverifiedUsersOptimistic(
-                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            setPendingUsersOptimistic(
+                pendingUsersOptimistic.filter((user) => user.id !== userId)
             );
         } catch {
             toast.error(t('notifications.error'));
@@ -55,14 +55,14 @@ export default function AdministrationTab({
             blockUser(userId);
             toast.success(t('notifications.accountRejected'));
 
-            // Find the user before removing from unverified list
-            const userToBlock = unverifiedUsersOptimistic.find(
+            // Find the user before removing from pending list
+            const userToBlock = pendingUsersOptimistic.find(
                 (user) => user.id === userId
             );
 
-            // Remove from unverified list
-            setUnverifiedUsersOptimistic(
-                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            // Remove from pending list
+            setPendingUsersOptimistic(
+                pendingUsersOptimistic.filter((user) => user.id !== userId)
             );
 
             // Add to blocked list if user was found
@@ -92,10 +92,10 @@ export default function AdministrationTab({
                 blockedUsersOptimistic.filter((user) => user.id !== userId)
             );
 
-            // Add to unverified list if user was found
+            // Add to pending list if user was found
             if (userToUnblock) {
-                setUnverifiedUsersOptimistic([
-                    ...unverifiedUsersOptimistic,
+                setPendingUsersOptimistic([
+                    ...pendingUsersOptimistic,
                     userToUnblock,
                 ]);
             }
@@ -114,7 +114,7 @@ export default function AdministrationTab({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {unverifiedUsersOptimistic.length > 0 ? (
+                    {pendingUsersOptimistic.length > 0 ? (
                         <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
@@ -137,7 +137,7 @@ export default function AdministrationTab({
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {unverifiedUsersOptimistic.map((user) => (
+                                    {pendingUsersOptimistic.map((user) => (
                                         <TableRow key={user.id}>
                                             <TableCell className="font-medium">
                                                 <div>
