@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/auth-client';
 import { SpinnerIcon } from '@/components/icons';
 
 export function SocialLogin() {
@@ -29,7 +29,9 @@ export function SocialLogin() {
                 className={cn(buttonVariants({ variant: 'outline' }))}
                 onClick={() => {
                     setIsGoogleLoading(true);
-                    signIn('google');
+                    signIn.social({
+                        provider: 'google',
+                    });
                 }}
                 disabled={isGoogleLoading}
             >

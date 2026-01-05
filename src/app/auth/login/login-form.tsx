@@ -10,10 +10,9 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/auth-client';
 import { SpinnerIcon } from '@/components/icons';
 import { UserLoginSchema } from '@/schemas';
-import { AuthError } from '@auth/core/errors';
 
 type FormData = z.infer<typeof UserLoginSchema>;
 
@@ -30,19 +29,12 @@ export function LoginForm() {
     async function onSubmit(data: FormData) {
         setIsLoading(true);
         try {
-            await signIn('credentials', {
+            await signIn.email({
                 ...data,
-                redirectTo: '/',
+                callbackURL: '/',
             });
         } catch (error) {
-            if (error instanceof AuthError) {
-                switch (error.name) {
-                    case 'CredentialsSignin':
-                        return { error: 'Invalid credentials!' };
-                    default:
-                        return { error: 'Something went wrong!' };
-                }
-            }
+            console.log(error);
 
             throw error;
         }

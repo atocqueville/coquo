@@ -1,4 +1,3 @@
-# Replace YOUR_DOCKER_USERNAME with your actual Docker Hub username
 services:
     coquo:
         container_name: coquo-next
@@ -7,6 +6,3 @@ services:
             - 3030:3000
         volumes:
             - ./config:/config
-        environment:
-            - AUTH_URL=http://localhost:3030/api/auth
-            - AUTH_SECRET="define_auth_secret"

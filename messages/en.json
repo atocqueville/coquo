@@ -243,9 +243,9 @@
                 "title": "Account validation",
                 "description": "Approve or reject pending registration requests."
             },
-            "blockedAccounts": {
-                "title": "Blocked accounts",
-                "description": "List of blocked accounts."
+            "bannedAccounts": {
+                "title": "Banned accounts",
+                "description": "List of banned accounts."
             },
             "table": {
                 "headers": {
@@ -257,12 +257,12 @@
                 },
                 "status": {
                     "pending": "Pending",
-                    "blocked": "Blocked"
+                    "banned": "Banned"
                 },
                 "actions": {
                     "approve": "Approve",
-                    "reject": "Reject",
-                    "unblock": "Unblock"
+                    "ban": "Ban",
+                    "unban": "Unban"
                 }
             },
             "empty": {
@@ -270,8 +270,8 @@
             },
             "notifications": {
                 "accountValidated": "Account validated successfully",
-                "accountRejected": "Account rejected successfully",
-                "accountUnblocked": "Account unblocked successfully",
+                "accountBanned": "Account banned successfully",
+                "accountUnbanned": "Account unbanned successfully",
                 "error": "An error occurred. Please try again."
             }
         },

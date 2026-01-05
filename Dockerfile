@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 
 # Install dependencies only when needed
@@ -45,7 +45,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Install only PM2 and Prisma CLI globally (minimal footprint)
-RUN npm install -g pm2@5.4.2 prisma@5.21.1
+RUN npm install -g pm2@5.4.2 prisma@6.19.1
 
 COPY --from=builder /app/public ./public
 

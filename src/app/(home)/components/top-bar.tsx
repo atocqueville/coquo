@@ -19,10 +19,10 @@ interface FilterState {
 
 export default function TopBar({
     tags,
-    users,
+    authors,
 }: {
     tags: Tag[];
-    users: User[];
+    authors: { id: string; name: string; email: string }[];
 }) {
     const t = useTranslations('HomePage');
     const router = useRouter();
@@ -42,9 +42,9 @@ export default function TopBar({
         return searchParams.get('q') || '';
     });
 
-    const userOptions = users.map((user) => ({
-        value: user.id,
-        label: user.name || user.email || t('userFallback'),
+    const userOptions = authors.map((author) => ({
+        value: author.id,
+        label: author.name || author.email || t('userFallback'),
     }));
 
     // Helper function to update URL and cookies

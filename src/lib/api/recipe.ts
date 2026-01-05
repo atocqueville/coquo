@@ -4,11 +4,11 @@ import { revalidatePath } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import type { CreateRecipeSchema } from '@/schemas';
-import { auth } from '@/auth';
 import type { RecipeUi } from '@/lib/model/recipe-ui';
 import { z } from 'zod';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
 import { ITEMS_PER_PAGE } from '@/lib/utils';
+import { getSession } from '@/lib/auth';
 
 type CreateRecipeFormData = z.infer<typeof CreateRecipeSchema>;
 
@@ -45,7 +45,7 @@ export async function getRecipes(filters: {
 }
 
 export async function getStarredRecipes(): Promise<RecipeWithTagsAndAuthor[]> {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.id) throw new Error('Unauthorized');
 
     const starredIds = await getUserStarredRecipeIds(session.user.id);
@@ -104,7 +104,7 @@ export async function getRecipeById(id: string): Promise<RecipeUi> {
 }
 
 export async function createRecipe(formData: CreateRecipeFormData) {
-    const session = await auth();
+    const session = await getSession();
     const recipeFormToRecipeDb = mapCreateRecipeFormDataToRecipeDb(
         formData,
         session?.user?.id
@@ -168,7 +168,7 @@ export async function updateRecipe(id: number, formData: CreateRecipeFormData) {
 }
 
 export async function deleteRecipe(id: number) {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.id) throw new Error('Unauthorized');
 
     // First check if the recipe exists and user has permission to delete
@@ -197,7 +197,7 @@ export async function deleteRecipe(id: number) {
 }
 
 export async function toggleFavorite(recipeId: number) {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.id) throw new Error('Unauthorized');
 
     const starredIds = await getUserStarredRecipeIds(session.user.id);

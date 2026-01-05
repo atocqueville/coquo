@@ -5,13 +5,12 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
+import { signUp } from '@/lib/auth-client';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createUser } from '@/lib/api/user';
 import { SpinnerIcon } from '@/components/icons';
 import { userAuthSchema } from '@/schemas';
 
@@ -33,15 +32,11 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
         setIsLoading(true);
 
         try {
-            await createUser(data);
-        } catch (error) {
-            console.log(error);
-        }
-
-        try {
-            await signIn('credentials', {
-                ...data,
-                redirectTo: '/',
+            await signUp.email({
+                email: data.email,
+                password: data.password,
+                name: data.name,
+                callbackURL: '/',
             });
         } catch (error) {
             console.log(error);

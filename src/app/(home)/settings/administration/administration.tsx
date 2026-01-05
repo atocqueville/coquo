@@ -21,48 +21,49 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { RoleGate } from '@/components/auth/role-gate';
-import type { User } from '@prisma/client';
-import { verifyUser, blockUser, unblockUser } from '@/lib/api/user';
+import { approveUser, banUser, unbanUser } from '@/lib/api/user';
 import { toast } from 'sonner';
+import type { User } from '@prisma/client';
 
 export default function AdministrationTab({
-    unverifiedUsers,
+    pendingUsers,
     blockedUsers,
 }: {
-    unverifiedUsers: User[];
+    pendingUsers: User[];
     blockedUsers: User[];
 }) {
+    console.log('p', pendingUsers);
     const t = useTranslations('SettingsPage.AdministrationTab');
     const currentLocale = useLocale();
-    const [unverifiedUsersOptimistic, setUnverifiedUsersOptimistic] =
-        useState(unverifiedUsers);
+    const [pendingUsersOptimistic, setPendingUsersOptimistic] =
+        useState(pendingUsers);
     const [blockedUsersOptimistic, setBlockedUsersOptimistic] =
         useState(blockedUsers);
     const handleApproveUser = (userId: string) => {
         try {
-            verifyUser(userId);
+            approveUser(userId);
             toast.success(t('notifications.accountValidated'));
-            setUnverifiedUsersOptimistic(
-                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            setPendingUsersOptimistic(
+                pendingUsersOptimistic.filter((user) => user.id !== userId)
             );
         } catch {
             toast.error(t('notifications.error'));
         }
     };
 
-    const handleRejectUser = (userId: string) => {
+    const handleBanUser = (userId: string) => {
         try {
-            blockUser(userId);
-            toast.success(t('notifications.accountRejected'));
+            banUser(userId);
+            toast.success(t('notifications.accountBanned'));
 
-            // Find the user before removing from unverified list
-            const userToBlock = unverifiedUsersOptimistic.find(
+            // Find the user before removing from pending list
+            const userToBlock = pendingUsersOptimistic.find(
                 (user) => user.id === userId
             );
 
-            // Remove from unverified list
-            setUnverifiedUsersOptimistic(
-                unverifiedUsersOptimistic.filter((user) => user.id !== userId)
+            // Remove from pending list
+            setPendingUsersOptimistic(
+                pendingUsersOptimistic.filter((user) => user.id !== userId)
             );
 
             // Add to blocked list if user was found
@@ -77,10 +78,10 @@ export default function AdministrationTab({
         }
     };
 
-    const handleUnblockUser = (userId: string) => {
+    const handleUnbanUser = (userId: string) => {
         try {
-            unblockUser(userId);
-            toast.success(t('notifications.accountUnblocked'));
+            unbanUser(userId);
+            toast.success(t('notifications.accountUnbanned'));
 
             // Find the user before removing from blocked list
             const userToUnblock = blockedUsersOptimistic.find(
@@ -92,10 +93,10 @@ export default function AdministrationTab({
                 blockedUsersOptimistic.filter((user) => user.id !== userId)
             );
 
-            // Add to unverified list if user was found
+            // Add to pending list if user was found
             if (userToUnblock) {
-                setUnverifiedUsersOptimistic([
-                    ...unverifiedUsersOptimistic,
+                setPendingUsersOptimistic([
+                    ...pendingUsersOptimistic,
                     userToUnblock,
                 ]);
             }
@@ -105,7 +106,7 @@ export default function AdministrationTab({
     };
 
     return (
-        <RoleGate allowedRole="ADMIN">
+        <RoleGate allowedRole="admin">
             <Card>
                 <CardHeader>
                     <CardTitle>{t('accountValidation.title')}</CardTitle>
@@ -114,7 +115,7 @@ export default function AdministrationTab({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {unverifiedUsersOptimistic.length > 0 ? (
+                    {pendingUsersOptimistic.length > 0 ? (
                         <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
@@ -137,7 +138,7 @@ export default function AdministrationTab({
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {unverifiedUsersOptimistic.map((user) => (
+                                    {pendingUsersOptimistic.map((user) => (
                                         <TableRow key={user.id}>
                                             <TableCell className="font-medium">
                                                 <div>
@@ -195,7 +196,7 @@ export default function AdministrationTab({
                                                         size="sm"
                                                         className="h-8 w-8 p-0 text-red-500"
                                                         onClick={() =>
-                                                            handleRejectUser(
+                                                            handleBanUser(
                                                                 user.id
                                                             )
                                                         }
@@ -203,7 +204,7 @@ export default function AdministrationTab({
                                                         <X className="h-4 w-4" />
                                                         <span className="sr-only">
                                                             {t(
-                                                                'table.actions.reject'
+                                                                'table.actions.ban'
                                                             )}
                                                         </span>
                                                     </Button>
@@ -226,9 +227,9 @@ export default function AdministrationTab({
 
             <Card>
                 <CardHeader>
-                    <CardTitle>{t('blockedAccounts.title')}</CardTitle>
+                    <CardTitle>{t('bannedAccounts.title')}</CardTitle>
                     <CardDescription>
-                        {t('blockedAccounts.description')}
+                        {t('bannedAccounts.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -283,7 +284,7 @@ export default function AdministrationTab({
                                         </TableCell>
                                         <TableCell className="hidden sm:table-cell">
                                             <Badge variant="default">
-                                                {t('table.status.blocked')}
+                                                {t('table.status.banned')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
@@ -292,10 +293,10 @@ export default function AdministrationTab({
                                                 size="sm"
                                                 className="text-xs"
                                                 onClick={() =>
-                                                    handleUnblockUser(user.id)
+                                                    handleUnbanUser(user.id)
                                                 }
                                             >
-                                                {t('table.actions.unblock')}
+                                                {t('table.actions.unban')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>

@@ -18,13 +18,13 @@ import Link from 'next/link';
 import DynamicWakeLockWrapper from './dynamic-wake-lock-wrapper';
 import RecipeDeleteButton from './recipe-delete-button';
 import { getTranslations } from 'next-intl/server';
-import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
 import { getDifficultyProps, createDifficultyLabels } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
 import RecipeImageCarousel from './recipe-image-carousel';
 import { PageMobileFooter } from '@/components/page-wrapper';
 import BackButton from './back-button';
+import { getSession } from '@/lib/auth';
 
 const IngredientsList = ({
     ingredients,
@@ -45,7 +45,7 @@ const IngredientsList = ({
 };
 
 export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
-    const session = await auth();
+    const session = await getSession();
     const t = await getTranslations('RecipePage');
     const difficultyT = await getTranslations('common.Difficulty');
     const isAuthor = session?.user?.id === recipe.userId;

@@ -1,12 +1,13 @@
-import type React from 'react';
 import AccountTab from './account';
-import { getUserById } from '@/lib/api/user';
-import { auth } from '@/auth';
-import type { User } from '@prisma/client';
+import { currentUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export default async function AccountWrapper() {
-    const session = await auth();
-    const currentUser = await getUserById(session?.user?.id as string);
+    const user = await currentUser();
 
-    return <AccountTab currentUser={currentUser as User} />;
+    if (!user) {
+        redirect('/auth/login');
+    }
+
+    return <AccountTab currentUser={user} />;
 }

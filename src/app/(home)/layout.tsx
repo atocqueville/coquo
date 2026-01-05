@@ -1,24 +1,30 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/sidebar/sidebar';
-import { SessionProvider } from 'next-auth/react';
 import { MobileNavbar } from '@/components/navbar/mobile-navbar';
+import { getSession } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
-export default function CookBookLayout({
+export default async function CookBookLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await getSession();
+
+    // If user is logged in but not approved by admin, redirect to error page
+    if (session?.user && !session.user.approved) {
+        redirect('/auth/error');
+    }
+
     return (
-        <SessionProvider>
-            <SidebarProvider defaultOpen={false}>
-                <div className="w-full flex h-screen">
-                    <AppSidebar />
-                    <div className="flex flex-col flex-1">
-                        <main className="flex-1">{children}</main>
-                        <MobileNavbar />
-                    </div>
+        <SidebarProvider defaultOpen={false}>
+            <div className="w-full flex h-screen">
+                <AppSidebar />
+                <div className="flex flex-col flex-1">
+                    <main className="flex-1">{children}</main>
+                    <MobileNavbar />
                 </div>
-            </SidebarProvider>
-        </SessionProvider>
+            </div>
+        </SidebarProvider>
     );
 }
