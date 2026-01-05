@@ -16,8 +16,9 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-import type { Tag } from '@prisma/client';
+import type { Tag } from '@/lib/prisma';
 import { useTranslations } from 'next-intl';
+
 /**
  * Props for MultiTagSelect component
  */

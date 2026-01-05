@@ -18,7 +18,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Tag } from '@prisma/client';
+import type { Tag } from '@/lib/prisma';
 
 interface AdvancedSearchButtonProps {
     selectedTags: string[];

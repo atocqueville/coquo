@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import tinycolor from 'tinycolor2';
-import type { Tag } from '@prisma/client';
+import type { Tag } from '@/lib/prisma';
 import { useTranslations } from 'next-intl';
 
 export const createSystemTagTranslator = (t: (key: string) => string) => {

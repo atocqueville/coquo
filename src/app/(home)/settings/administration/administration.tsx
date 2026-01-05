@@ -23,7 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { RoleGate } from '@/components/auth/role-gate';
 import { approveUser, banUser, unbanUser } from '@/lib/api/user';
 import { toast } from 'sonner';
-import type { User } from '@prisma/client';
+import type { User } from '@/lib/prisma';
 
 export default function AdministrationTab({
     pendingUsers,

@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma';
 import prisma from '@/lib/prisma';
 import type { CreateRecipeSchema } from '@/schemas';
 import type { RecipeUi } from '@/lib/model/recipe-ui';

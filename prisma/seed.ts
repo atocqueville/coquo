@@ -1,4 +1,4 @@
-import { PrismaClient, type Prisma, type Tag } from '@prisma/client';
+import { PrismaClient, type Prisma, type Tag } from '@/generated/prisma/client';
 import { aubergineRotie, potimarron } from './mocks/recipes';
 import { randomUUID } from 'crypto';
 

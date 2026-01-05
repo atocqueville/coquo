@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import type { Tag, User } from '@prisma/client';
+import type { Tag } from '@/lib/prisma';
 import { setCookie, destroyCookie } from 'nookies';
 import { AdvancedSearchButton } from './advanced-search-button';
 
