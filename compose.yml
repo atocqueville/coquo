@@ -7,7 +7,7 @@ services:
         volumes:
             - ./config:/config
         # environment:
-        #   - BETTER_AUTH_URL=https://coquo.example.com
+        #   - BETTER_AUTH_SECRET=...   # requis en prod
+        #   - OAUTH_AUTH_URL=https://coquo.example.com  # si Google auth activé
         #   - GOOGLE_CLIENT_ID=...
         #   - GOOGLE_CLIENT_SECRET=...
-        #   - BETTER_AUTH_URL=https://votredomaine.com → requis si Google auth activé (callback OAuth)

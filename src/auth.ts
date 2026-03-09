@@ -7,7 +7,7 @@ import { getGoogleCredentials } from '@/lib/auth-config';
 
 // URL publique de l’app (Docker / proxy). Requise pour que le callback OAuth Google soit correct.
 const baseURL =
-    process.env.BETTER_AUTH_URL || undefined;
+    process.env.OAUTH_AUTH_URL || undefined;
 
 const googleCreds = getGoogleCredentials();
 
