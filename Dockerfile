@@ -19,6 +19,8 @@ COPY . .
 
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
+# BETTER_AUTH_SECRET requis à l’exécution ; placeholder uniquement pour que le build Next.js passe
+ENV BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime
 # Set prisma database url
 
 # Generate Prisma client in node_modules, and generate .next directory with build

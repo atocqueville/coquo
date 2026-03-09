@@ -13,6 +13,6 @@ export function getAuthSecret(): string {
     }
 
     throw new Error(
-        'BETTER_AUTH_SECRET is required in production. Set it in your environment.'
+        'BETTER_AUTH_SECRET is required in production. Set it in your environment (e.g. docker compose). For a local prod build, use: BETTER_AUTH_SECRET=build-placeholder yarn build:prod'
     );
 }
