@@ -84,8 +84,11 @@ To enable Google Sign In, you'll need to set up OAuth credentials in the Google 
       - ./config:/config
     environment:
       - BETTER_AUTH_SECRET=**** (optional)
-      - AUTH_GOOGLE_ID=your_google_client_id (optional)
-      - AUTH_GOOGLE_SECRET=your_google_client_secret (optional)
+      # Optionnel : active la connexion Google sur la page login
+      - GOOGLE_CLIENT_ID=your_google_client_id
+      - GOOGLE_CLIENT_SECRET=your_google_client_secret
+      # Requis si Google est activé : URL publique de l’app (callback OAuth)
+      - BETTER_AUTH_URL=https://votredomaine.com
 ```
 
 ## Development

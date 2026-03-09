@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { CookingPotIcon } from 'lucide-react';
 import { LoginForm } from '@/app/auth/login/login-form';
 import { SocialLogin } from './social-login';
+import { isGoogleAuthEnabled } from '@/lib/auth-config';
 
 export const metadata: Metadata = {
     title: 'Login',
@@ -13,15 +14,8 @@ export const metadata: Metadata = {
 // Needed to access environment variables at runtime
 export const dynamic = 'force-dynamic';
 
-function isGoogleAuthConfigured() {
-    // Access environment variables dynamically to prevent build-time optimization
-    const clientId = process.env['GOOGLE_CLIENT_ID'];
-    const clientSecret = process.env['GOOGLE_CLIENT_SECRET'];
-    return Boolean(clientId && clientSecret);
-}
-
 export default function LoginPage() {
-    const showSocialLogin = isGoogleAuthConfigured();
+    const showSocialLogin = isGoogleAuthEnabled();
 
     return (
         <div className="lg:p-8">

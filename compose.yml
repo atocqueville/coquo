@@ -6,3 +6,8 @@ services:
             - 3030:3000
         volumes:
             - ./config:/config
+        # environment:
+        #   - BETTER_AUTH_URL=https://coquo.example.com
+        #   - GOOGLE_CLIENT_ID=...
+        #   - GOOGLE_CLIENT_SECRET=...
+        #   - BETTER_AUTH_URL=https://votredomaine.com → requis si Google auth activé (callback OAuth)

@@ -3,6 +3,13 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin } from 'better-auth/plugins';
 import prisma from '@/lib/prisma';
 import { getAuthSecret } from '@/lib/auth-secret';
+import { getGoogleCredentials } from '@/lib/auth-config';
+
+// URL publique de l’app (Docker / proxy). Requise pour que le callback OAuth Google soit correct.
+const baseURL =
+    process.env.BETTER_AUTH_URL || undefined;
+
+const googleCreds = getGoogleCredentials();
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -10,9 +17,20 @@ export const auth = betterAuth({
     }),
     plugins: [admin()],
     secret: getAuthSecret(),
+    ...(baseURL && { baseURL }),
     trustedOrigins: async (request) => {
+        const origins: string[] = [];
+        if (baseURL) {
+            try {
+                const url = new URL(baseURL);
+                origins.push(url.origin);
+            } catch {
+                // ignore invalid URL
+            }
+        }
         const origin = request?.headers.get('origin');
-        return origin ? [origin] : [];
+        if (origin) origins.push(origin);
+        return origins;
     },
     user: {
         additionalFields: {
@@ -35,12 +53,14 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    socialProviders: {
-        google: {
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    ...(googleCreds && {
+        socialProviders: {
+            google: {
+                clientId: googleCreds.clientId,
+                clientSecret: googleCreds.clientSecret,
+            },
         },
-    },
+    }),
     databaseHooks: {
         user: {
             create: {
