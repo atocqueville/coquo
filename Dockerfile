@@ -1,40 +1,43 @@
 FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 
-# Install dependencies only when needed
+
+########################################################
+# DEPENDENCIES
+########################################################
 FROM base AS deps
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Install dependencies
 COPY package.json yarn.lock* ./
 RUN yarn --frozen-lockfile
 
 
-# Rebuild the source code only when needed
+########################################################
+# BUILDER
+########################################################
 FROM base AS builder
-
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
-# BETTER_AUTH_SECRET requis à l’exécution ; placeholder uniquement pour que le build Next.js passe
+# BETTER_AUTH_SECRET is required at runtime; placeholder only for the Next.js build to pass
 ENV BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime
-# Set prisma database url
 
-# Generate Prisma client in node_modules, and generate .next directory with build
-# It needs the local env var DATABASE_URL, to go deep only one level (NO IDEA WHY)
+# Generate Prisma client, then build the Next.js app
 RUN yarn run build:prod
 
 # Build express app in file-storage
 WORKDIR /app/file-storage
 RUN yarn --frozen-lockfile
-WORKDIR /app
 
-# Production image, copy all the files and run next
+
+########################################################
+# PRODUCTION
+########################################################
 FROM base AS runner
-
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -47,7 +50,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Install only PM2 and Prisma CLI globally (minimal footprint)
-RUN npm install -g pm2@5.4.2 prisma@6.19.1
+# TODO use binaries
+RUN npm install -g pm2@5.4.2 prisma@7.4.2
 
 COPY --from=builder /app/public ./public
 
