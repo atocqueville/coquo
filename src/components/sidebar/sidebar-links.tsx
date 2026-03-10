@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Settings } from 'lucide-react';
 import {
     SidebarContent,
@@ -32,15 +33,15 @@ export function SidebarLinks() {
                                             disabled={pathname === item.href}
                                             className="transition-colors duration-200"
                                         >
-                                            <a href={item.href}>
+                                            <Link href={item.href}>
                                                 <item.icon
                                                     className={`transition-all duration-200 ${
                                                         pathname === item.href
                                                             ? ''
                                                             : 'text-sidebar-foreground hover:scale-110'
-                                                    }`}
+                                                    }`                                                    }
                                                 />
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))}
@@ -57,7 +58,7 @@ export function SidebarLinks() {
                             disabled={pathname === '/settings'}
                             className="transition-colors duration-200"
                         >
-                            <a href={'/settings'}>
+                            <Link href="/settings">
                                 <Settings
                                     className={`transition-all duration-200 ${
                                         pathname === '/settings'
@@ -65,7 +66,7 @@ export function SidebarLinks() {
                                             : 'text-sidebar-foreground hover:scale-110'
                                     }`}
                                 />
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
