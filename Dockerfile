@@ -67,7 +67,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage
 
 # PM2 Config
-COPY --from=builder --chown=nextjs:nodejs /app/ecosystem.config.js ./ecosystem.config.js
+COPY --from=builder --chown=nextjs:nodejs /app/ecosystem.config.cjs ./ecosystem.config.cjs
 
 USER nextjs
 
@@ -79,4 +79,4 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["npx", "pm2-runtime", "ecosystem.config.js"]
+CMD ["npx", "pm2-runtime", "ecosystem.config.cjs"]

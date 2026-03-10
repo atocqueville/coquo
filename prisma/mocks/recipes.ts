@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '../generated/prisma/client.js';
 
 export const aubergineRotie: Omit<Prisma.RecipeCreateInput, 'author'> = {
     title: 'Aubergine rôtie, sauce à la purée de sésame et semoule aux amandes',

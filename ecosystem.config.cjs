@@ -1,16 +1,16 @@
 module.exports = [
     {
-        name: 'prisma-migrate',
+        name: 'migrate',
         script: 'npx',
         args: 'prisma migrate deploy',
         autorestart: false,
     },
     {
-        name: 'nextjs',
+        name: 'coquo',
         script: 'server.js',
     },
     {
-        name: 'file-storage',
+        name: 'fs',
         script: 'file-storage/server.js',
         env: {
             MEDIA_PATH: '../../config/media',

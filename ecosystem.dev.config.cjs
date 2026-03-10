@@ -1,12 +1,12 @@
 module.exports = [
     {
-        name: 'nextjs',
+        name: 'coquo',
         script: 'next',
         args: 'dev',
         watch: false,
     },
     {
-        name: 'file-storage',
+        name: 'fs',
         script: 'npm',
         args: 'start --prefix file-storage',
         watch: ['file-storage'],
@@ -16,7 +16,7 @@ module.exports = [
         },
     },
     {
-        name: 'prisma-studio',
+        name: 'studio',
         script: 'npx',
         args: 'dotenv -e .env.local -- prisma studio',
         watch: false,
