@@ -1,4 +1,4 @@
-import type { Recipe } from '@prisma/client';
+import type { Recipe } from '@/lib/prisma';
 
 // Helper function to format time display
 export const formatTime = (recipe: Pick<Recipe, 'prepTime' | 'cookTime'>) => {
