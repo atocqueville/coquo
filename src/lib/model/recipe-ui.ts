@@ -6,12 +6,12 @@ export interface RecipeUi {
         path: string;
         order: number;
     }>;
-    userId: string;
+    userId: string | null;
     author: {
         id: string;
         email: string | null;
         name: string | null;
-    };
+    } | null;
     ingredients: string[];
     difficulty: number;
     cookTime: number;

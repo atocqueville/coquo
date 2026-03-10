@@ -150,7 +150,7 @@ export default async function Recipe({ recipe }: { recipe: RecipeUi }) {
 
                         {/* Author */}
                         <div className="px-6">
-                            {recipe.author.email && (
+                            {recipe.author?.email && (
                                 <p className="text-sm text-muted-foreground mt-1">
                                     {t('author')} {recipe.author.name}
                                 </p>

@@ -181,7 +181,7 @@ export async function deleteRecipe(id: number) {
         throw new Error('Recipe not found');
     }
 
-    if (recipe.userId !== session.user.id) {
+    if (!recipe.userId || recipe.userId !== session.user.id) {
         throw new Error('Unauthorized to delete this recipe');
     }
 
