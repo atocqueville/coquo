@@ -36,6 +36,7 @@ export default function RecipeImageCarousel({
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
                 priority
+                unoptimized
             />
 
             {images.length > 1 && (

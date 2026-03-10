@@ -5,6 +5,17 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
     output: 'standalone',
+    images: {
+        localPatterns: [
+            {
+                pathname: '/api/image-proxy',
+            },
+            {
+                pathname: '/**',
+                search: '',
+            },
+        ],
+    },
     experimental: {
         scrollRestoration: true,
         serverActions: {

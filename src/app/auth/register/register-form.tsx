@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +19,7 @@ interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 type RegisterFormData = z.infer<typeof userAuthSchema>;
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -30,7 +31,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
     async function onSubmit(data: RegisterFormData) {
         setIsLoading(true);
-
         try {
             await signUp.email({
                 email: data.email,
@@ -38,11 +38,12 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
                 name: data.name,
                 callbackURL: '/',
             });
+            router.push('/');
         } catch (error) {
             console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
     }
 
     return (

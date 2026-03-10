@@ -89,10 +89,10 @@ model Recipe {
   prepTime    Int
   cookTime    Int
   servings    Int
-  userId      String
+  userId      String?
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
-  author      User          @relation(fields: [userId], references: [id])
+  author      User?          @relation(fields: [userId], references: [id])
   images      RecipeImage[]
   steps       RecipeStep[]
   starredBy   User[]        @relation("Favorites")

@@ -392,6 +392,7 @@ export function CreateRecipeForm({
                                                                                     fill
                                                                                     alt={`Aperçu de la recette - Image ${index + 1}`}
                                                                                     className="object-cover"
+                                                                                    unoptimized
                                                                                 />
                                                                                 <Button
                                                                                     type="button"

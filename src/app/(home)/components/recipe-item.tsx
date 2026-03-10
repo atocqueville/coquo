@@ -36,6 +36,7 @@ export default async function RecipeItem({
                                 fill
                                 sizes="(max-width: 640px) 128px, 25vw"
                                 className="object-cover transition-transform group-hover:scale-105"
+                                unoptimized
                             />
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 pt-8 sm:p-4 sm:pt-12">
                                 <div className="flex justify-between text-white">

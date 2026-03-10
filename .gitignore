@@ -1,5 +1,7 @@
 # Keep environment variables out of version control
 .env
+.env.local
+.env.production
 
 .DS_Store
 
@@ -39,9 +41,6 @@ yarn-error.log*
 
 # vscode
 .vscode
-
-# env files (can opt-in for commiting if needed)
-.env*
 
 # vercel
 .vercel
