@@ -1,8 +1,8 @@
 module.exports = [
     {
         name: 'migrate',
-        script: 'npx',
-        args: 'prisma migrate deploy',
+        script: 'node_modules/.bin/prisma',
+        args: ['migrate', 'deploy'],
         autorestart: false,
     },
     {

@@ -1,5 +1,4 @@
-FROM node:20-alpine AS base
-RUN apk add --no-cache libc6-compat openssl
+FROM node:20.19-alpine AS base
 
 
 ########################################################
@@ -27,6 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime
 
 # Generate Prisma client, then build the Next.js app
+ENV DATABASE_URL="build-placeholder-not-used-at-runtime"
 RUN yarn run build:prod
 
 # Build express app in file-storage
@@ -49,9 +49,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Install only PM2 and Prisma CLI globally (minimal footprint)
-# TODO use binaries
-RUN npm install -g pm2@5.4.2 prisma@7.4.2
+# Install only PM2 globally
+RUN npm install -g pm2@5.4.2
+# Prisma CLI + dotenv for migrate deploy and prisma.config.ts (version aligned with package.json)
+RUN npm install prisma@7.4.2 dotenv && chown -R nextjs:nodejs node_modules
 
 COPY --from=builder /app/public ./public
 
@@ -66,6 +67,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
 # Express File-Storage
 COPY --from=builder --chown=nextjs:nodejs /app/file-storage ./file-storage
