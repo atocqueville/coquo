@@ -1,6 +1,6 @@
 'use server';
 
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '@/lib/prisma';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
 import { headers } from 'next/headers';

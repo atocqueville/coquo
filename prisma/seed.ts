@@ -1,8 +1,15 @@
-import { PrismaClient, type Prisma, type Tag } from '@prisma/client';
-import { aubergineRotie, potimarron } from './mocks/recipes';
-import { randomUUID } from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
-const prisma = new PrismaClient();
+import { PrismaClient, type Prisma, type Tag } from './generated/prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { aubergineRotie, potimarron } from './mocks/recipes';
+import { randomUUID } from 'node:crypto';
+
+const adapter = new PrismaBetterSqlite3({
+    url: process.env.DATABASE_URL,
+});
+const prisma = new PrismaClient({ adapter });
 
 /**
  * Returns a random number of tags (between min and max inclusive)

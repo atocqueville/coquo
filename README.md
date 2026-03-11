@@ -115,6 +115,13 @@ yarn dev:stop
 
 You can then log in with the combo `admin@coquo.io` / `azerty` at http://localhost:3000
 
+### Building the Docker image locally
+
+```bash
+yarn docker:build
+docker tag coquo atocqueville/coquo:dev
+```
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - React framework

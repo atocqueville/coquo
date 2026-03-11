@@ -40,7 +40,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { Tag } from '@prisma/client';
+import type { Tag } from '@/lib/prisma';
 import { Badge } from '@/components/ui/badge';
 
 import { uploadImages } from '@/lib/api/file-storage';

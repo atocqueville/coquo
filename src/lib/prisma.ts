@@ -1,15 +1,18 @@
-import { PrismaClient } from '@prisma/client'
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting your database connection limit.
-//
-// Learn more:
-// https://pris.ly/d/help/next-js-best-practices
+import { PrismaClient } from '../../prisma/generated/prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-export const prisma = globalForPrisma.prisma || new PrismaClient()
+const adapter = new PrismaBetterSqlite3({
+    url: process.env.DATABASE_URL ?? 'file:./dev.db',
+});
+export const prisma =
+    globalForPrisma.prisma ?? new PrismaClient({ adapter });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-export default prisma
+export default prisma;
+export type { Prisma, Tag, User, Recipe } from '../../prisma/generated/prisma/client';

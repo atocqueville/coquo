@@ -8,7 +8,7 @@ const sharp = require('sharp');
 
 const app = express();
 
-/** MEDIA_PATH is set in either the ecosystem.config.js or ecosystem.dev.config.js file */
+/** MEDIA_PATH is set in either the ecosystem.config.cjs or ecosystem.dev.config.cjs file */
 const MEDIA_PATH = process.env.MEDIA_PATH;
 const ABS_MEDIA_PATH = path.resolve(__dirname, MEDIA_PATH);
 
