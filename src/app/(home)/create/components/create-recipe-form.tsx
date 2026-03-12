@@ -43,7 +43,8 @@ import {
 import type { Tag } from '@/lib/prisma';
 import { Badge } from '@/components/ui/badge';
 
-import { uploadImages } from '@/lib/api/file-storage';
+import { getMediaPath } from '@/lib/api/express.constants';
+import { uploadImages } from '@/lib/api/media';
 import { createRecipe, updateRecipe } from '@/lib/api/recipe';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -140,17 +141,11 @@ export function CreateRecipeForm({
     const formSchema = useMemo(() => createFormSchema(t), [t]);
     type FormValues = z.infer<typeof formSchema>;
 
-    // Format image URL to use the image proxy for existing images
+    // Format image URL for existing images (media path) or data URLs (new uploads)
     const formatImageUrl = (imagePath: string | undefined) => {
         if (!imagePath) return null;
-
-        // For existing images stored on the server, use the image proxy
-        if (!imagePath.startsWith('data:')) {
-            return `/api/image-proxy?imageId=${imagePath}`;
-        }
-
-        // For data URLs (new uploads from FileReader), return as is
-        return imagePath;
+        if (imagePath.startsWith('data:')) return imagePath;
+        return getMediaPath(imagePath);
     };
 
     const initialImageUrls =

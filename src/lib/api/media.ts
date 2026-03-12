@@ -1,6 +1,6 @@
 'use server';
 
-import { FILE_STORAGE_URL } from './express.constants';
+import { MEDIA_BASE_URL, MEDIA_PATH } from './express.constants';
 
 export async function uploadImages(
     fileList: File[]
@@ -14,8 +14,10 @@ export async function uploadImages(
         formData.append('files', file);
     });
 
+    const uploadUrl = `${MEDIA_BASE_URL}${MEDIA_PATH}/files`;
+
     try {
-        const response = await fetch(FILE_STORAGE_URL + '/files', {
+        const response = await fetch(uploadUrl, {
             method: 'POST',
             body: formData,
         });
@@ -31,7 +33,7 @@ export async function uploadImages(
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
             throw new Error(
-                'Server returned non-JSON response. Make sure the file storage server is running on port 3040.'
+                'Server returned non-JSON response. Make sure the app is running.'
             );
         }
 

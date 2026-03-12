@@ -5,6 +5,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { getLocale } from 'next-intl/server';
 import './globals.css';
 
+export const dynamic = 'force-dynamic';
+
 const geistSans = localFont({
     src: '../fonts/GeistVF.woff',
     variable: '--font-geist-sans',

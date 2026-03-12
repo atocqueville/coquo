@@ -4,11 +4,10 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
-    output: 'standalone',
     images: {
         localPatterns: [
             {
-                pathname: '/api/image-proxy',
+                pathname: '/media/**',
             },
             {
                 pathname: '/**',

@@ -1,21 +1,25 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Badge } from '@/components/ui/badge';
 import { Clock, ChefHat } from 'lucide-react';
+import { getMediaPath } from '@/lib/api/express.constants';
 import type { RecipeWithTagsAndAuthor } from '@/lib/api/recipe';
 import { getUserStarredRecipeIds } from '@/lib/api/user';
+import { currentUser } from '@/lib/auth';
 import FavoriteButton from './favorite-button';
 import { getDifficultyProps, createDifficultyLabels } from '@/utils/difficulty';
 import { formatTime } from '@/utils/time-format';
-import { getTranslations } from 'next-intl/server';
 
 export default async function RecipeItem({
     recipe,
 }: {
     recipe: RecipeWithTagsAndAuthor;
 }) {
-    // const user = await currentUser();
-    const starredRecipeIds = await getUserStarredRecipeIds('12' as string); // TODO: Replace with user.id
+    const user = await currentUser();
+    const starredRecipeIds = user?.id
+        ? await getUserStarredRecipeIds(user.id)
+        : [];
     const timeInfo = formatTime(recipe);
     const difficultyT = await getTranslations('common.Difficulty');
     const difficultyLabels = createDifficultyLabels(difficultyT);
@@ -31,7 +35,7 @@ export default async function RecipeItem({
                     {recipe.images && recipe.images.length > 0 ? (
                         <>
                             <Image
-                                src={`/api/image-proxy?imageId=${recipe.images[0].path}`}
+                                src={getMediaPath(recipe.images[0].path)}
                                 alt="recipe top view"
                                 fill
                                 sizes="(max-width: 640px) 128px, 25vw"
