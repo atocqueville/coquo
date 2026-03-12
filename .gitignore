@@ -27,6 +27,7 @@
 
 # production
 /build
+/dist
 
 # data
 config/**

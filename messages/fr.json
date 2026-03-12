@@ -199,7 +199,8 @@
         "tabs": {
             "account": "Compte",
             "customization": "Personnalisation",
-            "administration": "Administration"
+            "administration": "Administration",
+            "changelog": "Changelog"
         },
         "AccountTab": {
             "profile": {

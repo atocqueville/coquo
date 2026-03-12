@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getMediaPath } from '@/lib/api/express.constants';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -30,7 +31,7 @@ export default function RecipeImageCarousel({
     return (
         <div className="relative h-full w-full">
             <Image
-                src={`/api/image-proxy?imageId=${images[currentImageIndex].path}`}
+                src={getMediaPath(images[currentImageIndex].path)}
                 alt={`Recipe image ${currentImageIndex + 1}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 768px"

@@ -48,7 +48,7 @@ services:
     container_name: coquo
     image: atocqueville/coquo:latest
     ports:
-      - 3030:3000
+      - 3030:3847
     volumes:
       - ./config:/config
     environment:
@@ -79,7 +79,7 @@ To enable Google Sign In, you'll need to set up OAuth credentials in the Google 
     container_name: coquo
     image: atocqueville/coquo:latest
     ports:
-      - 3030:3000
+      - 3030:3847
     volumes:
       - ./config:/config
     environment:
@@ -98,22 +98,16 @@ Create a .env.local file with
 DATABASE_URL="file:../config/db/db.sqlite3"
 ```
 
-Start the development server (using pm2):
+Start the development server:
 
 ```bash
 yarn install
 yarn prisma:reset # Removes your eventual existing database, creates an empty one and runs migrations
 
-yarn dev:start # Starts the Coquo web app on port 3000 + Prisma Studio on port 5555
+yarn dev # Starts the Coquo web app on port 3847 (custom server + Next.js)
 ```
 
-Stop the development server:
-
-```bash
-yarn dev:stop
-```
-
-You can then log in with the combo `admin@coquo.io` / `azerty` at http://localhost:3000
+You can then log in with the combo `admin@coquo.io` / `azerty` at http://localhost:3847
 
 ### Building the Docker image locally
 
