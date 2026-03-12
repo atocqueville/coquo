@@ -8,6 +8,7 @@
 
 - Migrated to Next.js custom server (single Node process: Express + Next.js, media mounted at `/media`, Prisma migrations on startup in production).
 - Added a Changelog tab in /settings route.
+- Updated all @radix-ui dependencies
 
 ### Removed
 
