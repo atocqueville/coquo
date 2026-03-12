@@ -48,7 +48,7 @@ app.prepare()
 
         server.listen(port, () => {
             console.log(
-                `> Ready on http://localhost:${port} (${dev ? 'development' : 'production'})`
+                `> Ready on http://localhost:${port}`
             );
         });
     })

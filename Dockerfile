@@ -61,4 +61,4 @@ COPY --from=builder /app/CHANGELOG.md ./CHANGELOG.md
 USER nextjs
 EXPOSE 3847
 
-CMD ["node", "dist/server/index.js"]
+CMD ["npm", "start"]
