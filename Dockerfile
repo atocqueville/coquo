@@ -1,4 +1,4 @@
-FROM node:20.19-alpine AS base
+FROM node:22.12-alpine AS base
 RUN apk add --no-cache openssl
 
 
@@ -7,8 +7,8 @@ RUN apk add --no-cache openssl
 ########################################################
 FROM base AS deps
 WORKDIR /app
-COPY package.json yarn.lock* ./
-RUN yarn --frozen-lockfile
+COPY package.json package-lock.json ./
+RUN npm ci
 
 
 ########################################################
@@ -16,8 +16,8 @@ RUN yarn --frozen-lockfile
 ########################################################
 FROM base AS prod-deps
 WORKDIR /app
-COPY package.json yarn.lock* ./
-RUN yarn install --production --frozen-lockfile
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 
 ########################################################
@@ -32,7 +32,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime
 ENV DATABASE_URL="build-placeholder-not-used-at-runtime"
 
-RUN yarn build
+RUN npm run build
 
 
 ########################################################
