@@ -1,7 +1,7 @@
 /**
- * Récupère le BETTER_AUTH_SECRET.
- * - En dev : variable d’env ou secret fixe (sessions stables entre redémarrages).
- * - En prod : BETTER_AUTH_SECRET est requis (variable d’env).
+ * Retrieves the BETTER_AUTH_SECRET.
+ * - Dev : fixed secret (stable sessions between restarts).
+ * - Prod : BETTER_AUTH_SECRET is required (environment variable).
  */
 export function getAuthSecret(): string {
     if (process.env.BETTER_AUTH_SECRET) {
