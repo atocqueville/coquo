@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
-
 import { PrismaClient, type Prisma, type Tag } from './generated/prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { aubergineRotie, potimarron } from './mocks/recipes';
 import { randomUUID } from 'node:crypto';
+import { PRISMA_DATABASE_URL } from './prisma.constants';
 
 const adapter = new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL ?? PRISMA_DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
@@ -54,6 +52,7 @@ async function main() {
     const tags = await prisma.tag.findMany();
 
     const adminEmail = 'admin@coquo.io';
+    // better-auth credential hash for password "azerty"
     const adminPassword =
         '43a996f1a728e49e81d4aced41729916:831ba8ee7c36031c0d9edcbd1d63596decb984c9f947b50e2419ace0e20a7db9d5c1d6ae2addde1d4066b67ff0a2027b062ee5263b95f1f73ce25b5ae05f9461';
 

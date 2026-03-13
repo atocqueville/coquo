@@ -1,12 +1,9 @@
-/app/node_modules
-/app/.gitignore
-/app/.next
-
 .git
+node_modules
+.next
+dist
 npm-debug.log
-
 README.md
-
 config/db/*
 config/logs/*
 config/*.json
@@ -14,3 +11,8 @@ config/*.json
 # Environment files
 .env
 .env.*
+
+# Dev / IDE
+.cursor
+.vscode
+*.log

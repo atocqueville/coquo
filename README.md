@@ -93,11 +93,6 @@ To enable Google Sign In, you'll need to set up OAuth credentials in the Google 
 
 ## Development
 
-Create a .env.local file with
-```
-DATABASE_URL="file:../config/db/db.sqlite3"
-```
-
 Start the development server:
 
 ```bash
@@ -113,7 +108,8 @@ You can then log in with the combo `admin@coquo.io` / `azerty` at http://localho
 
 ```bash
 yarn docker:build
-docker tag coquo atocqueville/coquo:dev
+docker tag coquo coquo:dev
+docker compose up
 ```
 
 ## Tech Stack

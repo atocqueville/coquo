@@ -5,14 +5,14 @@
     "type": "module",
     "scripts": {
         "dev": "nodemon -e ts --watch server -x tsx server/index.ts",
-        "build": "prisma generate && next build && tsc -p tsconfig.server.json",
+        "build": "prisma generate && BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime next build && tsc -p tsconfig.server.json",
         "start": "NODE_ENV=production node dist/server/index.js",
         "db:reset": "npx prisma migrate reset",
         "db:seed": "npx prisma db seed",
-        "db:push": "npx dotenv -e .env.local -- prisma db push",
-        "db:pull": "npx dotenv -e .env.local -- prisma db pull",
+        "db:push": "npx prisma db push",
+        "db:pull": "npx prisma db pull",
         "db:studio": "npx prisma studio",
-        "prisma:migrate": "npx prisma migrate dev --name",
+        "db:migrate": "npx prisma migrate dev --name",
         "docker:build": "docker build -t coquo ."
     },
     "dependencies": {
@@ -43,8 +43,6 @@
         "cmdk": "^1.1.1",
         "cors": "^2.8.5",
         "crypto-js": "^4.2.0",
-        "dotenv": "^16",
-        "dotenv-cli": "^7.3.0",
         "express": "^4.21.2",
         "lucide-react": "^0.511.0",
         "multer": "^2.1.1",

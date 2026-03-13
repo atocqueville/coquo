@@ -1,13 +1,9 @@
-import dotenv from 'dotenv';
 import { execSync } from 'node:child_process';
 import express from 'express';
 import next from 'next';
 import mediaApp from './media.js';
 import changelogApp from './changelog.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-
-dotenv.config({ path: '.env.local' });
-dotenv.config();
 
 const rootDir = process.cwd();
 
