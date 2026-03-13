@@ -1,13 +1,10 @@
 services:
     coquo:
-        container_name: coquo-next
+        container_name: coquo
         image: coquo:dev
         ports:
             - 3847:3847
         volumes:
             - ./config:/config
         environment:
-            - BETTER_AUTH_SECRET=dev-secret-do-not-use-in-production
-        #   - OAUTH_AUTH_URL=...
-        #   - GOOGLE_CLIENT_ID=...
-        #   - GOOGLE_CLIENT_SECRET=...
+            - AUTH_SECRET=dev-secret-do-not-use-in-production

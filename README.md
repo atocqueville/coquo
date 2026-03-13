@@ -42,18 +42,17 @@ Coquo is a modern, self-hosted recipe management application built with Next.js.
 
 - with docker compose (**recommended**)
 
-```
+```yaml
 services:
   coquo:
     container_name: coquo
     image: atocqueville/coquo:latest
     ports:
-      - 3030:3847
+      - 3847:3847
     volumes:
       - ./config:/config
     environment:
-      - AUTH_URL=**insert your production domain**/api/auth
-      - AUTH_SECRET="insert a hash secret"
+      - AUTH_SECRET=****   # Required, used for encryption, signing, and hashing
 ```
 
 ### Add Google Sign In Provider
@@ -72,45 +71,39 @@ To enable Google Sign In, you'll need to set up OAuth credentials in the Google 
      - Authorized Javascript origins: `https://yourdomain.com`
      - Authorized redirect URIs: `https://yourdomain.com/api/auth/callback/google`
 
-3. **Configure Environment Variables**:
-```
- services:
-  coquo:
-    container_name: coquo
-    image: atocqueville/coquo:latest
-    ports:
-      - 3030:3847
-    volumes:
-      - ./config:/config
+3. **Configure Docker Environment Variables**:
+```yaml
     environment:
-      - BETTER_AUTH_SECRET=****  # requis en prod
-      # Optionnel : active la connexion Google sur la page login
-      - GOOGLE_CLIENT_ID=your_google_client_id
-      - GOOGLE_CLIENT_SECRET=your_google_client_secret
-      # Requis si Google est activé : URL publique de l’app (callback OAuth)
-      - OAUTH_AUTH_URL=https://votredomaine.com
+      - AUTH_SECRET=****
+      - GOOGLE_CLIENT_ID=your_google_client_id # Required to use Google OAuth
+      - GOOGLE_CLIENT_SECRET=your_google_client_secret # Required to use Google OAuth
+      - OAUTH_AUTH_URL=https://yourdomain.com # Required to use Google OAuth
 ```
 
 ## Development
 
+**Prerequisites**: Node.js 22.x, npm. You can `nvm use` in project root.
+
 Start the development server:
 
 ```bash
-yarn install
-yarn prisma:reset # Removes your eventual existing database, creates an empty one and runs migrations
-
-yarn dev # Starts the Coquo web app on port 3847 (custom server + Next.js)
+npm install
+npm run db:reset   # Recreates the database, runs migrations
+npm run db:seed    # Seed the database with fake data
+npm run dev        # Serves on port 3847
 ```
 
-You can then log in with the combo `admin@coquo.io` / `azerty` at http://localhost:3847
+Test login: `admin@coquo.io` / `azerty` at http://localhost:3847
 
 ### Building the Docker image locally
 
 ```bash
-yarn docker:build
-docker tag coquo coquo:dev
+npm run docker:build
+docker tag coquo:latest coquo:dev
 docker compose up
 ```
+
+The repo's `compose.yml` uses the image `coquo:dev` and sets dev environment variables.
 
 ## Tech Stack
 
