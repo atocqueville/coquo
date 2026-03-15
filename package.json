@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "nodemon -e ts --watch server -x tsx server/index.ts",
-        "build": "prisma generate && BETTER_AUTH_SECRET=build-placeholder-not-used-at-runtime next build && tsc -p tsconfig.server.json",
+        "build": "prisma generate && AUTH_SECRET=build-placeholder-not-used-at-runtime next build && tsc -p tsconfig.server.json",
         "start": "NODE_ENV=production node dist/server/index.js",
         "db:reset": "npx prisma migrate reset",
         "db:seed": "npx prisma db seed",
