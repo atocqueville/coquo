@@ -7,8 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const MEDIA_PATH = '/media';
 
-const MEDIA_DIR = path.join(process.cwd(), 'config', 'media');
+const MEDIA_DIR =
+    process.env.NODE_ENV === 'production'
+        ? '/config/media'
+        : path.join(process.cwd(), 'config', 'media');
 const ABS_MEDIA_DIR = path.resolve(MEDIA_DIR);
+console.log('MEDIA_DIR', MEDIA_DIR);
+console.log('ABS_MEDIA_DIR', ABS_MEDIA_DIR);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
