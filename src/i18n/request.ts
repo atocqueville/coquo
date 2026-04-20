@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth';
 import { getUserById } from '@/lib/api/user';
 
 // Supported locales
-const locales = ['fr', 'en'];
+const locales = ['fr', 'en', 'zh'];
 const defaultLocale = 'en';
 
 export default getRequestConfig(async () => {
