@@ -1,0 +1,301 @@
+{
+    "HomePage": {
+        "title": "我的食谱",
+        "search": {
+            "placeholder": "搜索"
+        },
+        "filters": {
+            "advancedSearch": "高级搜索",
+            "title": "筛选",
+            "tagsLabel": "标签",
+            "authorsLabel": "作者",
+            "tagsPlaceholder": "选择标签",
+            "authorsPlaceholder": "作者",
+            "resetButton": "重置"
+        },
+        "userFallback": "匿名用户"
+    },
+    "common": {
+        "FavoriteButton": {
+            "added": "食谱已添加到收藏",
+            "removed": "食谱已从收藏中移除",
+            "error": "发生错误，请重试。"
+        },
+        "Difficulty": {
+            "easy": "简单",
+            "medium": "中等",
+            "hard": "困难",
+            "unknown": "未知"
+        },
+        "SystemTags": {
+            "vegetarian": "素食",
+            "meat": "肉类",
+            "fish": "鱼类",
+            "gluten-free": "无麸质",
+            "quick": "快手",
+            "summer": "夏季",
+            "winter": "冬季",
+            "autumn": "秋季",
+            "spring": "春季",
+            "dessert": "甜点",
+            "starter": "开胃菜",
+            "main": "主菜",
+            "spicy": "辣味"
+        },
+        "MultiTagSelect": {
+            "placeholder": "选择选项"
+        },
+        "Pagination": {
+            "previous": "上一页",
+            "next": "下一页",
+            "goToPreviousPage": "前往上一页",
+            "goToNextPage": "前往下一页",
+            "morePages": "更多页面"
+        },
+        "MobileNavbar": {
+            "moreOptions": "更多选项",
+            "more": "更多"
+        },
+        "ErrorMessage": {
+            "permissionDenied": "您没有权限查看此内容。"
+        },
+        "AutoVerificationChecker": {
+            "accountVerified": "您的账户已成功验证！",
+            "accountNotVerified": "您的账户尚未验证。",
+            "verificationError": "检查账户验证状态时出错",
+            "checkingInProgress": "验证中...",
+            "pendingValidation": "账户待验证",
+            "automaticCheck": "页面会自动检查您的账户状态。如果您的账户已验证，请刷新页面。"
+        },
+        "ApiError": {
+            "userExists": "用户已存在",
+            "noAdminFound": "未找到管理员",
+            "incorrectPassword": "当前密码不正确"
+        }
+    },
+    "FavoritePage": {
+        "title": "我收藏的食谱",
+        "emptyState": {
+            "title": "未找到食谱",
+            "description": "您还没有收藏的食谱。将食谱添加到收藏夹后即可在此查看。"
+        }
+    },
+    "RecipeList": {
+        "emptyState": {
+            "noRecipesFound": "未找到食谱",
+            "noResults": "没有符合您搜索条件的食谱。请尝试调整筛选条件或搜索其他内容。",
+            "noFavorites": "您还没有收藏的食谱。将食谱添加到收藏夹后即可在此查看。"
+        }
+    },
+    "CreateRecipePage": {
+        "title": "创建新食谱",
+        "form": {
+            "pictures": {
+                "label": "食谱照片",
+                "imageCount": "（{count} 张图片）",
+                "uploadText": "上传图片",
+                "removeImage": "移除图片",
+                "moreImages": "+ 还有 {count} 张"
+            },
+            "title": {
+                "label": "食谱标题",
+                "placeholder": "美味巧克力蛋糕"
+            },
+            "prepTime": {
+                "label": "准备时间（分钟）"
+            },
+            "cookTime": {
+                "label": "烹饪时间（分钟）"
+            },
+            "servings": {
+                "label": "份量"
+            },
+            "difficulty": {
+                "label": "难度"
+            },
+            "tags": {
+                "label": "标签"
+            },
+            "ingredients": {
+                "label": "食材",
+                "placeholder": "每行添加一种食材",
+                "description": "列出所有食材及其用量和计量单位。",
+                "tooltip": {
+                    "info": "关于食材格式",
+                    "format1": "每行输入一种食材",
+                    "format2": "格式：\"2 杯面粉\" 或 \"1 汤匙橄榄油\""
+                }
+            },
+            "steps": {
+                "label": "食谱步骤",
+                "addStep": "添加步骤",
+                "addStepShort": "添加",
+                "removeStep": "移除步骤",
+                "stepNumber": "步骤 {number}",
+                "stepTitle": {
+                    "label": "步骤标题",
+                    "placeholder": "准备面团"
+                },
+                "instructions": {
+                    "label": "说明",
+                    "addInstruction": "添加说明",
+                    "addInstructionShort": "添加",
+                    "removeInstruction": "移除说明",
+                    "placeholder": "在大碗中混合面粉和泡打粉..."
+                }
+            },
+            "submit": {
+                "create": "创建食谱",
+                "update": "更新食谱",
+                "creating": "创建中...",
+                "updating": "更新中..."
+            }
+        },
+        "validation": {
+            "titleMin": "食谱标题至少需要 2 个字符。",
+            "ingredientsRequired": "请添加食材",
+            "stepTitleMin": "步骤标题至少需要 2 个字符。",
+            "instructionMin": "说明至少需要 5 个字符。",
+            "instructionRequired": "请至少添加一条说明。",
+            "stepsRequired": "请至少添加一个步骤。",
+            "prepTimeMin": "准备时间至少为 1 分钟。",
+            "cookTimeMin": "烹饪时间必须为 0 分钟或更多。",
+            "servingsMin": "食谱份量至少为 1 人份。"
+        },
+        "notifications": {
+            "createSuccess": "食谱创建成功",
+            "updateSuccess": "食谱更新成功",
+            "createError": "创建食谱时发生错误",
+            "updateError": "更新食谱时发生错误"
+        }
+    },
+    "RecipePage": {
+        "actions": {
+            "editRecipe": "编辑食谱",
+            "deleteRecipe": "删除食谱",
+            "backToList": "返回食谱列表"
+        },
+        "timeLabels": {
+            "preparation": "准备",
+            "cooking": "烹饪",
+            "people": "人份"
+        },
+        "author": "食谱添加者",
+        "sections": {
+            "ingredients": "食材",
+            "instructions": "说明"
+        },
+        "deleteDialog": {
+            "title": "删除食谱",
+            "description": "确定要删除此食谱吗？此操作不可撤销，所有食谱数据将永久丢失。",
+            "cancel": "取消",
+            "delete": "删除",
+            "deleting": "删除中...",
+            "error": "删除食谱时发生错误"
+        }
+    },
+    "SettingsPage": {
+        "title": "设置",
+        "tabs": {
+            "account": "账户",
+            "customization": "自定义",
+            "administration": "管理",
+            "changelog": "更新日志"
+        },
+        "AccountTab": {
+            "profile": {
+                "title": "个人资料",
+                "description": "管理您的个人信息和偏好设置。",
+                "nameLabel": "姓名",
+                "saveButton": "保存更改"
+            },
+            "language": {
+                "title": "语言偏好",
+                "description": "选择界面的首选语言。如果选择\"自动\"，将使用浏览器的语言。",
+                "languageLabel": "语言",
+                "selectPlaceholder": "选择语言",
+                "options": {
+                    "auto": "自动（浏览器）",
+                    "fr": "Français",
+                    "en": "English",
+                    "zh": "中文"
+                },
+                "saveButton": "保存更改"
+            },
+            "session": {
+                "title": "会话",
+                "description": "管理您当前的会话。",
+                "loggedInAs": "登录为",
+                "memberSince": "注册时间",
+                "signOutButton": "退出登录",
+                "signOutDialog": {
+                    "title": "确认退出",
+                    "description": "确定要退出登录吗？您需要重新登录才能访问账户。",
+                    "cancel": "取消",
+                    "confirm": "退出"
+                }
+            },
+            "notifications": {
+                "profileUpdated": "个人资料更新成功",
+                "profileUpdateError": "更新个人资料时发生错误"
+            }
+        },
+        "AdministrationTab": {
+            "accountValidation": {
+                "title": "账户验证",
+                "description": "批准或拒绝待处理的注册请求。"
+            },
+            "bannedAccounts": {
+                "title": "已封禁账户",
+                "description": "已封禁账户列表。"
+            },
+            "table": {
+                "headers": {
+                    "user": "用户",
+                    "email": "邮箱",
+                    "date": "日期",
+                    "status": "状态",
+                    "actions": "操作"
+                },
+                "status": {
+                    "pending": "待处理",
+                    "banned": "已封禁"
+                },
+                "actions": {
+                    "approve": "批准",
+                    "ban": "封禁",
+                    "unban": "解封"
+                }
+            },
+            "empty": {
+                "noPendingRequests": "没有待处理的请求"
+            },
+            "notifications": {
+                "accountValidated": "账户验证成功",
+                "accountBanned": "账户封禁成功",
+                "accountUnbanned": "账户解封成功",
+                "error": "发生错误，请重试。"
+            }
+        },
+        "CustomizationTab": {
+            "title": "标签管理",
+            "description": "为您的食谱创建和管理自定义标签。",
+            "comingSoon": {
+                "title": "🚧 即将推出",
+                "description": "自定义标签管理功能即将推出。敬请期待！"
+            },
+            "form": {
+                "tagNameLabel": "标签名称",
+                "tagNamePlaceholder": "例如：意大利菜、亚洲菜等",
+                "colorLabel": "颜色",
+                "previewLabel": "预览",
+                "createButton": "创建标签",
+                "defaultTagName": "新标签"
+            },
+            "customTags": {
+                "title": "自定义标签",
+                "empty": "没有自定义标签"
+            }
+        }
+    }
+}
